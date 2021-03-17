@@ -13,7 +13,16 @@ export function RunGame() {
 
     newTurn.turn += 1;
 
-    Do(BuildUpTo(newTurn, Group("Building", GroupElement("(SteelMine)", 1))));
+    Do(
+      BuildUpTo(
+        newTurn,
+        Group(
+          "Building",
+          GroupElement("Steel Mine", 2),
+          GroupElement("Solar Power Plant", 1)
+        )
+      )
+    );
 
     newTurn = UpdateResources(newTurn);
     gameRuns = !CheckForGameEnd(gameTurn);

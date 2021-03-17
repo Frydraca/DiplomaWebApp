@@ -5,8 +5,34 @@ export function CheckForGameEnd(turnNumber) {
 
 export function UpdateResources(turnState) {
   turnState.gameMap.forEach((element) => {
-    if (element.building !== {} && element.building.name === "Command Center") {
-      turnState.energy += 10;
+    switch (element.building.name) {
+      case "Command Center":
+        let playerResources = turnState.resources.find(
+          (resource) => resource.playerId === element.building.owner
+        );
+        playerResources.energy += 10;
+        break;
+      // case "Steel Mine":
+      //   let playerResources = turnState.resources.find(element => {element.playerId === element.building.owner });
+      //   playerResources.energy -= 10;
+      //   break;
+      // case "Solar Power Plant":
+      //   numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+      //   break;
+      // case "Crystal Mine":
+      //   numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+      //   break;
+      // case "Foundry":
+      //   numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+      //   break;
+      // case "Core Factory":
+      //   numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+      //   break;
+      // case "Workshop":
+      //   numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+      //   break;
+      default:
+        break;
     }
   });
   return turnState;
