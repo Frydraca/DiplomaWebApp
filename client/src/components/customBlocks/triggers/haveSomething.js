@@ -45,7 +45,7 @@ export const haveSomething = {
       negator = "";
     }
 
-    var code = negator + "Have(" + value_havesomething + ");\n";
+    var code = negator + "Have(" + value_havesomething + ")";
     return code;
   },
 };

@@ -1,61 +1,65 @@
+import Building from "./buildings/Building";
+import { BuildCommand } from "./commands/buildCommand";
+import SteelMineData from "./data/buildings/steelMine";
+import SolarPowerPlantData from "./data/buildings/solarPowerPlant";
+import CrystalMineData from "./data/buildings/crystalMine";
+import CoreFactoryData from "./data/buildings/coreFactory";
+import FoundryData from "./data/buildings/foundry";
+import WorkshopData from "./data/buildings/workshop";
+
 export function Do(action) {
   return action;
 }
 
-function Build(turnState, building, number) {
-  let buildCount = 0;
-  turnState.gameMap.forEach((element) => {
-    if (
-      element.building.name === "null" &&
-      buildCount < number &&
-      CheckTerrainForBuilding(element.terrain, building)
-    ) {
-      element.building = { owner: "player1", name: building };
-      buildCount += 1;
-    }
-  });
+export function Build(gameEngine, playerId, buildingData) {
+  buildingData.owner = playerId;
+  let newBuilding = new Building(buildingData);
+  gameEngine.Execute(new BuildCommand(newBuilding));
 }
 
-export function BuildUpTo(turnState, buildingGroup) {
+export function BuildUpTo(gameEngine, playerId, buildingGroup) {
   if (buildingGroup.groupType !== "Building") {
     console.log("Error: wrong type! Type: " + buildingGroup.groupType);
   }
 
-  let currentBuildings = CountThePlayerExistingBuildings(turnState, "player1");
+  let currentBuildings = gameEngine.GetBuildingsOfPlayer(playerId);
 
   buildingGroup.elements.forEach((element) => {
     let numberOfNeededBuildings = 0;
-    switch (element.gameObject) {
+    let buildingType = {};
+    switch (element.gameObject.name) {
       case "Command Center":
-        console.log("Error: Cant build new command centers!");
+        console.log("Error: Cant build new command centers!"); //TODO error handling
         break;
       case "Steel Mine":
-        numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+        buildingType = SteelMineData;
         break;
       case "Solar Power Plant":
-        numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+        buildingType = SolarPowerPlantData;
         break;
       case "Crystal Mine":
-        numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+        buildingType = CrystalMineData;
         break;
       case "Foundry":
-        numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+        buildingType = FoundryData;
         break;
       case "Core Factory":
-        numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+        buildingType = CoreFactoryData;
         break;
       case "Workshop":
-        numberOfNeededBuildings = element.number - currentBuildings.SteelMine;
+        buildingType = WorkshopData;
         break;
       default:
         break;
     }
-    if (numberOfNeededBuildings > 0) {
-      Build(turnState, element.gameObject, numberOfNeededBuildings);
+    numberOfNeededBuildings =
+      element.number -
+      gameEngine.GetBuildingsOfGivenType(playerId, buildingType).length;
+
+    for (let i = 0; i < numberOfNeededBuildings; i++) {
+      Build(gameEngine, playerId, buildingType);
     }
   });
-
-  console.log(currentBuildings);
 }
 
 export function Group(type, ...elements) {
@@ -132,6 +136,33 @@ function CheckTerrainForBuilding(terrain, building) {
       }
     case "Crystal Mine":
       if (terrain === "crystal field") {
+        return true;
+      } else {
+        return false;
+      }
+    default:
+      break;
+  }
+  return true;
+}
+
+//TODO Refactor
+function CheckResourcesForBuilding(resources, building) {
+  switch (building) {
+    case "Steel Mine":
+      if (resources.steel >= 15) {
+        return true;
+      } else {
+        return false;
+      }
+    case "Crystal Mine":
+      if (resources.steel >= 15) {
+        return true;
+      } else {
+        return false;
+      }
+    case "Solar Power Plant":
+      if (resources.steel >= 10) {
         return true;
       } else {
         return false;

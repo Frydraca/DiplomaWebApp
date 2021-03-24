@@ -15,10 +15,7 @@ function EditorScreen() {
     <div className="Editor">
       <Row>
         <Col md={6}>
-          <h1>hello</h1>
-        </Col>
-        <Col md={6}>
-          <h1>blockly</h1>
+          <h1>blockly editor</h1>
         </Col>
       </Row>
       {/* <Row>

@@ -1,75 +1,100 @@
 {
   "gameId": 1,
-  "turns": [
+  "isRunning": true,
+  "turnNumber": 0,
+  "players": [
     {
-      "turn": 1,
-      "resources": [
-        {
-          "playerId": "player1",
-          "steel": 30,
-          "roboSteel": 0,
+      "playerId": "player1",
+      "resources": {
+        "steel": 15,
+        "roboSteel": 0,
+        "crystal": 0,
+        "energyCore": 3,
+        "energy": 10,
+        "credits": 0
+      }
+    }
+  ],
+  "gameMap": [
+    {
+      "coordinates": [0, 0],
+      "terrain": "plains",
+      "possibleTerrain": ["plains"],
+      "building": {
+        "owner": "player1",
+        "name": "Command Center",
+        "cost": {
+          "steel": 0,
           "crystal": 0,
-          "energyCore": 3,
+          "roboSteel": 0,
+          "energyCore": 0
+        },
+        "usage": {
+          "energy": 0,
+          "steel": 0,
+          "crystal": 0,
+          "roboSteel": 0,
+          "energyCore": 0
+        },
+        "production": {
           "energy": 10,
-          "credits": 0
-        }
-      ],
-      "gameMap": [
-        {
-          "coordinates": [0, 0],
-          "terrain": "plains",
-          "building": { "owner": "player1", "name": "Command Center" },
-          "units": []
+          "steel": 0,
+          "crystal": 0,
+          "roboSteel": 0,
+          "energyCore": 0
         },
-        {
-          "coordinates": [0, 1],
-          "terrain": "plains",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        },
-        {
-          "coordinates": [0, 2],
-          "terrain": "plains",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        },
-        {
-          "coordinates": [1, 0],
-          "terrain": "plains",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        },
-        {
-          "coordinates": [1, 1],
-          "terrain": "plains",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        },
-        {
-          "coordinates": [1, 2],
-          "terrain": "crystal field",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        },
-        {
-          "coordinates": [2, 0],
-          "terrain": "steel ore",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        },
-        {
-          "coordinates": [2, 1],
-          "terrain": "steel ore",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        },
-        {
-          "coordinates": [2, 2],
-          "terrain": "steel ore",
-          "building": { "owner": "null", "name": "null" },
-          "units": []
-        }
-      ]
+        "hitPoints": 100,
+        "armor": 5
+      },
+      "units": []
+    },
+    {
+      "coordinates": [0, 1],
+      "terrain": "plains",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
+    },
+    {
+      "coordinates": [0, 2],
+      "terrain": "plains",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
+    },
+    {
+      "coordinates": [1, 0],
+      "terrain": "plains",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
+    },
+    {
+      "coordinates": [1, 1],
+      "terrain": "plains",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
+    },
+    {
+      "coordinates": [1, 2],
+      "terrain": "crystal field",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
+    },
+    {
+      "coordinates": [2, 0],
+      "terrain": "steel ore",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
+    },
+    {
+      "coordinates": [2, 1],
+      "terrain": "steel ore",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
+    },
+    {
+      "coordinates": [2, 2],
+      "terrain": "steel ore",
+      "building": { "owner": "null", "name": "null" },
+      "units": []
     }
   ]
 }

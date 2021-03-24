@@ -1,9 +1,30 @@
-export const foundry = {
+const FoundryData = {
+  owner: "",
   name: "Foundry",
-  steelCost: 50,
-  energyUsage: 10,
-  steelUsage: 10,
-  roboSteelProduction: 5,
+  location: [0, 0],
+  possibleTerrain: ["plains"],
+  cost: {
+    steel: 50,
+    crystal: 0,
+    roboSteel: 0,
+    energyCore: 0,
+  },
+  usage: {
+    energy: 10,
+    steel: 10,
+    crystal: 0,
+    roboSteel: 0,
+    energyCore: 0,
+  },
+  production: {
+    energy: 0,
+    steel: 0,
+    crystal: 0,
+    roboSteel: 5,
+    energyCore: 0,
+  },
   hitPoints: 70,
   armor: 4,
 };
+
+export default FoundryData;

@@ -10,9 +10,6 @@ export default function App() {
       <div>
         <ul>
           <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
             <Link to="/editor">Editor</Link>
           </li>
           <li>

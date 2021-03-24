@@ -30,6 +30,7 @@ export const ifElse = {
         colour: 20,
         tooltip: "",
         helpUrl: "",
+        mutator: "controls_if_mutator",
       });
     },
   },
@@ -47,7 +48,15 @@ export const ifElse = {
       "FalseAction"
     );
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code =
+      "if(" +
+      statements_condition +
+      "){\n" +
+      statements_trueaction +
+      "}\n" +
+      "else {\n" +
+      statements_falseaction +
+      "};\n";
     return code;
   },
 };

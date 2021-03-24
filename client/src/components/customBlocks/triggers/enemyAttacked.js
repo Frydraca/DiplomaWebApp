@@ -1,5 +1,3 @@
-import Blockly from "node-blockly/browser";
-
 export const enemyAttacked = {
   name: "Enemy Attacked",
   category: "Triggers",
@@ -18,7 +16,7 @@ export const enemyAttacked = {
   },
   generator: (block) => {
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code = "EnemyAttacked()";
     return code;
   },
 };

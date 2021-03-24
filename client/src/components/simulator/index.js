@@ -3,10 +3,6 @@ import Canvas from "../tools/Canvas";
 import RunGame from "../../tempGameEngine/temp";
 
 function SimulatorScreen() {
-  const tempGameHistory = {
-    turns: Array[(1, 1, 1, 1, 1)],
-  };
-
   const draw = (ctx, gameState) => {
     ctx.canvas.width = 500;
     ctx.canvas.height = 500;

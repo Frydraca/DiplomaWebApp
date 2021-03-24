@@ -1,35 +1,24 @@
-import { Do, BuildUpTo, Group, GroupElement } from "./aiFunctions.js";
-import { UpdateResources, CheckForGameEnd } from "./gameFunctions.js";
+import { Do, Build, Group, GroupElement, BuildUpTo } from "./aiFunctions.js";
+import { GameEngine } from "./gameEngine.js";
+import SteelMineData from "./data/buildings/steelMine";
 
 export function RunGame() {
-  var gameState = require("./gameState.json");
+  var gameStartState = require("./gameState.json");
+  const playerId = "player1";
 
-  var gameRuns = true;
-  var gameTurn = 1;
-  while (gameRuns) {
-    let newTurn = JSON.parse(
-      JSON.stringify(gameState.turns[gameState.turns.length - 1])
+  const game = new GameEngine(gameStartState);
+
+  while (game.IsRunning()) {
+    //Build(game, playerId, SteelMineData);
+    BuildUpTo(
+      game,
+      playerId,
+      Group("Building", GroupElement(SteelMineData, 2))
     );
-
-    newTurn.turn += 1;
-
-    Do(
-      BuildUpTo(
-        newTurn,
-        Group(
-          "Building",
-          GroupElement("Steel Mine", 2),
-          GroupElement("Solar Power Plant", 1)
-        )
-      )
-    );
-
-    newTurn = UpdateResources(newTurn);
-    gameRuns = !CheckForGameEnd(gameTurn);
-    gameTurn += 1;
-    gameState.turns.push(newTurn);
+    game.TurnEnd();
   }
-  console.log(gameState);
+  console.log(game.commands);
+  console.log(game.gameState);
 }
 
 export default RunGame;
