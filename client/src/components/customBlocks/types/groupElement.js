@@ -40,33 +40,32 @@ export const groupElement = {
     // TODO Towers and units
     switch (value_name) {
       case "(CommandCenter)":
-        formattedValue = "Command Center";
+        formattedValue = "CommandCenterData";
         break;
       case "(SteelMine)":
-        formattedValue = "Steel Mine";
+        formattedValue = "SteelMineData";
         break;
       case "(SolarPowerPlant)":
-        formattedValue = "Solar Power Plant";
+        formattedValue = "SolarPowerPlantData";
         break;
       case "(CrystalMine)":
-        formattedValue = "Crystal Mine";
+        formattedValue = "CrystalMineData";
         break;
       case "(Foundry)":
-        formattedValue = "Foundry";
+        formattedValue = "FoundryData";
         break;
       case "(CoreFactory)":
-        formattedValue = "Core Factory";
+        formattedValue = "CoreFactoryData";
         break;
       case "(Workshop)":
-        formattedValue = "Workshop";
+        formattedValue = "WorkshopData";
         break;
       default:
         formattedValue = "Unrecognized type!";
         break;
     }
 
-    var code =
-      ", GroupElement('" + formattedValue + "', " + number_number + ")";
+    var code = ", GroupElement(" + formattedValue + ", " + number_number + ")";
     return code;
   },
 };

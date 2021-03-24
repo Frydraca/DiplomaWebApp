@@ -30,7 +30,7 @@ export const buildUpto = {
       Blockly.JavaScript.ORDER_ATOMIC
     );
     // TODO: Assemble JavaScript into code variable.
-    var code = "BuildUpTo(currentTurn," + value_buildinggroup + ")";
+    var code = "BuildUpTo(game, playerId," + value_buildinggroup + ")";
     return code;
   },
 };

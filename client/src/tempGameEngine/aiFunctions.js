@@ -22,8 +22,6 @@ export function BuildUpTo(gameEngine, playerId, buildingGroup) {
     console.log("Error: wrong type! Type: " + buildingGroup.groupType);
   }
 
-  let currentBuildings = gameEngine.GetBuildingsOfPlayer(playerId);
-
   buildingGroup.elements.forEach((element) => {
     let numberOfNeededBuildings = 0;
     let buildingType = {};
