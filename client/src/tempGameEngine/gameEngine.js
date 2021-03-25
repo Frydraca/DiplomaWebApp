@@ -1,4 +1,4 @@
-import Building from "./buildings/Building";
+import Building from "./objects/Building";
 
 export class GameEngine {
   gameState = {};
@@ -89,6 +89,22 @@ export class GameEngine {
       tile.building = building;
       return true;
     }
+    return false;
+  }
+
+  Create(unit) {
+    return false;
+  }
+
+  Move(unit, targetLocation) {
+    return false;
+  }
+
+  Attack(unit, attackTarget) {
+    return false;
+  }
+
+  Delete(gameObject) {
     return false;
   }
 }

@@ -1,6 +1,6 @@
 import { Button, Col, Row } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
-import RunGame from "../../tempGameEngine/temp";
+import { AiEngine } from "../../tempGameEngine/aiEngine";
 
 function SimulatorScreen() {
   const draw = (ctx, gameState) => {
@@ -18,12 +18,21 @@ function SimulatorScreen() {
     }
   };
 
+  const startingGameState = require("../../tempGameEngine/gameState.json");
+  const playerIds = ["player1"];
+  const scripts = [];
+  var game = new AiEngine(playerIds, scripts, startingGameState);
+
+  function simulate() {
+    return game.RunGame();
+  }
+
   return (
     <div className="SimulatorScreen">
       <div>
         <Row>
           <Col>
-            <Button onClick={RunGame}>Run</Button>
+            <Button onClick={simulate}>Run</Button>
           </Col>
           <Col>
             <Button> Previous Turn</Button>

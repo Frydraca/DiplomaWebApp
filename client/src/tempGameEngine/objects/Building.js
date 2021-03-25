@@ -1,25 +1,12 @@
-export default class Building {
-  stats = {};
-  constructor(building) {
-    this.stats = building;
-  }
+import GameObject from "./GameObject";
+
+export default class Building extends GameObject {
   // Private functions //
   IsLocationValid(terrain) {
     return this.stats.possibleTerrain.includes(terrain);
   }
 
   // Public functions //
-  GetOwner() {
-    return this.stats.owner;
-  }
-
-  GetName() {
-    return this.stats.name;
-  }
-  GetLocation() {
-    return this.stats.location;
-  }
-
   CanBuild(resources) {
     if (
       resources.steel >= this.stats.cost.steel &&
