@@ -22,6 +22,8 @@
       "building": {
         "owner": "player1",
         "name": "Command Center",
+        "possibleTerrain": ["plains"],
+        "location": [0, 0],
         "cost": {
           "steel": 0,
           "crystal": 0,

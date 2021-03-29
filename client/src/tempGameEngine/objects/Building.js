@@ -1,50 +1,65 @@
 import GameObject from "./GameObject";
-import Tile from "./Tile";
 
 export default class Building extends GameObject {
+  possibleTerrain = [];
+  cost = {};
+  usage = {};
+  production = {};
+  hitPoints = 0;
+  armor = 0;
+  constructor(buildingData) {
+    super(buildingData);
+    this.possibleTerrain = buildingData.possibleTerrain;
+    this.cost = buildingData.cost;
+    this.usage = buildingData.usage;
+    this.production = buildingData.production;
+    this.hitPoints = buildingData.hitPoints;
+    this.armor = buildingData.armor;
+  }
+
   // Private functions //
   IsLocationValid(terrain) {
-    return this.stats.possibleTerrain.includes(terrain);
+    return this.possibleTerrain.includes(terrain);
   }
 
   // Public functions //
   CanBuild(resources) {
     if (
-      resources.steel >= this.stats.cost.steel &&
-      resources.crystal >= this.stats.cost.crystal &&
-      resources.roboSteel >= this.stats.cost.roboSteel &&
-      resources.energyCore >= this.stats.cost.energyCore
+      resources.steel >= this.cost.steel &&
+      resources.crystal >= this.cost.crystal &&
+      resources.roboSteel >= this.cost.roboSteel &&
+      resources.energyCore >= this.cost.energyCore
     ) {
       return true;
     }
     return false;
   }
   TakeCost(resources) {
-    resources.steel -= this.stats.cost.steel;
-    resources.crystal -= this.stats.cost.crystal;
-    resources.roboSteel -= this.stats.cost.roboSteel;
-    resources.energyCore -= this.stats.cost.energyCore;
+    resources.steel -= this.cost.steel;
+    resources.crystal -= this.cost.crystal;
+    resources.roboSteel -= this.cost.roboSteel;
+    resources.energyCore -= this.cost.energyCore;
     return resources;
   }
   UpdateResources(resources) {
     if (
-      resources.energy >= this.stats.usage.energy &&
-      resources.steel >= this.stats.usage.steel &&
-      resources.crystal >= this.stats.usage.crystal &&
-      resources.roboSteel >= this.stats.usage.roboSteel &&
-      resources.energyCore >= this.stats.usage.energyCore
+      resources.energy >= this.usage.energy &&
+      resources.steel >= this.usage.steel &&
+      resources.crystal >= this.usage.crystal &&
+      resources.roboSteel >= this.usage.roboSteel &&
+      resources.energyCore >= this.usage.energyCore
     ) {
-      resources.energy -= this.stats.usage.energy;
-      resources.steel -= this.stats.usage.steel;
-      resources.crystal -= this.stats.usage.crystal;
-      resources.roboSteel -= this.stats.usage.roboSteel;
-      resources.energyCore -= this.stats.usage.energyCore;
+      resources.energy -= this.usage.energy;
+      resources.steel -= this.usage.steel;
+      resources.crystal -= this.usage.crystal;
+      resources.roboSteel -= this.usage.roboSteel;
+      resources.energyCore -= this.usage.energyCore;
 
-      resources.energy += this.stats.production.energy;
-      resources.steel += this.stats.production.steel;
-      resources.crystal += this.stats.production.crystal;
-      resources.roboSteel += this.stats.production.roboSteel;
-      resources.energyCore += this.stats.production.energyCore;
+      resources.energy += this.production.energy;
+      resources.steel += this.production.steel;
+      resources.crystal += this.production.crystal;
+      resources.roboSteel += this.production.roboSteel;
+      resources.energyCore += this.production.energyCore;
     }
     return resources;
   }

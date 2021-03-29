@@ -1,9 +1,13 @@
 export default class GameObject {
   objectId = "";
-  stats = {};
+  owner = "";
+  name = "";
+  location = [0, 0];
   constructor(objectData) {
     this.objectId = Date.now() + Math.random();
-    this.stats = objectData;
+    this.owner = objectData.owner;
+    this.name = objectData.name;
+    this.location = objectData.location;
   }
 
   GetObjectId() {
@@ -11,12 +15,12 @@ export default class GameObject {
   }
 
   GetOwner() {
-    return this.stats.owner;
+    return this.owner;
   }
   GetName() {
-    return this.stats.name;
+    return this.name;
   }
   GetLocation() {
-    return this.stats.location;
+    return this.location;
   }
 }
