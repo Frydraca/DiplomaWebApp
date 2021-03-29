@@ -1,4 +1,5 @@
 import GameObject from "./GameObject";
+import Tile from "./Tile";
 
 export default class Building extends GameObject {
   // Private functions //
@@ -49,16 +50,16 @@ export default class Building extends GameObject {
   }
 
   FindLocationToBuild(gameMap) {
-    let ret = { success: false, coordinates: [0, 0] };
+    let ret = { success: false, tile: "null" };
 
-    //TODO make a better algprithm
+    //TODO make a better algorithm
     for (let i = 0; i < gameMap.length; i++) {
       if (
-        gameMap[i].building.owner === "null" &&
+        gameMap[i].GetBuildingId() === "null" &&
         this.IsLocationValid(gameMap[i].terrain)
       ) {
         ret.success = true;
-        ret.coordinates = gameMap[i].coordinates;
+        ret.tile = gameMap[i];
         return ret;
       }
     }

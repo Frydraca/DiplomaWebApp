@@ -19,7 +19,6 @@
     {
       "coordinates": [0, 0],
       "terrain": "plains",
-      "possibleTerrain": ["plains"],
       "building": {
         "owner": "player1",
         "name": "Command Center",
@@ -46,55 +45,55 @@
         "hitPoints": 100,
         "armor": 5
       },
-      "units": []
+      "unit": "null"
     },
     {
       "coordinates": [0, 1],
       "terrain": "plains",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     },
     {
       "coordinates": [0, 2],
       "terrain": "plains",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     },
     {
       "coordinates": [1, 0],
       "terrain": "plains",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     },
     {
       "coordinates": [1, 1],
       "terrain": "plains",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     },
     {
       "coordinates": [1, 2],
       "terrain": "crystal field",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     },
     {
       "coordinates": [2, 0],
       "terrain": "steel ore",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     },
     {
       "coordinates": [2, 1],
       "terrain": "steel ore",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     },
     {
       "coordinates": [2, 2],
       "terrain": "steel ore",
-      "building": { "owner": "null", "name": "null" },
-      "units": []
+      "building": "null",
+      "unit": "null"
     }
   ]
 }

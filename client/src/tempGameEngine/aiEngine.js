@@ -9,6 +9,7 @@ import {
   CoreFactoryData,
   WorkshopData,
 } from "./data/buildings/index";
+import GameState from "./objects/GameState";
 
 export class AiEngine {
   players = {};
@@ -16,7 +17,8 @@ export class AiEngine {
 
   constructor(playerIds, scripts, startingGameState) {
     this.players = playerIds;
-    this.game = new GameEngine(startingGameState);
+    console.log(startingGameState);
+    this.game = new GameEngine(new GameState(startingGameState));
   }
 
   // Main run function

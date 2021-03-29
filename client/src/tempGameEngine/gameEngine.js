@@ -1,39 +1,11 @@
-import Building from "./objects/Building";
-
 export class GameEngine {
   gameState = {};
-  buildings = [];
   commands = [];
   currentTurnCommands = [];
 
   constructor(startingState) {
+    console.log(startingState);
     this.gameState = startingState;
-
-    this.InitBuildings(startingState);
-  }
-
-  // Private functions //
-  InitBuildings(startingState) {
-    startingState.gameMap.forEach((element) => {
-      if (element.building.name !== "null") {
-        this.buildings.push(new Building(element.building));
-      }
-    });
-  }
-
-  CheckForGameEnd() {
-    if (this.gameState.turnNumber >= 10) {
-      this.gameState.isRunning = false;
-    }
-  }
-
-  UpdateResources() {
-    this.buildings.forEach((building) => {
-      let player = this.gameState.players.find(
-        (player) => player.playerid === building.owner
-      );
-      player.resources = building.UpdateResources(player.resources);
-    });
   }
 
   // Public functions
@@ -44,11 +16,13 @@ export class GameEngine {
   }
 
   GetBuildingsOfGivenType(playerId, buildingData) {
-    return this.buildings.filter(
-      (element) =>
-        element.GetOwner() === playerId &&
-        element.GetName() === buildingData.name
-    );
+    return this.gameState
+      .GetBuildings()
+      .filter(
+        (element) =>
+          element.GetOwner() === playerId &&
+          element.GetName() === buildingData.name
+      );
   }
 
   Execute(command) {
@@ -76,23 +50,22 @@ export class GameEngine {
   }
 
   Build(building) {
-    let player = this.gameState.players.find(
-      (element) => element.playerId === building.GetOwner()
+    let player = this.GetOwnerOfObject(building);
+    let locationResponse = building.FindLocationToBuild(
+      this.gameState.GetTiles()
     );
-    let location = building.FindLocationToBuild(this.gameState.gameMap);
-    if (building.CanBuild(player.resources) && location.success) {
+    if (building.CanBuild(player.resources) && locationResponse.success) {
       player.resources = building.TakeCost(player.resources);
-      this.buildings.push(building);
-      let tile = this.gameState.gameMap.find(
-        (element) => element.coordinates === location.coordinates
-      );
-      tile.building = building;
+
+      this.gameState.AddBuildingToTile(building, locationResponse.tile);
       return true;
     }
     return false;
   }
 
   Create(unit) {
+    let player = this.GetOwnerOfObject(unit);
+
     return false;
   }
 
@@ -106,6 +79,30 @@ export class GameEngine {
 
   Delete(gameObject) {
     return false;
+  }
+
+  CheckForGameEnd() {
+    if (this.gameState.turnNumber >= 10) {
+      this.gameState.isRunning = false;
+    }
+  }
+
+  UpdateResources() {
+    this.gameState.GetBuildings().forEach((building) => {
+      let player = this.gameState.GetPlayerById(building.GetOwner());
+      player.SetResources(building.UpdateResources(player.GetResources()));
+    });
+  }
+
+  GetOwnerOfObject(object) {
+    return this.gameState.players.find(
+      (player) => player.playerId === object.GetOwner()
+    );
+  }
+
+  DoesPlayerHaveGivenBuilding(playerId, buildingType) {
+    let buildingsOfPlayer = this.GetBuildingsOfPlayer(playerId);
+    buildingsOfPlayer.includes(buildingType);
   }
 }
 
