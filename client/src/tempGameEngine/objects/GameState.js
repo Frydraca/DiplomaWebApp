@@ -1,4 +1,3 @@
-import { Next } from "react-bootstrap/esm/PageItem";
 import Building from "./Building";
 import Player from "./Player";
 import Tile from "./Tile";
@@ -55,7 +54,7 @@ export default class GameState {
     return this.buildings;
   }
 
-  GetBuildingId(buildingId) {
+  GetBuildingById(buildingId) {
     return this.buildings.find(
       (element) => element.GetObjectId() === buildingId
     );
@@ -115,6 +114,20 @@ export default class GameState {
     targetTile.SetUnitId("null");
   }
 
+  RemoveObject(gameObject) {
+    let objectId = gameObject.GetObjectId();
+    let building = this.GetBuildingById(objectId);
+    let unit = this.GetUnitById(objectId);
+    if (building !== undefined) {
+      this.RemoveBuildingFromTile(
+        this.GetTileByLocation(building.GetLocation())
+      );
+    }
+    if (unit !== undefined) {
+      this.RemoveUnitFromTile(this.GetTileByLocation(unit.GetLocation()));
+    }
+  }
+
   GetNeighbourTile(homeTile, direction) {
     let homeLocation = homeTile.GetLocation();
     let neighbourLocation;
@@ -151,6 +164,20 @@ export default class GameState {
       Math.abs(tile1.GetLocation()[0] - tile2.GetLocation()[0]) +
       Math.abs(tile1.GetLocation()[1] - tile2.GetLocation()[1])
     );
+  }
+
+  CanAttackTarget(attackerObject, targetObject) {
+    let attackerTile = this.GetTileByLocation(attackerObject.GetLocation());
+    let targetTile = this.GetTileByLocation(targetObject.GetLocation());
+    if (
+      attackerObject.GetCanAttack() &&
+      attackerObject.GetOwner() !== targetObject.GetOwner() &&
+      attackerObject.GetRange() >=
+        this.GetDistanceBetweenTiles(attackerTile, targetTile)
+    ) {
+      return true;
+    }
+    return false;
   }
 
   FindPathBetween(startingTile, targetTile) {

@@ -25,6 +25,9 @@ const SolarPowerPlantData = {
   },
   hitPoints: 30,
   armor: 0,
+  canAttack: false,
+  range: 0,
+  attackDamage: 0,
 };
 
 export default SolarPowerPlantData;

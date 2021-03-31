@@ -25,6 +25,9 @@ const CoreFactoryData = {
   },
   hitPoints: 70,
   armor: 4,
+  canAttack: false,
+  range: 0,
+  attackDamage: 0,
 };
 
 export default CoreFactoryData;

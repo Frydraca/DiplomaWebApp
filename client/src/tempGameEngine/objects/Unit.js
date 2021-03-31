@@ -3,14 +3,11 @@ import GameObject from "./GameObject";
 export default class Unit extends GameObject {
   cost = {};
   speed = 0;
-  hitPoints = 0;
-  armor = 0;
+
   constructor(unitData, ownerId) {
     super(unitData, ownerId);
     this.cost = unitData.cost;
     this.speed = unitData.speed;
-    this.hitPoints = unitData.hitPoints;
-    this.armor = unitData.armor;
   }
 
   GetSpeed() {

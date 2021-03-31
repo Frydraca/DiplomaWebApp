@@ -25,6 +25,9 @@ const CrystalMineData = {
   },
   hitPoints: 40,
   armor: 2,
+  canAttack: false,
+  range: 0,
+  attackDamage: 0,
 };
 
 export default CrystalMineData;

@@ -25,6 +25,9 @@ const WorkshopData = {
   },
   hitPoints: 50,
   armor: 5,
+  canAttack: false,
+  range: 0,
+  attackDamage: 0,
 };
 
 export default WorkshopData;

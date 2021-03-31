@@ -5,16 +5,12 @@ export default class Building extends GameObject {
   cost = {};
   usage = {};
   production = {};
-  hitPoints = 0;
-  armor = 0;
   constructor(buildingData, ownerId) {
     super(buildingData, ownerId);
     this.possibleTerrain = buildingData.possibleTerrain;
     this.cost = buildingData.cost;
     this.usage = buildingData.usage;
     this.production = buildingData.production;
-    this.hitPoints = buildingData.hitPoints;
-    this.armor = buildingData.armor;
   }
 
   // Private functions //

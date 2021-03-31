@@ -74,12 +74,9 @@ export class GameEngine {
   }
 
   Move(unit, targetTile) {
-    console.log(unit);
     let currentTile = this.gameState.GetTileByLocation(unit.GetLocation());
-    console.log(currentTile);
     let path = this.gameState.FindPathBetween(currentTile, targetTile);
     if (path === "null") {
-      console.log("path null");
       return false;
     }
     let newTile;
@@ -93,7 +90,14 @@ export class GameEngine {
     return true;
   }
 
-  Attack(unit, attackTarget) {
+  Attack(attackerObject, targetObject) {
+    if (this.gamestate.CanAttackTarget(attackerObject, targetObject)) {
+      targetObject.TakeDamage(attackerObject.GetAttackDamage());
+      if (targetObject.GetHitPoints() < 1) {
+        this.gameState.RemoveObject(targetObject);
+      }
+      return true;
+    }
     return false;
   }
 
