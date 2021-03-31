@@ -31,12 +31,13 @@ export class AiEngine {
 
   // Main run function
   RunGame() {
-    let playerId = this.players[0];
     let counter = 1;
     while (this.game.IsRunning()) {
+      counter++;
+      //script player1
       this.Do(
         this.BuildUpTo(
-          playerId,
+          this.players[0],
           this.Group(
             "Building",
             this.GroupElement(SteelMineData, 2),
@@ -45,11 +46,26 @@ export class AiEngine {
           )
         )
       );
-      if (counter === 1) {
-        this.Do(this.Create(playerId, RaiderBotData));
+      if (counter === 7) {
+        this.Do(this.Create(this.players[0], RaiderBotData));
         this.Do(this.Move());
-        counter = 2;
       }
+      if (counter === 8) {
+        this.Do(this.Attack());
+      }
+
+      //script player2
+      this.Do(
+        this.BuildUpTo(
+          this.players[1],
+          this.Group(
+            "Building",
+            this.GroupElement(SteelMineData, 1),
+            this.GroupElement(SolarPowerPlantData, 1),
+            this.GroupElement(CrystalMineData, 1)
+          )
+        )
+      );
 
       this.game.TurnEnd();
     }
@@ -66,8 +82,13 @@ export class AiEngine {
     let units = this.game.gameState.GetUnits();
     let tiles = this.game.gameState.GetTiles();
     if (units.length > 0) {
-      this.game.Execute(new MoveCommand(units[0], tiles[8]));
+      this.game.Execute(new MoveCommand(units[0], tiles[24]));
     }
+  }
+  Attack() {
+    let units = this.game.gameState.GetUnits();
+    let buildings = this.game.gameState.GetBuildings();
+    this.game.Execute(new AttackCommand(units[0], buildings[1]));
   }
 
   Build(playerId, buildingData) {

@@ -17,20 +17,24 @@ export default class GameState {
     startingGameState.players.forEach((playerData) => {
       this.players.push(new Player(playerData));
     });
-    startingGameState.gameMap.forEach((tile) => {
+    startingGameState.gameMap.forEach((element) => {
       let buildingId = "null";
       let unitId = "null";
-      if (tile.building !== "null") {
-        let newBuilding = new Building(tile.building, tile.building.owner);
+      if (element.building !== "null") {
+        let newBuilding = new Building(
+          element.building,
+          element.building.owner
+        );
         buildingId = newBuilding.GetObjectId();
+        newBuilding.SetLocation(element.location);
         this.buildings.push(newBuilding);
       }
-      if (tile.unit !== "null") {
-        let newUnit = new Unit(tile.unit, tile.unit.owner);
+      if (element.unit !== "null") {
+        let newUnit = new Unit(element.unit, element.unit.owner);
         unitId = newUnit.GetObjectId();
         this.units.push(newUnit);
       }
-      this.tiles.push(new Tile(tile, buildingId, unitId));
+      this.tiles.push(new Tile(element, buildingId, unitId));
     });
   }
 
@@ -122,10 +126,13 @@ export default class GameState {
       this.RemoveBuildingFromTile(
         this.GetTileByLocation(building.GetLocation())
       );
+      return true;
     }
     if (unit !== undefined) {
       this.RemoveUnitFromTile(this.GetTileByLocation(unit.GetLocation()));
+      return true;
     }
+    return false;
   }
 
   GetNeighbourTile(homeTile, direction) {
@@ -166,6 +173,14 @@ export default class GameState {
     );
   }
 
+  GetClosestBuildingLocationToCommandCenter(playerId, building) {
+    let CommandCenter = this.GetBuildings().filter(
+      (element) =>
+        element.GetOwner() === playerId &&
+        element.GetName() === "Command Center"
+    );
+  }
+
   CanAttackTarget(attackerObject, targetObject) {
     let attackerTile = this.GetTileByLocation(attackerObject.GetLocation());
     let targetTile = this.GetTileByLocation(targetObject.GetLocation());
@@ -181,16 +196,12 @@ export default class GameState {
   }
 
   FindPathBetween(startingTile, targetTile) {
-    console.log(targetTile);
     let openList = [];
     let closedList = [];
     let startingNode = { tile: startingTile, f: 0, g: 0, h: 0, parent: "null" };
     let endNode;
     openList.push(startingNode);
-    let counter = 0;
-    while (openList.length !== 0 && counter < 5) {
-      counter++;
-      console.log(counter);
+    while (openList.length !== 0) {
       // Find the node with the lowest f value
       let lowestFValue = Number.POSITIVE_INFINITY;
       let currentNode = {};
@@ -243,7 +254,6 @@ export default class GameState {
       for (let i = 0; i < successors.length; i++) {
         let currentSuccessor = successors[i];
         if (currentSuccessor.tile === targetTile) {
-          console.log("endnode");
           endNode = currentSuccessor;
           break;
         }
@@ -259,7 +269,6 @@ export default class GameState {
         );
         currentSuccessor.f = currentSuccessor.g + currentSuccessor.h;
 
-        console.log(openList);
         // if there is a node in the open list which has the same tile
         // and lower f score then skip this successor
         if (
@@ -288,9 +297,6 @@ export default class GameState {
       }
       closedList.push(currentNode);
     }
-
-    console.log(closedList);
-    console.log(endNode);
 
     // return path
     if (endNode === undefined) {

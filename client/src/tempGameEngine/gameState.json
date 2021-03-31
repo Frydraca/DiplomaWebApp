@@ -13,11 +13,34 @@
         "energy": 10,
         "credits": 0
       }
+    },
+    {
+      "playerId": "player2",
+      "resources": {
+        "steel": 30,
+        "roboSteel": 10,
+        "crystal": 0,
+        "energyCore": 3,
+        "energy": 10,
+        "credits": 0
+      }
     }
   ],
   "gameMap": [
     {
       "location": [0, 0],
+      "terrain": "steel ore",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [0, 1],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [0, 2],
       "terrain": "plains",
       "building": {
         "owner": "player1",
@@ -45,25 +68,28 @@
           "energyCore": 0
         },
         "hitPoints": 100,
-        "armor": 5
+        "armor": 5,
+        "canAttack": false,
+        "range": 0,
+        "attackDamage": 0
       },
       "unit": "null"
     },
     {
-      "location": [0, 1],
-      "terrain": "plains",
+      "location": [0, 3],
+      "terrain": "steel ore",
       "building": "null",
       "unit": "null"
     },
     {
-      "location": [0, 2],
-      "terrain": "plains",
+      "location": [0, 4],
+      "terrain": "crystal field",
       "building": "null",
       "unit": "null"
     },
     {
       "location": [1, 0],
-      "terrain": "plains",
+      "terrain": "steel ore",
       "building": "null",
       "unit": "null"
     },
@@ -75,24 +101,138 @@
     },
     {
       "location": [1, 2],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [1, 3],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [1, 4],
       "terrain": "crystal field",
       "building": "null",
       "unit": "null"
     },
     {
       "location": [2, 0],
-      "terrain": "steel ore",
+      "terrain": "plains",
       "building": "null",
       "unit": "null"
     },
     {
       "location": [2, 1],
-      "terrain": "steel ore",
+      "terrain": "plains",
       "building": "null",
       "unit": "null"
     },
     {
       "location": [2, 2],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [2, 3],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [2, 4],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [3, 0],
+      "terrain": "crystal field",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [3, 1],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [3, 2],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [3, 3],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [3, 4],
+      "terrain": "steel ore",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [4, 0],
+      "terrain": "crystal field",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [4, 1],
+      "terrain": "steel ore",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [4, 2],
+      "terrain": "plains",
+      "building": {
+        "owner": "player2",
+        "name": "Command Center",
+        "possibleTerrain": ["plains"],
+        "location": [0, 0],
+        "cost": {
+          "steel": 0,
+          "crystal": 0,
+          "roboSteel": 0,
+          "energyCore": 0
+        },
+        "usage": {
+          "energy": 0,
+          "steel": 0,
+          "crystal": 0,
+          "roboSteel": 0,
+          "energyCore": 0
+        },
+        "production": {
+          "energy": 10,
+          "steel": 0,
+          "crystal": 0,
+          "roboSteel": 0,
+          "energyCore": 0
+        },
+        "hitPoints": 100,
+        "armor": 5,
+        "canAttack": false,
+        "range": 0,
+        "attackDamage": 0
+      },
+      "unit": "null"
+    },
+    {
+      "location": [4, 3],
+      "terrain": "plains",
+      "building": "null",
+      "unit": "null"
+    },
+    {
+      "location": [4, 4],
       "terrain": "steel ore",
       "building": "null",
       "unit": "null"

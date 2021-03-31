@@ -3,28 +3,95 @@ import Canvas from "../tools/Canvas";
 import { AiEngine } from "../../tempGameEngine/aiEngine";
 
 function SimulatorScreen() {
-  const draw = (ctx, gameState) => {
+  const startingGameState = require("../../tempGameEngine/gameState.json");
+  const playerIds = ["player1", "player2"];
+  const scripts = [];
+  var game = new AiEngine(playerIds, scripts, startingGameState);
+
+  const draw = (ctx) => {
     ctx.canvas.width = 500;
     ctx.canvas.height = 500;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
-    for (var i = 0; i < 5; i++) {
-      for (var ii = 0; ii < 5; ii++) {
-        ctx.beginPath();
-        ctx.rect((ii + 1) * 50, (i + 1) * 50, 50, 50);
-        ctx.stroke();
+    let gameState = game.game.gameState;
+    let tiles = gameState.GetTiles();
+    tiles.forEach((element) => {
+      ctx.beginPath();
+      ctx.rect(
+        (element.GetLocation()[0] + 1) * 50,
+        (element.GetLocation()[1] + 1) * 50,
+        50,
+        50
+      );
+      switch (element.GetTerrain()) {
+        case "plains":
+          ctx.fillStyle = "lightgreen";
+          break;
+        case "steel ore":
+          ctx.fillStyle = "grey";
+          break;
+        case "crystal field":
+          ctx.fillStyle = "lightskyblue";
+          break;
+        default:
+          ctx.fillStyle = "red";
+          break;
       }
-    }
+      ctx.fill();
+    });
+    let buildings = gameState.GetBuildings();
+    buildings.forEach((element) => {
+      ctx.beginPath();
+      ctx.rect(
+        (element.GetLocation()[0] + 1) * 50 + 10,
+        (element.GetLocation()[1] + 1) * 50 + 10,
+        30,
+        30
+      );
+      switch (element.GetOwner()) {
+        case "player1":
+          ctx.fillStyle = "orange";
+          break;
+        case "player2":
+          ctx.fillStyle = "yellow";
+          break;
+        default:
+          ctx.fillStyle = "red";
+          break;
+      }
+      ctx.fill();
+    });
+    let units = gameState.GetUnits();
+    units.forEach((element) => {
+      ctx.beginPath();
+      ctx.rect(
+        (element.GetLocation()[0] + 1) * 50 + 10,
+        (element.GetLocation()[1] + 1) * 50 + 10,
+        30,
+        30
+      );
+      switch (element.GetOwner()) {
+        case "player1":
+          ctx.fillStyle = "darkviolet";
+          break;
+        case "player2":
+          ctx.fillStyle = "violet";
+          break;
+        default:
+          ctx.fillStyle = "red";
+          break;
+      }
+      ctx.fill();
+    });
   };
-
-  const startingGameState = require("../../tempGameEngine/gameState.json");
-  const playerIds = ["player1"];
-  const scripts = [];
-  var game = new AiEngine(playerIds, scripts, startingGameState);
 
   function simulate() {
     return game.RunGame();
+  }
+
+  function getGameState() {
+    return game.game.gameState;
   }
 
   return (

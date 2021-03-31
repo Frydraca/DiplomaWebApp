@@ -91,10 +91,10 @@ export class GameEngine {
   }
 
   Attack(attackerObject, targetObject) {
-    if (this.gamestate.CanAttackTarget(attackerObject, targetObject)) {
+    if (this.gameState.CanAttackTarget(attackerObject, targetObject)) {
       targetObject.TakeDamage(attackerObject.GetAttackDamage());
       if (targetObject.GetHitPoints() < 1) {
-        this.gameState.RemoveObject(targetObject);
+        return this.gameState.RemoveObject(targetObject);
       }
       return true;
     }
@@ -102,7 +102,7 @@ export class GameEngine {
   }
 
   Delete(gameObject) {
-    return false;
+    return this.gameState.RemoveObject(gameObject);
   }
 
   CheckForGameEnd() {

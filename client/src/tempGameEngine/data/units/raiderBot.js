@@ -11,9 +11,9 @@ const RaiderBotData = {
   hitPoints: 100,
   armor: 5,
   speed: 4,
-  canAttack: false,
-  range: 0,
-  attackDamage: 0,
+  canAttack: true,
+  range: 10,
+  attackDamage: 1,
 };
 
 export default RaiderBotData;

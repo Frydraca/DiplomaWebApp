@@ -1,15 +1,15 @@
 import Command from "./baseCommand";
 
 export default class AttackCommand extends Command {
-  unit = {};
-  attackTarget = {};
-  constructor(unit, attackTarget) {
+  attackerObject = {};
+  targetObject = {};
+  constructor(attackerObject, targetObject) {
     super();
-    this.unit = unit;
-    this.attackTarget = attackTarget;
+    this.attackerObject = attackerObject;
+    this.targetObject = targetObject;
   }
 
   execute(game) {
-    return game.Attack(this.unit, this.attackTarget);
+    return game.Attack(this.attackerObject, this.targetObject);
   }
 }
