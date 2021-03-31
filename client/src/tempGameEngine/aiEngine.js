@@ -1,6 +1,11 @@
 import GameEngine from "./gameEngine";
-import { BuildCommand } from "./commands/buildCommand";
-import Building from "./objects/Building";
+import {
+  AttackCommand,
+  BuildCommand,
+  CreateCommand,
+  DeleteCommand,
+  MoveCommand,
+} from "./commands/index";
 import {
   SteelMineData,
   SolarPowerPlantData,
@@ -9,7 +14,10 @@ import {
   CoreFactoryData,
   WorkshopData,
 } from "./data/buildings/index";
+import { RaiderBotData } from "./data/units/index";
+import Building from "./objects/Building";
 import GameState from "./objects/GameState";
+import Unit from "./objects/Unit";
 
 export class AiEngine {
   players = {};
@@ -24,10 +32,10 @@ export class AiEngine {
   // Main run function
   RunGame() {
     let playerId = this.players[0];
+    let counter = 1;
     while (this.game.IsRunning()) {
       this.Do(
         this.BuildUpTo(
-          this.game,
           playerId,
           this.Group(
             "Building",
@@ -37,6 +45,11 @@ export class AiEngine {
           )
         )
       );
+      if (counter === 1) {
+        this.Do(this.Create(playerId, RaiderBotData));
+        this.Do(this.Move());
+        counter = 2;
+      }
 
       this.game.TurnEnd();
     }
@@ -48,13 +61,21 @@ export class AiEngine {
   // Script interpeter functions //
   /////////////////////////////////
 
-  Build(gameEngine, playerId, buildingData) {
-    buildingData.owner = playerId;
-    let newBuilding = new Building(buildingData);
-    gameEngine.Execute(new BuildCommand(newBuilding));
+  // TODO delete. just for testing
+  Move() {
+    let units = this.game.gameState.GetUnits();
+    let tiles = this.game.gameState.GetTiles();
+    if (units.length > 0) {
+      this.game.Execute(new MoveCommand(units[0], tiles[8]));
+    }
   }
 
-  BuildUpTo(gameEngine, playerId, buildingGroup) {
+  Build(playerId, buildingData) {
+    let newBuilding = new Building(buildingData, playerId);
+    this.game.Execute(new BuildCommand(newBuilding));
+  }
+
+  BuildUpTo(playerId, buildingGroup) {
     if (buildingGroup.groupType !== "Building") {
       console.log("Error: wrong type! Type: " + buildingGroup.groupType);
     }
@@ -62,6 +83,7 @@ export class AiEngine {
     buildingGroup.elements.forEach((element) => {
       let numberOfNeededBuildings = 0;
       let buildingType = {};
+
       switch (element.gameObject.name) {
         case "Command Center":
           console.log("Error: Cant build new command centers!"); //TODO error handling
@@ -87,14 +109,20 @@ export class AiEngine {
         default:
           break;
       }
+
       numberOfNeededBuildings =
         element.number -
-        gameEngine.GetBuildingsOfGivenType(playerId, buildingType).length;
+        this.game.GetBuildingsOfGivenType(playerId, buildingType).length;
 
       for (let i = 0; i < numberOfNeededBuildings; i++) {
-        this.Build(gameEngine, playerId, buildingType);
+        this.Build(playerId, buildingType);
       }
     });
+  }
+
+  Create(playerId, unitData) {
+    let newUnit = new Unit(unitData, playerId);
+    this.game.Execute(new CreateCommand(newUnit));
   }
 
   Group(type, ...elements) {

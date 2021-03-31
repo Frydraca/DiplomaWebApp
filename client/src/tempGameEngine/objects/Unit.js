@@ -2,10 +2,19 @@ import GameObject from "./GameObject";
 
 export default class Unit extends GameObject {
   cost = {};
+  speed = 0;
   hitPoints = 0;
   armor = 0;
-  constructor(unitData) {
-    super(unitData);
+  constructor(unitData, ownerId) {
+    super(unitData, ownerId);
+    this.cost = unitData.cost;
+    this.speed = unitData.speed;
+    this.hitPoints = unitData.hitPoints;
+    this.armor = unitData.armor;
+  }
+
+  GetSpeed() {
+    return this.speed;
   }
 
   // Public functions //
@@ -26,5 +35,19 @@ export default class Unit extends GameObject {
     resources.roboSteel -= this.cost.roboSteel;
     resources.energyCore -= this.cost.energyCore;
     return resources;
+  }
+
+  FindLocationToCreate(gameMap) {
+    let ret = { success: false, tile: "null" };
+
+    //TODO make a better algorithm
+    for (let i = 0; i < gameMap.length; i++) {
+      if (gameMap[i].IsEmpty()) {
+        ret.success = true;
+        ret.tile = gameMap[i];
+        return ret;
+      }
+    }
+    return ret;
   }
 }

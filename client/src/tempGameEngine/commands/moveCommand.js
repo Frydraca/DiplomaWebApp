@@ -1,15 +1,15 @@
 import Command from "./baseCommand";
 
-export class MoveCommand extends Command {
+export default class MoveCommand extends Command {
   unit = {};
-  location = [0, 0];
-  constructor(unit, location) {
+  tile = {};
+  constructor(unit, tile) {
     super();
     this.unit = unit;
-    this.location = location;
+    this.tile = tile;
   }
 
   execute(game) {
-    return game.Move(this.unit, this.location);
+    return game.Move(this.unit, this.tile);
   }
 }

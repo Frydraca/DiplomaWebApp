@@ -3,9 +3,9 @@ export default class GameObject {
   owner = "";
   name = "";
   location = [0, 0];
-  constructor(objectData) {
+  constructor(objectData, ownerId) {
     this.objectId = Date.now() + Math.random();
-    this.owner = objectData.owner;
+    this.owner = ownerId;
     this.name = objectData.name;
     this.location = objectData.location;
   }
@@ -22,5 +22,8 @@ export default class GameObject {
   }
   GetLocation() {
     return this.location;
+  }
+  SetLocation(location) {
+    this.location = location;
   }
 }

@@ -7,8 +7,8 @@ export default class Building extends GameObject {
   production = {};
   hitPoints = 0;
   armor = 0;
-  constructor(buildingData) {
-    super(buildingData);
+  constructor(buildingData, ownerId) {
+    super(buildingData, ownerId);
     this.possibleTerrain = buildingData.possibleTerrain;
     this.cost = buildingData.cost;
     this.usage = buildingData.usage;
@@ -69,16 +69,12 @@ export default class Building extends GameObject {
 
     //TODO make a better algorithm
     for (let i = 0; i < gameMap.length; i++) {
-      if (
-        gameMap[i].GetBuildingId() === "null" &&
-        this.IsLocationValid(gameMap[i].terrain)
-      ) {
+      if (gameMap[i].IsEmpty() && this.IsLocationValid(gameMap[i].terrain)) {
         ret.success = true;
         ret.tile = gameMap[i];
         return ret;
       }
     }
-
     return ret;
   }
 }

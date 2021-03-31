@@ -56,7 +56,6 @@ export class GameEngine {
     );
     if (building.CanBuild(player.resources) && locationResponse.success) {
       player.resources = building.TakeCost(player.resources);
-
       this.gameState.AddBuildingToTile(building, locationResponse.tile);
       return true;
     }
@@ -65,12 +64,33 @@ export class GameEngine {
 
   Create(unit) {
     let player = this.GetOwnerOfObject(unit);
-
+    let locationResponse = unit.FindLocationToCreate(this.gameState.GetTiles());
+    if (unit.CanCreate(player.resources) && locationResponse.success) {
+      player.resources = unit.TakeCost(player.resources);
+      this.gameState.AddUnitToTile(unit, locationResponse.tile);
+      return true;
+    }
     return false;
   }
 
-  Move(unit, targetLocation) {
-    return false;
+  Move(unit, targetTile) {
+    console.log(unit);
+    let currentTile = this.gameState.GetTileByLocation(unit.GetLocation());
+    console.log(currentTile);
+    let path = this.gameState.FindPathBetween(currentTile, targetTile);
+    if (path === "null") {
+      console.log("path null");
+      return false;
+    }
+    let newTile;
+    if (path.length <= unit.GetSpeed()) {
+      newTile = path[path.length - 1].tile;
+    } else {
+      newTile = path[unit.GetSpeed()].tile;
+    }
+    this.gameState.RemoveUnitFromTile(currentTile);
+    this.gameState.AddUnitToTile(unit, newTile);
+    return true;
   }
 
   Attack(unit, attackTarget) {

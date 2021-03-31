@@ -1,6 +1,6 @@
 import Command from "./baseCommand";
 
-export class DeleteCommand extends Command {
+export default class DeleteCommand extends Command {
   gameObject = {};
   constructor(gameObject) {
     super();

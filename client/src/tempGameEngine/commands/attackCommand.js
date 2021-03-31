@@ -1,6 +1,6 @@
 import Command from "./baseCommand";
 
-export class AttackCommand extends Command {
+export default class AttackCommand extends Command {
   unit = {};
   attackTarget = {};
   constructor(unit, attackTarget) {

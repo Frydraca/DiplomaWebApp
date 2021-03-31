@@ -1,6 +1,6 @@
 import Command from "./baseCommand";
 
-export class CreateCommand extends Command {
+export default class CreateCommand extends Command {
   unit = {};
   constructor(unit) {
     super();
