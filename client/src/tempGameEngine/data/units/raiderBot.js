@@ -12,8 +12,8 @@ const RaiderBotData = {
   armor: 5,
   speed: 4,
   canAttack: true,
-  range: 10,
-  attackDamage: 1,
+  range: 5,
+  attackDamage: 1000,
 };
 
 export default RaiderBotData;

@@ -10,14 +10,14 @@ export default class GameObject {
   attackDamage = 0;
   constructor(objectData, ownerId) {
     this.objectId = Date.now() + Math.random();
-    this.owner = ownerId;
-    this.name = objectData.name;
-    this.location = objectData.location;
-    this.hitPoints = objectData.hitPoints;
-    this.armor = objectData.armor;
-    this.canAttack = objectData.canAttack;
-    this.range = objectData.range;
-    this.attackDamage = objectData.attackDamage;
+    this.owner = JSON.parse(JSON.stringify(ownerId));
+    this.name = JSON.parse(JSON.stringify(objectData.name));
+    this.location = JSON.parse(JSON.stringify(objectData.location));
+    this.hitPoints = JSON.parse(JSON.stringify(objectData.hitPoints));
+    this.armor = JSON.parse(JSON.stringify(objectData.armor));
+    this.canAttack = JSON.parse(JSON.stringify(objectData.canAttack));
+    this.range = JSON.parse(JSON.stringify(objectData.range));
+    this.attackDamage = JSON.parse(JSON.stringify(objectData.attackDamage));
   }
 
   GetObjectId() {

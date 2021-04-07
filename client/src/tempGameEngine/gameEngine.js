@@ -1,11 +1,21 @@
+import GameState from "./objects/GameState";
+import {
+  AttackCommand,
+  BuildCommand,
+  CreateCommand,
+  DeleteCommand,
+  MoveCommand,
+} from "./commands/index";
+
 export class GameEngine {
+  startingGameStateData = {};
   gameState = {};
   commands = [];
   currentTurnCommands = [];
 
   constructor(startingState) {
-    console.log(startingState);
-    this.gameState = startingState;
+    this.startingGameStateData = startingState;
+    this.gameState = new GameState(startingState);
   }
 
   // Public functions
@@ -25,8 +35,75 @@ export class GameEngine {
       );
   }
 
+  GetGameStateInTurn(turnNumber) {
+    let responseGameState = new GameState(this.startingGameStateData);
+
+    if (turnNumber > this.commands.length) {
+      return responseGameState;
+    }
+    for (
+      let currentTurnNumber = 0;
+      currentTurnNumber < turnNumber;
+      currentTurnNumber++
+    ) {
+      this.commands[currentTurnNumber].forEach((command) => {
+        switch (command.GetType()) {
+          case "attack":
+            responseGameState.GetObjectByLocation(
+              command.GetAttackerObject().GetLocation()
+            );
+            new AttackCommand(
+              responseGameState.GetObjectByLocation(
+                command.GetAttackerObject().GetLocation()
+              ),
+              responseGameState.GetObjectByLocation(
+                command.GetTargetObject().GetLocation()
+              )
+            ).execute(this, responseGameState);
+            break;
+          case "build":
+            new BuildCommand(command.GetBuilding()).execute(
+              this,
+              responseGameState
+            );
+            break;
+          case "create":
+            new CreateCommand(command.GetUnit()).execute(
+              this,
+              responseGameState
+            );
+            break;
+          case "delete":
+            new DeleteCommand(
+              responseGameState.GetObjectByLocation(
+                command.GetObjectToDelete().GetLocation()
+              )
+            ).execute(this, responseGameState);
+            break;
+          case "move":
+            new MoveCommand(
+              responseGameState.GetObjectByLocation(
+                command.GetUnitToMove().GetLocation()
+              ),
+              command.GetTile()
+            ).execute(this, responseGameState);
+            break;
+          default:
+            break;
+        }
+      });
+      responseGameState.GetBuildings().forEach((building) => {
+        let player = responseGameState.GetPlayerById(building.GetOwner());
+        player.SetResources(building.UpdateResources(player.GetResources()));
+      });
+      responseGameState.turnNumber += 1;
+    }
+    console.log(responseGameState);
+    return responseGameState;
+  }
+
   Execute(command) {
-    if (command.execute(this)) {
+    if (command.execute(this, this.gameState)) {
       this.currentTurnCommands.push(command);
     }
     return command;
@@ -49,34 +126,36 @@ export class GameEngine {
     return this.gameState;
   }
 
-  Build(building) {
-    let player = this.GetOwnerOfObject(building);
-    let locationResponse = building.FindLocationToBuild(
-      this.gameState.GetTiles()
+  Build(gameState, building) {
+    let player = this.GetOwnerOfObject(gameState, building);
+    let locationResponse = gameState.GetClosestBuildingLocationToCommandCenter(
+      player,
+      building
     );
     if (building.CanBuild(player.resources) && locationResponse.success) {
       player.resources = building.TakeCost(player.resources);
-      this.gameState.AddBuildingToTile(building, locationResponse.tile);
+      gameState.AddBuildingToTile(building, locationResponse.tile);
       return true;
     }
     return false;
   }
 
-  Create(unit) {
-    let player = this.GetOwnerOfObject(unit);
-    let locationResponse = unit.FindLocationToCreate(this.gameState.GetTiles());
+  Create(gameState, unit) {
+    let player = this.GetOwnerOfObject(gameState, unit);
+    let locationResponse = unit.FindLocationToCreate(gameState.GetTiles());
     if (unit.CanCreate(player.resources) && locationResponse.success) {
       player.resources = unit.TakeCost(player.resources);
-      this.gameState.AddUnitToTile(unit, locationResponse.tile);
+      gameState.AddUnitToTile(unit, locationResponse.tile);
       return true;
     }
     return false;
   }
 
-  Move(unit, targetTile) {
-    let currentTile = this.gameState.GetTileByLocation(unit.GetLocation());
-    let path = this.gameState.FindPathBetween(currentTile, targetTile);
+  Move(gameState, unit, targetTile) {
+    let currentTile = gameState.GetTileByLocation(unit.GetLocation());
+    let path = gameState.FindPathBetween(currentTile, targetTile);
     if (path === "null") {
+      console.log("path fail");
       return false;
     }
     let newTile;
@@ -85,24 +164,24 @@ export class GameEngine {
     } else {
       newTile = path[unit.GetSpeed()].tile;
     }
-    this.gameState.RemoveUnitFromTile(currentTile);
-    this.gameState.AddUnitToTile(unit, newTile);
+    gameState.RemoveUnitFromTile(currentTile);
+    gameState.AddUnitToTile(unit, newTile);
     return true;
   }
 
-  Attack(attackerObject, targetObject) {
-    if (this.gameState.CanAttackTarget(attackerObject, targetObject)) {
+  Attack(gameState, attackerObject, targetObject) {
+    if (gameState.CanAttackTarget(attackerObject, targetObject)) {
       targetObject.TakeDamage(attackerObject.GetAttackDamage());
       if (targetObject.GetHitPoints() < 1) {
-        return this.gameState.RemoveObject(targetObject);
+        return gameState.RemoveObject(targetObject);
       }
       return true;
     }
     return false;
   }
 
-  Delete(gameObject) {
-    return this.gameState.RemoveObject(gameObject);
+  Delete(gameState, gameObject) {
+    return gameState.RemoveObject(gameObject);
   }
 
   CheckForGameEnd() {
@@ -118,8 +197,8 @@ export class GameEngine {
     });
   }
 
-  GetOwnerOfObject(object) {
-    return this.gameState.players.find(
+  GetOwnerOfObject(gameState, object) {
+    return gameState.players.find(
       (player) => player.playerId === object.GetOwner()
     );
   }

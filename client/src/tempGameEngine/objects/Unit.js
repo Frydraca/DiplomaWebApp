@@ -6,8 +6,8 @@ export default class Unit extends GameObject {
 
   constructor(unitData, ownerId) {
     super(unitData, ownerId);
-    this.cost = unitData.cost;
-    this.speed = unitData.speed;
+    this.cost = JSON.parse(JSON.stringify(unitData.cost));
+    this.speed = JSON.parse(JSON.stringify(unitData.speed));
   }
 
   GetSpeed() {

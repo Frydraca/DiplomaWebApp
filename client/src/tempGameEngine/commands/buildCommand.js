@@ -3,11 +3,15 @@ import Command from "./baseCommand";
 export default class BuildCommand extends Command {
   building = {};
   constructor(building) {
-    super();
+    super("build");
     this.building = building;
   }
 
-  execute(game) {
-    return game.Build(this.building);
+  execute(game, gameState) {
+    return game.Build(gameState, this.building);
+  }
+
+  GetBuilding() {
+    return this.building;
   }
 }

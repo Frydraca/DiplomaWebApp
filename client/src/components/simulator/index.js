@@ -7,17 +7,25 @@ function SimulatorScreen() {
   const playerIds = ["player1", "player2"];
   const scripts = [];
   var game = new AiEngine(playerIds, scripts, startingGameState);
+  var turnToView = 0;
+  let gameState = game.game.GetGameStateInTurn(turnToView);
 
   const draw = (ctx) => {
     ctx.canvas.width = 500;
     ctx.canvas.height = 500;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // var img = new Image(30, 30);
+    // img.src =
+    //   "file://E:Lajos/Egyetem/MSc/Diploma/DiplomaWebApp/client/images/Crystal_Mine.png";
+    // ctx.drawImage(img, 100, 100, 30, 30);
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
-    let gameState = game.game.gameState;
     let tiles = gameState.GetTiles();
     tiles.forEach((element) => {
       ctx.beginPath();
+      var img = new Image(30, 30);
+      img.src = "./Crystal_Mine.png";
+      ctx.drawImage(img, 100, 100, 30, 30);
       ctx.rect(
         (element.GetLocation()[0] + 1) * 50,
         (element.GetLocation()[1] + 1) * 50,
@@ -89,6 +97,18 @@ function SimulatorScreen() {
   function simulate() {
     return game.RunGame();
   }
+  function goToStart() {
+    turnToView = 0;
+    gameState = game.game.GetGameStateInTurn(turnToView);
+  }
+  function incrementTurnToView() {
+    turnToView++;
+    gameState = game.game.GetGameStateInTurn(turnToView);
+  }
+  function decrementTurnToView() {
+    turnToView--;
+    gameState = game.game.GetGameStateInTurn(turnToView);
+  }
 
   function getGameState() {
     return game.game.gameState;
@@ -102,10 +122,13 @@ function SimulatorScreen() {
             <Button onClick={simulate}>Run</Button>
           </Col>
           <Col>
-            <Button> Previous Turn</Button>
+            <Button onClick={goToStart}>Go to Start</Button>
           </Col>
           <Col>
-            <Button> Next Turn</Button>
+            <Button onClick={decrementTurnToView}> Previous Turn</Button>
+          </Col>
+          <Col>
+            <Button onClick={incrementTurnToView}> Next Turn</Button>
           </Col>
         </Row>
         <Row>

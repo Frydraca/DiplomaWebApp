@@ -1,13 +1,17 @@
 import Command from "./baseCommand";
 
 export default class DeleteCommand extends Command {
-  gameObject = {};
-  constructor(gameObject) {
-    super();
-    this.gameObject = gameObject;
+  objectToDelete = {};
+  constructor(objectToDelete) {
+    super("delete");
+    this.objectToDelete = objectToDelete;
   }
 
-  execute(game) {
-    return game.Delete(this.gameObject);
+  execute(gameState, game) {
+    return game.Delete(gameState, this.objectToDelete);
+  }
+
+  GetObjectToDelete() {
+    return this.objectToDelete;
   }
 }

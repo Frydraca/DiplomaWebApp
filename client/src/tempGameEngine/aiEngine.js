@@ -16,7 +16,6 @@ import {
 } from "./data/buildings/index";
 import { RaiderBotData } from "./data/units/index";
 import Building from "./objects/Building";
-import GameState from "./objects/GameState";
 import Unit from "./objects/Unit";
 
 export class AiEngine {
@@ -26,14 +25,13 @@ export class AiEngine {
   constructor(playerIds, scripts, startingGameState) {
     this.players = playerIds;
     console.log(startingGameState);
-    this.game = new GameEngine(new GameState(startingGameState));
+    this.game = new GameEngine(startingGameState);
   }
 
   // Main run function
   RunGame() {
-    let counter = 1;
+    let counter = 0;
     while (this.game.IsRunning()) {
-      counter++;
       //script player1
       this.Do(
         this.BuildUpTo(
@@ -68,9 +66,11 @@ export class AiEngine {
       );
 
       this.game.TurnEnd();
+      counter++;
     }
     console.log(this.game.commands);
     console.log(this.game.gameState);
+    console.log(this.game.startingGameStateData);
   }
 
   /////////////////////////////////

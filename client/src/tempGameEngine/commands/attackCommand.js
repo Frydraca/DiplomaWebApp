@@ -4,12 +4,20 @@ export default class AttackCommand extends Command {
   attackerObject = {};
   targetObject = {};
   constructor(attackerObject, targetObject) {
-    super();
+    super("attack");
     this.attackerObject = attackerObject;
     this.targetObject = targetObject;
   }
 
-  execute(game) {
-    return game.Attack(this.attackerObject, this.targetObject);
+  execute(game, gameState) {
+    return game.Attack(gameState, this.attackerObject, this.targetObject);
+  }
+
+  GetAttackerObject() {
+    return this.attackerObject;
+  }
+
+  GetTargetObject() {
+    return this.targetObject;
   }
 }

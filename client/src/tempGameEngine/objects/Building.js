@@ -7,10 +7,12 @@ export default class Building extends GameObject {
   production = {};
   constructor(buildingData, ownerId) {
     super(buildingData, ownerId);
-    this.possibleTerrain = buildingData.possibleTerrain;
-    this.cost = buildingData.cost;
-    this.usage = buildingData.usage;
-    this.production = buildingData.production;
+    this.possibleTerrain = JSON.parse(
+      JSON.stringify(buildingData.possibleTerrain)
+    );
+    this.cost = JSON.parse(JSON.stringify(buildingData.cost));
+    this.usage = JSON.parse(JSON.stringify(buildingData.usage));
+    this.production = JSON.parse(JSON.stringify(buildingData.production));
   }
 
   // Private functions //

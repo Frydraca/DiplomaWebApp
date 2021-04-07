@@ -1,15 +1,23 @@
 import Command from "./baseCommand";
 
 export default class MoveCommand extends Command {
-  unit = {};
+  unitToMove = {};
   tile = {};
-  constructor(unit, tile) {
-    super();
-    this.unit = unit;
+  constructor(unitToMove, tile) {
+    super("move");
+    this.unitToMove = unitToMove;
     this.tile = tile;
   }
 
-  execute(game) {
-    return game.Move(this.unit, this.tile);
+  execute(game, gameState) {
+    return game.Move(gameState, this.unitToMove, this.tile);
+  }
+
+  GetUnitToMove() {
+    return this.unitToMove;
+  }
+
+  GetTile() {
+    return this.tile;
   }
 }

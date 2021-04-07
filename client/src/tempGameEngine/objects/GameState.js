@@ -12,8 +12,8 @@ export default class GameState {
   tiles = [];
 
   constructor(startingGameState) {
-    this.turnNumber = startingGameState.turnNumber;
-    this.isRunning = startingGameState.isRunning;
+    this.turnNumber = JSON.parse(JSON.stringify(startingGameState.turnNumber));
+    this.isRunning = JSON.parse(JSON.stringify(startingGameState.isRunning));
     startingGameState.players.forEach((playerData) => {
       this.players.push(new Player(playerData));
     });
@@ -77,7 +77,22 @@ export default class GameState {
   }
 
   GetTileByLocation(location) {
-    return this.tiles.find((element) => element.location === location);
+    return this.tiles.find(
+      (element) =>
+        element.location[0] === location[0] &&
+        element.location[1] === location[1]
+    );
+  }
+
+  GetObjectByLocation(location) {
+    let tile = this.GetTileByLocation(location);
+    if (tile.HasUnit()) {
+      return this.GetUnitById(tile.GetUnitId());
+    }
+    if (tile.HasBuilding()) {
+      return this.GetBuildingById(tile.GetBuildingId());
+    }
+    return false;
   }
 
   AddBuildingToTile(building, tile) {
@@ -166,6 +181,13 @@ export default class GameState {
     return ret;
   }
 
+  IsSameLocation(tile1, tile2) {
+    return (
+      tile1.GetLocation()[0] === tile2.GetLocation()[0] &&
+      tile1.GetLocation()[1] === tile2.GetLocation()[1]
+    );
+  }
+
   GetDistanceBetweenTiles(tile1, tile2) {
     return (
       Math.abs(tile1.GetLocation()[0] - tile2.GetLocation()[0]) +
@@ -173,12 +195,30 @@ export default class GameState {
     );
   }
 
-  GetClosestBuildingLocationToCommandCenter(playerId, building) {
-    let CommandCenter = this.GetBuildings().filter(
+  // TODO: Refactor
+  GetClosestBuildingLocationToCommandCenter(player, building) {
+    let ret = { success: false, tile: "null" };
+    let commandCenter = this.GetBuildings().filter(
       (element) =>
-        element.GetOwner() === playerId &&
+        element.GetOwner() === player.GetPlayerId() &&
         element.GetName() === "Command Center"
     );
+    let commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
+    let closestTile;
+    let closestDistance = Number.POSITIVE_INFINITY;
+    this.tiles.forEach((element) => {
+      if (building.IsLocationValid(element.GetTerrain()) && element.IsEmpty()) {
+        if (
+          this.GetDistanceBetweenTiles(element, commandTile) < closestDistance
+        ) {
+          closestDistance = this.GetDistanceBetweenTiles(element, commandTile);
+          closestTile = element;
+          ret.success = true;
+          ret.tile = closestTile;
+        }
+      }
+    });
+    return ret;
   }
 
   CanAttackTarget(attackerObject, targetObject) {
@@ -253,7 +293,7 @@ export default class GameState {
       // for each successor
       for (let i = 0; i < successors.length; i++) {
         let currentSuccessor = successors[i];
-        if (currentSuccessor.tile === targetTile) {
+        if (this.IsSameLocation(currentSuccessor.tile, targetTile)) {
           endNode = currentSuccessor;
           break;
         }
@@ -312,7 +352,6 @@ export default class GameState {
       }
       lastNode = lastNode.parent;
     }
-    console.log(path);
     return path.reverse();
   }
 }

@@ -3,8 +3,8 @@ export default class Player {
   resources = {};
 
   constructor(playerData) {
-    this.playerId = playerData.playerId;
-    this.resources = playerData.resources;
+    this.playerId = JSON.parse(JSON.stringify(playerData.playerId));
+    this.resources = JSON.parse(JSON.stringify(playerData.resources));
   }
 
   GetPlayerId() {

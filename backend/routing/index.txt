@@ -1,0 +1,88 @@
+Ai Designer
+- index.html             - login és registration form
+- mapList.html           - A pályák listája, adott pálya megtekintése
+- map.html               - adott pálya megnézése, AddScript és Simulate gomb, pálya leírása elolvasható
+- help.html              - a segítő oldal, link a játékszabályokhoz és a designer helphez
+- rules.html             - a játékszabályok megtekintése
+- designerHelp.html      - segítség a designer használatához
+- designer.html          - az AiDesigner felület, ShowMap, Save script, Load script gombok
+- profile.html           - a felhasználó profilja, Scripts gomb
+- scripts.html           - a felhasználó scripjeinek listája, Open, Delete, rename gombok
+
+- navbar
+    Maps        -> redirect to mapList.html
+    Ai Designer -> redirect to designer.html
+    Profile     -> redirect to profile.html
+    Help        -> redirect to help.html
+    Log out     -> redirect to index.html
+
+Routing
+
+
+middlewares/auth
+    checkPasswordMW.js
+    handleWrongPasswordMW.js
+    authMW.js
+
+middlewares/map
+    getBoardGameListMW.js
+    getBoardGameMW.js
+    saveBoardGameMW.js
+    deleteBoardGameMW.js
+
+middlewares/player
+    getPlayerListMW.js
+    getPlayerMW.js
+    savePlayerMW.js
+    createNewUserMW.js
+    deletePlayerMW.js
+
+
+
+GET /?hiba=wrongPassword            - index.html
+    handleWrongPasswordMW()         // Kezeli a rosszjelszót
+    renderMW(index.html)            // kirendereli az oldalt
+
+POST/login                          - jelszó ellenőrzés, ha ok mapList.html-re redirect, 
+                                      ha nem akkor vissza az index.html-re
+    checkPasswordMW()               // jelszó ellenőrzés, ha ok mapList.html-re redirect, 
+                                      ha nem akkor vissza az index.html-re
+
+POST/register                       - új regisztráció, ellenőrzés, hogy felhasználó már létezik e, ha nem, akkor redirect to mapList.html,
+                                      ha létezik, akkor vissza az index.html-re
+
+    createNewUserMW()               // új regisztráció, ellenőrzés, hogy felhasználó már létezik e, ha nem, akkor redirect to mapList.html,
+                                      ha létezik, akkor vissza az index.html-re
+
+
+GET /maps                            - mapList.html
+    authMW
+    getMapListMW
+        Maps lista lekérés
+    renderMW(mapList.html)
+
+GET /map/:mapid                      - map.html
+    authMW
+    getMapMW
+        adott map lekérése (ha létezik)
+    renderMW(map.html)
+
+GET /profile                        - profile.html
+    authMW
+    getProfileMW
+        felhasználó lekérése az adatbázisból
+    renderMW(profile.html)
+
+GET /scripts                        - scripts.html
+    authMW
+    getScriptListMW
+    renderMW(scripts.html)
+
+GET /aiDesigner                     - scripts.html
+    authMW
+
+
+
+
+
+

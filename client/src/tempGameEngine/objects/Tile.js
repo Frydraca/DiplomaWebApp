@@ -5,10 +5,10 @@ export default class Tile {
   unitId = "";
 
   constructor(tileData, buildingId, unitId) {
-    this.location = tileData.location;
-    this.terrain = tileData.terrain;
-    this.buildingId = buildingId;
-    this.unitId = unitId;
+    this.location = JSON.parse(JSON.stringify(tileData.location));
+    this.terrain = JSON.parse(JSON.stringify(tileData.terrain));
+    this.buildingId = JSON.parse(JSON.stringify(buildingId));
+    this.unitId = JSON.parse(JSON.stringify(unitId));
   }
 
   GetLocation() {
@@ -40,5 +40,19 @@ export default class Tile {
       return true;
     }
     return false;
+  }
+
+  HasUnit() {
+    if (this.unitId === "null") {
+      return false;
+    }
+    return true;
+  }
+
+  HasBuilding() {
+    if (this.buildingId === "null") {
+      return false;
+    }
+    return true;
   }
 }
