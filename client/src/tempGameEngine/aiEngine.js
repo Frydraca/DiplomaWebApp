@@ -44,8 +44,10 @@ export class AiEngine {
           )
         )
       );
-      if (counter === 7) {
+      if (counter === 6) {
         this.Do(this.Create(this.players[0], RaiderBotData));
+      }
+      if (counter === 7) {
         this.Do(this.Move());
       }
       if (counter === 8) {

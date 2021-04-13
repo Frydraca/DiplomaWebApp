@@ -1,28 +1,33 @@
+import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { logOut, isLoggedIn } from "../../api/Authentication";
 
 function NavMenu() {
   const activePath = "";
 
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   return (
     <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
-      <Navbar.Brand href="#home">Ai Designer</Navbar.Brand>
-      {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
+      <Navbar.Brand href="/">Ai Designer</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        {true ? (
-          <Nav className="ml-auto mr-3">
-            <Link to="/simulator">Simulator</Link>
-            <Link to="/editor">Designer</Link>
-          </Nav>
-        ) : (
-          <Nav className="ml-auto mr-3">
-            <Link to="/register">Register</Link>
-            <Link to="/login">Log In</Link>
-          </Nav>
-        )}
+        <Nav className="ml-auto mr-3">
+          {isLoggedIn() ? (
+            <>
+              <Nav.Link href="/mapList">Maps</Nav.Link>
+              <Nav.Link href="/simulator">Simulator</Nav.Link>
+              <Nav.Link href="/designer">Designer</Nav.Link>
+              <Nav.Link href="/profile">Profile</Nav.Link>
+              <Nav.Link href="/help">Help</Nav.Link>
+              <Nav.Link onClick={() => dispatch(logOut())}>Log out</Nav.Link>
+            </>
+          ) : (
+            <></>
+          )}
+        </Nav>
       </Navbar.Collapse>
     </Navbar>
   );

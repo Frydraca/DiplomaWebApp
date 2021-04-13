@@ -1,8 +1,16 @@
-import { Button, Col, Row } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
 import { AiEngine } from "../../tempGameEngine/aiEngine";
+import { initializeScreen } from "../../api/Authentication";
 
 function SimulatorScreen() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(initializeScreen());
+  }, []);
+
   const startingGameState = require("../../tempGameEngine/gameState.json");
   const playerIds = ["player1", "player2"];
   const scripts = [];
@@ -14,18 +22,11 @@ function SimulatorScreen() {
     ctx.canvas.width = 500;
     ctx.canvas.height = 500;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    // var img = new Image(30, 30);
-    // img.src =
-    //   "file://E:Lajos/Egyetem/MSc/Diploma/DiplomaWebApp/client/images/Crystal_Mine.png";
-    // ctx.drawImage(img, 100, 100, 30, 30);
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
     let tiles = gameState.GetTiles();
     tiles.forEach((element) => {
       ctx.beginPath();
-      var img = new Image(30, 30);
-      img.src = "./Crystal_Mine.png";
-      ctx.drawImage(img, 100, 100, 30, 30);
       ctx.rect(
         (element.GetLocation()[0] + 1) * 50,
         (element.GetLocation()[1] + 1) * 50,
@@ -110,25 +111,29 @@ function SimulatorScreen() {
     gameState = game.game.GetGameStateInTurn(turnToView);
   }
 
-  function getGameState() {
-    return game.game.gameState;
-  }
-
   return (
     <div className="SimulatorScreen">
-      <div>
+      <Container>
         <Row>
-          <Col>
-            <Button onClick={simulate}>Run</Button>
+          <Col md={2}>
+            <Button onClick={simulate} size="sm">
+              Run
+            </Button>
           </Col>
-          <Col>
-            <Button onClick={goToStart}>Go to Start</Button>
+          <Col md={2}>
+            <Button onClick={goToStart} size="sm">
+              Go to Start
+            </Button>
           </Col>
-          <Col>
-            <Button onClick={decrementTurnToView}> Previous Turn</Button>
+          <Col md={2}>
+            <Button onClick={decrementTurnToView} size="sm">
+              Previous Turn
+            </Button>
           </Col>
-          <Col>
-            <Button onClick={incrementTurnToView}> Next Turn</Button>
+          <Col md={2}>
+            <Button onClick={incrementTurnToView} size="sm">
+              Next Turn
+            </Button>
           </Col>
         </Row>
         <Row>
@@ -136,7 +141,7 @@ function SimulatorScreen() {
             <Canvas draw={draw}></Canvas>
           </Col>
         </Row>
-      </div>
+      </Container>
     </div>
   );
 }

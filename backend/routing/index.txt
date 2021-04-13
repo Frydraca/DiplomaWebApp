@@ -19,24 +19,6 @@ Ai Designer
 Routing
 
 
-middlewares/auth
-    checkPasswordMW.js
-    handleWrongPasswordMW.js
-    authMW.js
-
-middlewares/map
-    getBoardGameListMW.js
-    getBoardGameMW.js
-    saveBoardGameMW.js
-    deleteBoardGameMW.js
-
-middlewares/player
-    getPlayerListMW.js
-    getPlayerMW.js
-    savePlayerMW.js
-    createNewUserMW.js
-    deletePlayerMW.js
-
 
 
 GET /?hiba=wrongPassword            - index.html

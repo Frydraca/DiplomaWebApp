@@ -1,39 +1,52 @@
 import "./App.css";
-import NavMenu from "./components/Navigation/NavMenu";
-import EditorScreen from "./components/editor";
-import SimulatorScreen from "./components/simulator";
+import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { AuthenticatedRoute } from "./routing/AuthenticatedRoute";
+import NavMenu from "./components/Navigation/NavMenu";
+import Padding from "./components/Navigation/Padding";
+import EditorScreen from "./components/Designer";
+import SimulatorScreen from "./components/Simulator";
+import MapListScreen from "./components/Maps";
+import ProfileScreen from "./components/Profile";
+import StartingScreen from "./components/Authentication/StartingScreen";
+import LoginScreen from "./components/Authentication/LoginScreen";
+import RegisterScreen from "./components/Authentication/RegisterScreen";
+import HelpScreen from "./components/Help/HelpScreen";
+import RulesScreen from "./components/Help/RulesScreen";
+import DesignerHelpScreen from "./components/Help/DesignerHelpScreen";
 
 export default function App() {
   return (
     <div style={{ height: "100%" }}>
       <Router>
         <NavMenu />
-        <div>
-          <hr />
-
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/editor">
-              <EditorScreen />
-            </Route>
-            <Route path="/simulator">
-              <SimulatorScreen />
-            </Route>
-          </Switch>
-        </div>
+        <Padding />
+        <Route exact path="/" component={StartingScreen} />
+        <Route exact path="/login" component={LoginScreen} />
+        <Route exact path="/register" component={RegisterScreen} />
+        <AuthenticatedRoute exact path="/mapList">
+          <MapListScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designer">
+          <EditorScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/simulator">
+          <SimulatorScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/profile">
+          <ProfileScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/help">
+          <HelpScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/gameRules">
+          <RulesScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp">
+          <DesignerHelpScreen />
+        </AuthenticatedRoute>
       </Router>
-    </div>
-  );
-}
-
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
     </div>
   );
 }

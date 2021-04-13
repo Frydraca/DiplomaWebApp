@@ -1,5 +1,10 @@
 var express = require("express");
+var cors = require("cors");
 var app = express();
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
+app.use(cors());
 
 // Load routing
 require("./routing/index")(app);
