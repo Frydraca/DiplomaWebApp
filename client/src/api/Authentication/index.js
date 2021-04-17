@@ -10,7 +10,6 @@ var refreshInterval = { id: setInterval(() => {}, 1000), isSet: false };
 
 function refreshToken(dispatch, getState) {
   const header = generateAuthenticationHeader(getState());
-  console.log("refresh");
   return axios({
     method: "POST",
     url: serverBaseUrl + "token",
@@ -56,7 +55,7 @@ export function initializeScreen() {
           refreshToken(dispatch, getState);
           refreshInterval.id = setInterval(() => {
             refreshToken(dispatch, getState);
-          }, 5000);
+          }, 30000);
         }
       },
       (error) => {
@@ -83,7 +82,8 @@ export function logIn(loginData) {
     }).then(
       (success) => {
         dispatch(loadAuthData({ auth: success.data }));
-        dispatch(push("/designer"));
+        dispatch(push("/profile"));
+        window.location.reload();
       },
       (error) => {
         console.log(error);
@@ -99,16 +99,15 @@ export function logIn(loginData) {
 }
 
 export function logOutLocally(dispatch) {
-  console.log("logout locally");
   clearInterval(refreshInterval.id);
   refreshInterval.isSet = false;
   dispatch(removeAuthData());
   dispatch(loadUser({ user: {} }));
   dispatch(push("/"));
+  window.location.reload();
 }
 
 export function logOut() {
-  console.log("logout");
   return (dispatch, getState) => {
     const header = generateAuthenticationHeader(getState());
 
@@ -136,7 +135,6 @@ export function logOut() {
 }
 
 export function createNewAccount(registerData) {
-  console.log(registerData);
   return (dispatch) => {
     return axios({
       method: "post",
@@ -145,7 +143,8 @@ export function createNewAccount(registerData) {
     }).then(
       (success) => {
         dispatch(loadAuthData({ auth: success.data }));
-        dispatch(push("/designer"));
+        dispatch(push("/profile"));
+        window.location.reload();
       },
       (error) => {
         dispatch(

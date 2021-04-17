@@ -23,8 +23,8 @@ export default function App() {
         <NavMenu />
         <Padding />
         <Route exact path="/" component={StartingScreen} />
-        <Route exact path="/login" component={LoginScreen} />
-        <Route exact path="/register" component={RegisterScreen} />
+        <Route path="/login" component={LoginScreen} />
+        <Route path="/register" component={RegisterScreen} />
         <AuthenticatedRoute exact path="/mapList">
           <MapListScreen />
         </AuthenticatedRoute>

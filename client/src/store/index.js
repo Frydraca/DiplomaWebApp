@@ -10,6 +10,7 @@ import authentication from "./Authentication";
 import errors from "./Errors";
 import user from "./User";
 import game from "./Game";
+import gameMap from "./Map";
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   errors: errors,
   user: user,
   currentGame: game,
+  gameMap: gameMap,
 });
 
 const middleware = [

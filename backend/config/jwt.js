@@ -1,4 +1,4 @@
 const accessTokenSecret = "JWTSecretConsultationApp";
-const expTime = 10;
+const expTime = 300;
 
 module.exports = { accessTokenSecret: accessTokenSecret, expTime: expTime };

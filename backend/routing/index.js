@@ -1,3 +1,9 @@
+const createGameSimulationMW = require("../middlewares/data/game/createGameSimulationMW");
+const getGameMW = require("../middlewares/data/game/getGameMW");
+const updateGameMW = require("../middlewares/data/game/updateGameMW");
+const createMapMW = require("../middlewares/data/gameMap/createMapMW");
+const getAllMapsMW = require("../middlewares/data/gameMap/getAllMapsMW");
+const createScriptMW = require("../middlewares/data/script/createScriptMW");
 const createUserForRegisterMW = require("../middlewares/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middlewares/data/user/getUserForLoginMW");
 const getUserMW = require("../middlewares/data/user/getUserMW");
@@ -7,6 +13,11 @@ const authenticateWithJWTMW = require("../middlewares/logic/auth/authenticateWit
 const authenticateUserMW = require("../middlewares/logic/auth/authenticateUserMW");
 const sendBackActualUserMW = require("../middlewares/logic/auth/sendBackActualUserMW");
 const validatePasswordMW = require("../middlewares/logic/auth/validatePasswordMW");
+const setGameToEndMW = require("../middlewares/logic/game/setGameToEndMW");
+const setGameToGivenTurnMW = require("../middlewares/logic/game/setGameToGivenTurnMW");
+const setGameToNextTurnMW = require("../middlewares/logic/game/setGameToNextTurnMW");
+const setGameToPreviousTurnMW = require("../middlewares/logic/game/setGameToPreviousTurnMW");
+const setGameToStartMW = require("../middlewares/logic/game/setGameToStartMW");
 const logIncomingCallMW = require("../middlewares/logic/log/logIncomingCallMW");
 const sendJsonResponseMW = require("../middlewares/logic/sendJsonResponseMW");
 
@@ -70,5 +81,105 @@ module.exports = function (app) {
   );
 
   //simulator
-  app.get("/simulator", logIncomingCallMW());
+  app.post(
+    "/simulator",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    createGameSimulationMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  // app.get(
+  //   "/simulator/:gameId",
+  //   logIncomingCallMW(),
+  //   authenticateWithJWTMW(),
+  //   getUserMW(objRepo),
+  //   getGameMapMW(objRepo),
+  //   sendJsonResponseMW()
+  // );
+
+  app.get(
+    "/simulator/:gameId/start",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMW(objRepo),
+    setGameToStartMW(),
+    updateGameMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  app.get(
+    "/simulator/:gameId/nextTurn",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMW(objRepo),
+    setGameToNextTurnMW(),
+    updateGameMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  app.get(
+    "/simulator/:gameId/previousTurn",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMW(objRepo),
+    setGameToPreviousTurnMW(),
+    updateGameMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  app.get(
+    "/simulator/:gameId/end",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMW(objRepo),
+    setGameToEndMW(),
+    updateGameMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  app.get(
+    "/simulator/:gameId/:turnNumber",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMW(objRepo),
+    setGameToGivenTurnMW(),
+    updateGameMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  //designer
+  app.post(
+    "/designer",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    createScriptMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  //mapList
+  app.post(
+    "/mapList",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    createMapMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  app.get(
+    "/mapList",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getAllMapsMW(objRepo),
+    sendJsonResponseMW()
+  );
 };

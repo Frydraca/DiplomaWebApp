@@ -126,6 +126,14 @@ export class GameEngine {
     return this.gameState;
   }
 
+  GetStartingGameState() {
+    return new GameState(this.startingGameStateData);
+  }
+
+  GetCommands() {
+    return this.commands;
+  }
+
   Build(gameState, building) {
     let player = this.GetOwnerOfObject(gameState, building);
     let locationResponse = gameState.GetClosestBuildingLocationToCommandCenter(

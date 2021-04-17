@@ -3,17 +3,28 @@ import { useDispatch } from "react-redux";
 import Blockly from "node-blockly/browser";
 import { Button, Col, Row } from "react-bootstrap";
 import { initializeScreen } from "../../api/Authentication";
-import structures from "../customBlocks/structures";
-import actions from "../customBlocks/actions";
-import types from "../customBlocks/types";
-import triggers from "../customBlocks/triggers";
-import combatTactics from "../customBlocks/combatTactics";
+import { saveScript } from "../../api/Designer";
+import structures from "./customBlocks/structures";
+import actions from "./customBlocks/actions";
+import types from "./customBlocks/types";
+import triggers from "./customBlocks/triggers";
+import combatTactics from "./customBlocks/combatTactics";
 
 import BlocklyDrawer, { Block, Category } from "react-blockly-drawer";
 
 function EditorScreen() {
   const dispatch = useDispatch();
-  const generate = () => {};
+  var currentCode = "";
+  const save = () => {
+    console.log("save");
+    console.log(currentCode);
+    dispatch(
+      saveScript({
+        name: "tesztScript",
+        content: currentCode,
+      })
+    );
+  };
 
   useEffect(() => {
     dispatch(initializeScreen());
@@ -26,13 +37,13 @@ function EditorScreen() {
           <h1>blockly editor</h1>
         </Col>
       </Row>
-      {/* <Row>
+      <Row>
         <Col md={6}>
-          <button type="button" className="btn btn-primary" onClick={generate}>
-            Generate
+          <button className="btn btn-primary" onClick={save}>
+            Save Script
           </button>
         </Col>
-      </Row> */}
+      </Row>
       <Row>
         <Col>
           <BlocklyDrawer
@@ -44,8 +55,9 @@ function EditorScreen() {
               ...combatTactics,
             ]}
             onChange={(code, workspace) => {
-              console.clear();
+              //console.clear();
               console.log(code /*, workspace*/);
+              currentCode = code;
             }}
             language={Blockly.JavaScript}
             appearance={{

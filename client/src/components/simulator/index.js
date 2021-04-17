@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
 import { AiEngine } from "../../tempGameEngine/aiEngine";
 import { initializeScreen } from "../../api/Authentication";
+import { simulateGame, getStartOfGame } from "../../api/Simulator";
 
 function SimulatorScreen() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(initializeScreen());
   }, []);
+
+  const gameId = useSelector((state) => state.currentGame.id);
 
   const startingGameState = require("../../tempGameEngine/gameState.json");
   const playerIds = ["player1", "player2"];
@@ -96,11 +99,18 @@ function SimulatorScreen() {
   };
 
   function simulate() {
-    return game.RunGame();
+    game.RunGame();
+    dispatch(
+      simulateGame({
+        startingGameState: game.game.GetStartingGameState(),
+        commands: game.game.GetCommands(),
+      })
+    );
   }
   function goToStart() {
     turnToView = 0;
     gameState = game.game.GetGameStateInTurn(turnToView);
+    dispatch(getStartOfGame(gameId));
   }
   function incrementTurnToView() {
     turnToView++;
