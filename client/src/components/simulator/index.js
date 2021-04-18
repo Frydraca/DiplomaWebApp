@@ -102,8 +102,8 @@ function SimulatorScreen() {
     game.RunGame();
     dispatch(
       simulateGame({
-        startingGameState: game.game.GetStartingGameState(),
-        commands: game.game.GetCommands(),
+        gameId: "607762d486490906cc9bdd1a",
+        script: game.game.GetCommands(),
       })
     );
   }

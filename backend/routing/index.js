@@ -3,6 +3,7 @@ const getGameMW = require("../middlewares/data/game/getGameMW");
 const updateGameMW = require("../middlewares/data/game/updateGameMW");
 const createMapMW = require("../middlewares/data/gameMap/createMapMW");
 const getAllMapsMW = require("../middlewares/data/gameMap/getAllMapsMW");
+const getGameMapMW = require("../middlewares/data/gameMap/getGameMapMW");
 const createScriptMW = require("../middlewares/data/script/createScriptMW");
 const createUserForRegisterMW = require("../middlewares/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middlewares/data/user/getUserForLoginMW");
@@ -18,6 +19,7 @@ const setGameToGivenTurnMW = require("../middlewares/logic/game/setGameToGivenTu
 const setGameToNextTurnMW = require("../middlewares/logic/game/setGameToNextTurnMW");
 const setGameToPreviousTurnMW = require("../middlewares/logic/game/setGameToPreviousTurnMW");
 const setGameToStartMW = require("../middlewares/logic/game/setGameToStartMW");
+const runSimulationMW = require("../middlewares/logic/game/runSimulationMW");
 const logIncomingCallMW = require("../middlewares/logic/log/logIncomingCallMW");
 const sendJsonResponseMW = require("../middlewares/logic/sendJsonResponseMW");
 
@@ -98,6 +100,16 @@ module.exports = function (app) {
   //   getGameMapMW(objRepo),
   //   sendJsonResponseMW()
   // );
+
+  app.post(
+    "/simulator/simulate",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMapMW(objRepo),
+    runSimulationMW(objRepo),
+    sendJsonResponseMW()
+  );
 
   app.get(
     "/simulator/:gameId/start",
