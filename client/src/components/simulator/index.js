@@ -6,6 +6,7 @@ import { initializeScreen } from "../../api/Authentication";
 import {
   simulateGame,
   getStartOfGame,
+  getEndOfGame,
   getNextTurnOfGame,
   getPreviousTurnOfGame,
 } from "../../api/Simulator";
@@ -111,6 +112,9 @@ function SimulatorScreen() {
   function goToStart() {
     dispatch(getStartOfGame(gameId));
   }
+  function goToEnd() {
+    dispatch(getEndOfGame(gameId));
+  }
   function incrementTurnToView() {
     dispatch(getNextTurnOfGame(gameId));
   }
@@ -130,6 +134,11 @@ function SimulatorScreen() {
           <Col md={2}>
             <Button onClick={goToStart} size="sm">
               Go to Start
+            </Button>
+          </Col>
+          <Col md={2}>
+            <Button onClick={goToEnd} size="sm">
+              Go to End
             </Button>
           </Col>
           <Col md={2}>

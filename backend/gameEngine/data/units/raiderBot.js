@@ -13,5 +13,5 @@ module.exports = RaiderBotData = {
   speed: 4,
   canAttack: true,
   range: 5,
-  attackDamage: 10,
+  attackDamage: 1000,
 };

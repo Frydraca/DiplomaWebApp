@@ -35,8 +35,6 @@ export function simulateGame(simulationData) {
 }
 
 export function getStartOfGame(gameId) {
-  console.log(gameId);
-  console.log("gameId: " + gameId);
   return (dispatch, getState) => {
     const header = generateAuthenticationHeader(getState());
     return axios({
@@ -45,11 +43,11 @@ export function getStartOfGame(gameId) {
       headers: header,
     }).then(
       (success) => {
-        // dispatch(
-        //   loadGame({
-        //     game: success.data,
-        //   })
-        // );
+        dispatch(
+          loadGame({
+            game: success.data,
+          })
+        );
         console.log("loaded game start");
       },
       (error) => {
@@ -64,9 +62,35 @@ export function getStartOfGame(gameId) {
   };
 }
 
+export function getEndOfGame(gameId) {
+  return (dispatch, getState) => {
+    const header = generateAuthenticationHeader(getState());
+    return axios({
+      method: "GET",
+      url: `${serverBaseUrl}simulator/${gameId}/end`,
+      headers: header,
+    }).then(
+      (success) => {
+        dispatch(
+          loadGame({
+            game: success.data,
+          })
+        );
+        console.log("got previous turn");
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "getStartOfGameError",
+            description: error.response.data,
+          })
+        );
+      }
+    );
+  };
+}
+
 export function getNextTurnOfGame(gameId) {
-  console.log(gameId);
-  console.log("gameId: " + gameId);
   return (dispatch, getState) => {
     const header = generateAuthenticationHeader(getState());
     return axios({
@@ -95,8 +119,6 @@ export function getNextTurnOfGame(gameId) {
 }
 
 export function getPreviousTurnOfGame(gameId) {
-  console.log(gameId);
-  console.log("gameId: " + gameId);
   return (dispatch, getState) => {
     const header = generateAuthenticationHeader(getState());
     return axios({

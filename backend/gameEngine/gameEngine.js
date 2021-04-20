@@ -47,10 +47,10 @@ module.exports = class GameEngine {
   }
 
   TurnEnd() {
+    this.UpdateResources();
+    this.CheckForGameEnd();
     this.commands.push(this.currentTurnCommands);
     this.currentTurnCommands = [];
-    this.CheckForGameEnd();
-    this.UpdateResources();
     this.gameState.turnNumber += 1;
   }
 
@@ -136,9 +136,16 @@ module.exports = class GameEngine {
   }
 
   UpdateResources() {
+    let oldPlayers = JSON.parse(JSON.stringify(this.gameState.GetPlayers()));
     this.gameState.GetBuildings().forEach((building) => {
       let player = this.gameState.GetPlayerById(building.GetOwner());
       player.SetResources(building.UpdateResources(player.GetResources()));
+    });
+    let newPlayers = JSON.parse(JSON.stringify(this.gameState.GetPlayers()));
+    this.currentTurnCommands.push({
+      type: "updateResources",
+      oldPlayers: oldPlayers,
+      newPlayers: newPlayers,
     });
   }
 
