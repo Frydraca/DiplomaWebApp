@@ -107,7 +107,8 @@ module.exports = function (app) {
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     getGameMapMW(objRepo),
-    runSimulationMW(objRepo),
+    runSimulationMW(),
+    createGameSimulationMW(objRepo),
     sendJsonResponseMW()
   );
 

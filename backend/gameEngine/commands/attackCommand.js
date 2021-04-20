@@ -20,4 +20,12 @@ module.exports = class AttackCommand extends Command {
   GetTargetObject() {
     return this.targetObject;
   }
+
+  GetResult() {
+    return {
+      type: "attack",
+      attackerObject: JSON.parse(JSON.stringify(this.attackerObject)),
+      targetObject: JSON.parse(JSON.stringify(this.targetObject)),
+    };
+  }
 };

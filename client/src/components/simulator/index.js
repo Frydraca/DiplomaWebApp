@@ -2,9 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
-import { AiEngine } from "../../tempGameEngine/aiEngine";
 import { initializeScreen } from "../../api/Authentication";
-import { simulateGame, getStartOfGame } from "../../api/Simulator";
+import {
+  simulateGame,
+  getStartOfGame,
+  getNextTurnOfGame,
+  getPreviousTurnOfGame,
+} from "../../api/Simulator";
 
 function SimulatorScreen() {
   const dispatch = useDispatch();
@@ -13,13 +17,9 @@ function SimulatorScreen() {
   }, []);
 
   const gameId = useSelector((state) => state.currentGame.id);
-
-  const startingGameState = require("../../tempGameEngine/gameState.json");
-  const playerIds = ["player1", "player2"];
-  const scripts = [];
-  var game = new AiEngine(playerIds, scripts, startingGameState);
-  var turnToView = 0;
-  let gameState = game.game.GetGameStateInTurn(turnToView);
+  const currentGameState = useSelector(
+    (state) => state.currentGame.currentGameState
+  );
 
   const draw = (ctx) => {
     ctx.canvas.width = 500;
@@ -27,98 +27,95 @@ function SimulatorScreen() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
-    let tiles = gameState.GetTiles();
-    tiles.forEach((element) => {
-      ctx.beginPath();
-      ctx.rect(
-        (element.GetLocation()[0] + 1) * 50,
-        (element.GetLocation()[1] + 1) * 50,
-        50,
-        50
-      );
-      switch (element.GetTerrain()) {
-        case "plains":
-          ctx.fillStyle = "lightgreen";
-          break;
-        case "steel ore":
-          ctx.fillStyle = "grey";
-          break;
-        case "crystal field":
-          ctx.fillStyle = "lightskyblue";
-          break;
-        default:
-          ctx.fillStyle = "red";
-          break;
-      }
-      ctx.fill();
-    });
-    let buildings = gameState.GetBuildings();
-    buildings.forEach((element) => {
-      ctx.beginPath();
-      ctx.rect(
-        (element.GetLocation()[0] + 1) * 50 + 10,
-        (element.GetLocation()[1] + 1) * 50 + 10,
-        30,
-        30
-      );
-      switch (element.GetOwner()) {
-        case "player1":
-          ctx.fillStyle = "orange";
-          break;
-        case "player2":
-          ctx.fillStyle = "yellow";
-          break;
-        default:
-          ctx.fillStyle = "red";
-          break;
-      }
-      ctx.fill();
-    });
-    let units = gameState.GetUnits();
-    units.forEach((element) => {
-      ctx.beginPath();
-      ctx.rect(
-        (element.GetLocation()[0] + 1) * 50 + 10,
-        (element.GetLocation()[1] + 1) * 50 + 10,
-        30,
-        30
-      );
-      switch (element.GetOwner()) {
-        case "player1":
-          ctx.fillStyle = "darkviolet";
-          break;
-        case "player2":
-          ctx.fillStyle = "violet";
-          break;
-        default:
-          ctx.fillStyle = "red";
-          break;
-      }
-      ctx.fill();
-    });
+    if (currentGameState !== undefined) {
+      let tiles = currentGameState.tiles;
+      tiles.forEach((element) => {
+        ctx.beginPath();
+        ctx.rect(
+          (element.location[0] + 1) * 50,
+          (element.location[1] + 1) * 50,
+          50,
+          50
+        );
+        switch (element.terrain) {
+          case "plains":
+            ctx.fillStyle = "lightgreen";
+            break;
+          case "steel ore":
+            ctx.fillStyle = "grey";
+            break;
+          case "crystal field":
+            ctx.fillStyle = "lightskyblue";
+            break;
+          default:
+            ctx.fillStyle = "red";
+            break;
+        }
+        ctx.fill();
+      });
+      let buildings = currentGameState.buildings;
+      buildings.forEach((element) => {
+        ctx.beginPath();
+        ctx.rect(
+          (element.location[0] + 1) * 50 + 10,
+          (element.location[1] + 1) * 50 + 10,
+          30,
+          30
+        );
+        switch (element.owner) {
+          case "player1":
+            ctx.fillStyle = "orange";
+            break;
+          case "serverAi":
+            ctx.fillStyle = "yellow";
+            break;
+          default:
+            ctx.fillStyle = "red";
+            break;
+        }
+        ctx.fill();
+      });
+      let units = currentGameState.units;
+      units.forEach((element) => {
+        ctx.beginPath();
+        ctx.rect(
+          (element.location[0] + 1) * 50 + 10,
+          (element.location[1] + 1) * 50 + 10,
+          30,
+          30
+        );
+        switch (element.owner) {
+          case "player1":
+            ctx.fillStyle = "darkviolet";
+            break;
+          case "serverAi":
+            ctx.fillStyle = "violet";
+            break;
+          default:
+            ctx.fillStyle = "red";
+            break;
+        }
+        ctx.fill();
+      });
+    }
   };
 
   function simulate() {
-    game.RunGame();
     dispatch(
       simulateGame({
         gameId: "607762d486490906cc9bdd1a",
-        script: game.game.GetCommands(),
+        script: "script",
       })
     );
   }
   function goToStart() {
-    turnToView = 0;
-    gameState = game.game.GetGameStateInTurn(turnToView);
     dispatch(getStartOfGame(gameId));
   }
   function incrementTurnToView() {
-    turnToView++;
-    gameState = game.game.GetGameStateInTurn(turnToView);
+    dispatch(getNextTurnOfGame(gameId));
   }
   function decrementTurnToView() {
-    turnToView--;
-    gameState = game.game.GetGameStateInTurn(turnToView);
+    dispatch(getPreviousTurnOfGame(gameId));
   }
 
   return (

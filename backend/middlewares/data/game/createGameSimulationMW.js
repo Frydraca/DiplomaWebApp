@@ -11,11 +11,11 @@ module.exports = function (objectrepository) {
     var game = new Game({
       currentTurn: 0,
       currentCommandNumber: 0,
-      commands: req.body.commands,
-      players: req.body.startingGameState.players,
-      tiles: req.body.startingGameState.tiles,
-      buildings: req.body.startingGameState.buildings,
-      units: req.body.startingGameState.units,
+      commands: res.locals.simulation.commands,
+      players: res.locals.simulation.startingGameState.players,
+      tiles: res.locals.simulation.startingGameState.tiles,
+      buildings: res.locals.simulation.startingGameState.buildings,
+      units: res.locals.simulation.startingGameState.units,
     });
 
     game.save(function (err, successfulGame) {
@@ -25,11 +25,7 @@ module.exports = function (objectrepository) {
 
       res.locals.retData = {
         id: successfulGame.id,
-        owner: {
-          id: req.user.id,
-          email: req.user.email,
-          userName: req.user.userName,
-        },
+        currentGameState: res.locals.simulation.startingGameState,
       };
       return next();
     });

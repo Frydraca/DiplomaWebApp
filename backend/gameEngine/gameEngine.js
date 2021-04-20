@@ -8,12 +8,14 @@ const MoveCommand = require("./commands/moveCommand");
 module.exports = class GameEngine {
   startingGameStateData = {};
   gameState = {};
+  startingGameState = {};
   commands = [];
   currentTurnCommands = [];
 
   constructor(startingState) {
     this.startingGameStateData = startingState;
     this.gameState = new GameState(startingState);
+    this.startingGameState = JSON.parse(JSON.stringify(this.gameState));
   }
 
   // Public functions
@@ -33,76 +35,9 @@ module.exports = class GameEngine {
       );
   }
 
-  GetGameStateInTurn(turnNumber) {
-    let responseGameState = new GameState(this.startingGameStateData);
-
-    if (turnNumber > this.commands.length) {
-      return responseGameState;
-    }
-    for (
-      let currentTurnNumber = 0;
-      currentTurnNumber < turnNumber;
-      currentTurnNumber++
-    ) {
-      this.commands[currentTurnNumber].forEach((command) => {
-        switch (command.GetType()) {
-          case "attack":
-            responseGameState.GetObjectByLocation(
-              command.GetAttackerObject().GetLocation()
-            );
-            new AttackCommand(
-              responseGameState.GetObjectByLocation(
-                command.GetAttackerObject().GetLocation()
-              ),
-              responseGameState.GetObjectByLocation(
-                command.GetTargetObject().GetLocation()
-              )
-            ).execute(this, responseGameState);
-            break;
-          case "build":
-            new BuildCommand(command.GetBuilding()).execute(
-              this,
-              responseGameState
-            );
-            break;
-          case "create":
-            new CreateCommand(command.GetUnit()).execute(
-              this,
-              responseGameState
-            );
-            break;
-          case "delete":
-            new DeleteCommand(
-              responseGameState.GetObjectByLocation(
-                command.GetObjectToDelete().GetLocation()
-              )
-            ).execute(this, responseGameState);
-            break;
-          case "move":
-            new MoveCommand(
-              responseGameState.GetObjectByLocation(
-                command.GetUnitToMove().GetLocation()
-              ),
-              command.GetTile()
-            ).execute(this, responseGameState);
-            break;
-          default:
-            break;
-        }
-      });
-      responseGameState.GetBuildings().forEach((building) => {
-        let player = responseGameState.GetPlayerById(building.GetOwner());
-        player.SetResources(building.UpdateResources(player.GetResources()));
-      });
-      responseGameState.turnNumber += 1;
-    }
-    console.log(responseGameState);
-    return responseGameState;
-  }
-
   Execute(command) {
     if (command.execute(this, this.gameState)) {
-      this.currentTurnCommands.push(command);
+      this.currentTurnCommands.push(command.GetResult());
     }
     return command;
   }
@@ -141,9 +76,9 @@ module.exports = class GameEngine {
     if (building.CanBuild(player.resources) && locationResponse.success) {
       player.resources = building.TakeCost(player.resources);
       gameState.AddBuildingToTile(building, locationResponse.tile);
-      return true;
+      return { success: true, location: locationResponse.tile.GetLocation() };
     }
-    return false;
+    return { success: false, location: [] };
   }
 
   Create(gameState, unit) {
@@ -152,9 +87,9 @@ module.exports = class GameEngine {
     if (unit.CanCreate(player.resources) && locationResponse.success) {
       player.resources = unit.TakeCost(player.resources);
       gameState.AddUnitToTile(unit, locationResponse.tile);
-      return true;
+      return { success: true, location: locationResponse.tile.GetLocation() };
     }
-    return false;
+    return { success: false, location: [] };
   }
 
   Move(gameState, unit, targetTile) {
@@ -162,7 +97,7 @@ module.exports = class GameEngine {
     let path = gameState.FindPathBetween(currentTile, targetTile);
     if (path === "null") {
       console.log("path fail");
-      return false;
+      return { success: false, start: [], end: [] };
     }
     let newTile;
     if (path.length <= unit.GetSpeed()) {
@@ -172,7 +107,11 @@ module.exports = class GameEngine {
     }
     gameState.RemoveUnitFromTile(currentTile);
     gameState.AddUnitToTile(unit, newTile);
-    return true;
+    return {
+      success: true,
+      start: currentTile.GetLocation(),
+      end: newTile.GetLocation(),
+    };
   }
 
   Attack(gameState, attackerObject, targetObject) {

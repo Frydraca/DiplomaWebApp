@@ -63,3 +63,63 @@ export function getStartOfGame(gameId) {
     );
   };
 }
+
+export function getNextTurnOfGame(gameId) {
+  console.log(gameId);
+  console.log("gameId: " + gameId);
+  return (dispatch, getState) => {
+    const header = generateAuthenticationHeader(getState());
+    return axios({
+      method: "GET",
+      url: `${serverBaseUrl}simulator/${gameId}/nextTurn`,
+      headers: header,
+    }).then(
+      (success) => {
+        dispatch(
+          loadGame({
+            game: success.data,
+          })
+        );
+        console.log("got next turn");
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "getStartOfGameError",
+            description: error.response.data,
+          })
+        );
+      }
+    );
+  };
+}
+
+export function getPreviousTurnOfGame(gameId) {
+  console.log(gameId);
+  console.log("gameId: " + gameId);
+  return (dispatch, getState) => {
+    const header = generateAuthenticationHeader(getState());
+    return axios({
+      method: "GET",
+      url: `${serverBaseUrl}simulator/${gameId}/previousTurn`,
+      headers: header,
+    }).then(
+      (success) => {
+        dispatch(
+          loadGame({
+            game: success.data,
+          })
+        );
+        console.log("got previous turn");
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "getStartOfGameError",
+            description: error.response.data,
+          })
+        );
+      }
+    );
+  };
+}

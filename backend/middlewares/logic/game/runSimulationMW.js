@@ -10,7 +10,10 @@ module.exports = function () {
     var scripts = {};
     var aiEngine = new AiEngine(playerIds, scripts, res.locals.gameMap);
     aiEngine.RunGame();
-    //GameEngine
+    res.locals.simulation = {
+      startingGameState: aiEngine.game.startingGameState,
+      commands: aiEngine.game.commands,
+    };
 
     return next();
   };

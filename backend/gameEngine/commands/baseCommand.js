@@ -7,4 +7,10 @@ module.exports = class Command {
   GetType() {
     return this.type;
   }
+
+  GetResult() {
+    return {
+      type: "",
+    };
+  }
 };

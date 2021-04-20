@@ -2,16 +2,27 @@ const Command = require("./baseCommand");
 
 module.exports = class BuildCommand extends Command {
   building = {};
+  location = [];
   constructor(building) {
     super("build");
     this.building = building;
   }
 
   execute(game, gameState) {
-    return game.Build(gameState, this.building);
+    let result = game.Build(gameState, this.building);
+    this.location = result.location;
+    return result.success;
   }
 
   GetBuilding() {
     return this.building;
+  }
+
+  GetResult() {
+    return {
+      type: "build",
+      building: JSON.parse(JSON.stringify(this.building)),
+      location: JSON.parse(JSON.stringify(this.location)),
+    };
   }
 };
