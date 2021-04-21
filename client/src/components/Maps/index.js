@@ -13,10 +13,10 @@ function MapListScreen() {
     dispatch(loadMaps());
   }, []);
 
-  const mapList = useSelector((state) => state.gameMap.gameMaps);
+  const mapList = useSelector((state) => state.gameMaps.gameMaps);
 
   const newMap = {
-    name: "basic 5x5",
+    name: "basic 5x5 + extra steel ore",
     width: 5,
     height: 5,
     tiles: [
@@ -50,7 +50,7 @@ function MapListScreen() {
       },
       {
         location: [1, 2],
-        terrain: "plains",
+        terrain: "steel ore",
       },
       {
         location: [1, 3],
@@ -129,6 +129,7 @@ function MapListScreen() {
 
   function addNewMap() {
     dispatch(addMap(newMap));
+    dispatch(loadMaps());
   }
 
   return (
@@ -137,8 +138,8 @@ function MapListScreen() {
       <Button onClick={addNewMap}> Add map (just testing)</Button>
       {mapList !== undefined ? (
         <Row>
-          {mapList.map((gameMap) => (
-            <Col xs={12}>
+          {mapList.map((gameMap, index) => (
+            <Col key={index} xs={12}>
               <MapCard gameMap={gameMap} />
             </Col>
           ))}

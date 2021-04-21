@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
 import { initializeScreen } from "../../api/Authentication";
 import {
@@ -9,12 +10,16 @@ import {
   getEndOfGame,
   getNextTurnOfGame,
   getPreviousTurnOfGame,
+  loadCurrentMap,
 } from "../../api/Simulator";
 
 function SimulatorScreen() {
+  var { id } = useParams();
+  var simulationRan = false;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(initializeScreen());
+    dispatch(loadCurrentMap(id));
   }, []);
 
   const gameId = useSelector((state) => state.currentGame.id);
@@ -102,9 +107,11 @@ function SimulatorScreen() {
   };
 
   function simulate() {
+    simulationRan = true;
+    console.log(simulationRan);
     dispatch(
       simulateGame({
-        gameId: "607762d486490906cc9bdd1a",
+        gameId: id,
         script: "script",
       })
     );
@@ -152,11 +159,47 @@ function SimulatorScreen() {
             </Button>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Canvas draw={draw}></Canvas>
-          </Col>
-        </Row>
+        {currentGameState !== undefined ? (
+          <>
+            <Row>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th>Steel</th>
+                    <th>RoboSteel</th>
+                    <th>Energy</th>
+                    <th>Crystals</th>
+                    <th>Energy Cores</th>
+                    <th>Credits</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentGameState.players.map((player, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{player.playerId}</td>
+                        <td>{player.resources.steel}</td>
+                        <td>{player.resources.roboSteel}</td>
+                        <td>{player.resources.energy}</td>
+                        <td>{player.resources.crystal}</td>
+                        <td>{player.resources.energyCore}</td>
+                        <td>{player.resources.credits}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Row>
+            <Row>
+              <Col>
+                <Canvas draw={draw}></Canvas>
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <div className="d-flex justify-content-center align-items-center h-100"></div>
+        )}
       </Container>
     </div>
   );

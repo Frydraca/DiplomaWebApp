@@ -31,7 +31,7 @@ export default function App() {
         <AuthenticatedRoute exact path="/designer">
           <EditorScreen />
         </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/simulator">
+        <AuthenticatedRoute exact path="/simulator/:id">
           <SimulatorScreen />
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/profile">

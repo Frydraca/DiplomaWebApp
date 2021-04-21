@@ -4,6 +4,8 @@ const updateGameMW = require("../middlewares/data/game/updateGameMW");
 const createMapMW = require("../middlewares/data/gameMap/createMapMW");
 const getAllMapsMW = require("../middlewares/data/gameMap/getAllMapsMW");
 const getGameMapMW = require("../middlewares/data/gameMap/getGameMapMW");
+const returnOneGameMapMW = require("../middlewares/data/gameMap/returnOneGameMapMW");
+const returnAsStartingMapMW = require("../middlewares/data/gameMap/returnAsStartingMapMW");
 const createScriptMW = require("../middlewares/data/script/createScriptMW");
 const createUserForRegisterMW = require("../middlewares/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middlewares/data/user/getUserForLoginMW");
@@ -92,17 +94,18 @@ module.exports = function (app) {
     sendJsonResponseMW()
   );
 
-  // app.get(
-  //   "/simulator/:gameId",
-  //   logIncomingCallMW(),
-  //   authenticateWithJWTMW(),
-  //   getUserMW(objRepo),
-  //   getGameMapMW(objRepo),
-  //   sendJsonResponseMW()
-  // );
+  app.get(
+    "/simulator/:gameId",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMapMW(objRepo),
+    returnAsStartingMapMW(),
+    sendJsonResponseMW()
+  );
 
   app.post(
-    "/simulator/simulate",
+    "/simulator/:gameId/simulate",
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
@@ -184,6 +187,16 @@ module.exports = function (app) {
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     createMapMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  app.get(
+    "/mapList/:gameId",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getGameMapMW(objRepo),
+    returnOneGameMapMW(),
     sendJsonResponseMW()
   );
 

@@ -9,9 +9,9 @@ export function simulateGame(simulationData) {
     const header = generateAuthenticationHeader(getState());
     return axios({
       method: "POST",
-      url: serverBaseUrl + "simulator/simulate",
+      url: serverBaseUrl + `simulator/${simulationData.gameId}/simulate`,
       headers: header,
-      data: simulationData,
+      data: simulationData.scripts,
     }).then(
       (success) => {
         dispatch(
@@ -20,7 +20,6 @@ export function simulateGame(simulationData) {
           })
         );
         console.log("saved game simulation");
-        console.log(success.data);
       },
       (error) => {
         dispatch(
@@ -138,6 +137,35 @@ export function getPreviousTurnOfGame(gameId) {
         dispatch(
           addError({
             name: "getStartOfGameError",
+            description: error.response.data,
+          })
+        );
+      }
+    );
+  };
+}
+
+export function loadCurrentMap(mapId) {
+  return (dispatch, getState) => {
+    console.log(getState);
+    const header = generateAuthenticationHeader(getState());
+    return axios({
+      method: "GET",
+      url: serverBaseUrl + "simulator/" + mapId,
+      headers: header,
+    }).then(
+      (success) => {
+        console.log("loaded map");
+        dispatch(
+          loadGame({
+            game: success.data,
+          })
+        );
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "map loading error",
             description: error.response.data,
           })
         );

@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from "react";
-import { FunctionComponent } from "react";
+import React from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { loadOneMap } from "../../api/Maps";
 
 export function MapCard({ gameMap }) {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user);
+  function viewMap() {
+    console.log("view");
+    dispatch(loadOneMap(gameMap._id));
+  }
 
   return (
     <>
@@ -14,7 +17,7 @@ export function MapCard({ gameMap }) {
         <Card.Header>{gameMap.name}</Card.Header>
         <Card.Body>
           <p>description</p>
-          <Button>View</Button>
+          <Button onClick={viewMap}>View</Button>
         </Card.Body>
       </Card>
     </>

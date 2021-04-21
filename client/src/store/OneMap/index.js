@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const mapSlice = createSlice({
-  name: "current game",
+  name: "oneMap",
   initialState: {},
   reducers: {
-    loadMapList(_state, action) {
-      return action.payload.maps;
+    loadMap(_state, action) {
+      console.log("load");
+      return action.payload.oneMap;
     },
   },
 });
 
-export const { loadMapList } = mapSlice.actions;
+export const { loadMap } = mapSlice.actions;
 
 export default mapSlice.reducer;

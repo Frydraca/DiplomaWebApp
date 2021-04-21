@@ -2,8 +2,6 @@ const requireOption = require("../../../config/requireOption");
 
 module.exports = function (objectrepository) {
   const Game = requireOption(objectrepository, "Game");
-  const Cell = requireOption(objectrepository, "Cell");
-  const Building = requireOption(objectrepository, "Building");
 
   return function (req, res, next) {
     console.log("Create Game Simulation");

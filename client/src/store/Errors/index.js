@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const authSlice = createSlice({
+const errorSlice = createSlice({
   name: "errors",
   initialState: {},
   reducers: {
@@ -15,5 +15,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { addError, clearError } = authSlice.actions;
-export default authSlice.reducer;
+export const { addError, clearError } = errorSlice.actions;
+export default errorSlice.reducer;
