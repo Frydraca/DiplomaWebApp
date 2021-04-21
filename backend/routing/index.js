@@ -7,6 +7,8 @@ const getGameMapMW = require("../middlewares/data/gameMap/getGameMapMW");
 const returnOneGameMapMW = require("../middlewares/data/gameMap/returnOneGameMapMW");
 const returnAsStartingMapMW = require("../middlewares/data/gameMap/returnAsStartingMapMW");
 const createScriptMW = require("../middlewares/data/script/createScriptMW");
+const getAllScriptMW = require("../middlewares/data/script/getAllScriptMW");
+const getScriptMW = require("../middlewares/data/script/getScriptMW");
 const createUserForRegisterMW = require("../middlewares/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middlewares/data/user/getUserForLoginMW");
 const getUserMW = require("../middlewares/data/user/getUserMW");
@@ -180,6 +182,15 @@ module.exports = function (app) {
     sendJsonResponseMW()
   );
 
+  app.get(
+    "/designer/:scriptId",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getScriptMW(objRepo),
+    sendJsonResponseMW()
+  );
+
   //mapList
   app.post(
     "/mapList",
@@ -206,6 +217,16 @@ module.exports = function (app) {
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     getAllMapsMW(objRepo),
+    sendJsonResponseMW()
+  );
+
+  //scripts
+  app.get(
+    "/scripts",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getAllScriptMW(objRepo),
     sendJsonResponseMW()
   );
 };

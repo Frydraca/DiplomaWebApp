@@ -12,6 +12,7 @@ import user from "./User";
 import game from "./Game";
 import gameMaps from "./MapList";
 import oneMap from "./OneMap";
+import script from "./Script";
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   currentGame: game,
   gameMaps: gameMaps,
   oneMap: oneMap,
+  script: script,
 });
 
 const middleware = [

@@ -11,6 +11,7 @@ module.exports = function (objectrepository) {
       owner: req.user,
       creationDate: Date.now(),
       content: req.body.content,
+      workspace: req.body.workspace,
     });
 
     script.save(function (err, successfulScript) {

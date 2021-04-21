@@ -6,6 +6,7 @@ const Script = db.model("Script", {
   owner: { type: Schema.Types.ObjectId, ref: "User" },
   creationDate: Date,
   content: String,
+  workspace: String,
 });
 
 module.exports = Script;

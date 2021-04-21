@@ -28,7 +28,7 @@ export default function App() {
         <AuthenticatedRoute exact path="/mapList">
           <MapListScreen />
         </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/designer">
+        <AuthenticatedRoute exact path="/designer/:id">
           <EditorScreen />
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/simulator/:id">

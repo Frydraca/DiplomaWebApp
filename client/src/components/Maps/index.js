@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Container, Card, Col, Row, Spinner } from "react-bootstrap";
+import { Button, Container, Col, Row, Spinner } from "react-bootstrap";
 import { initializeScreen } from "../../api/Authentication";
 import { loadMaps, addMap } from "../../api/Maps";
 import MapCard from "./MapCard";
@@ -16,9 +16,9 @@ function MapListScreen() {
   const mapList = useSelector((state) => state.gameMaps.gameMaps);
 
   const newMap = {
-    name: "basic 5x5 + extra steel ore",
-    width: 5,
-    height: 5,
+    name: "basic 7x7",
+    width: 7,
+    height: 7,
     tiles: [
       {
         location: [0, 0],
@@ -34,15 +34,23 @@ function MapListScreen() {
       },
       {
         location: [0, 3],
-        terrain: "steel ore",
+        terrain: "plains",
       },
       {
         location: [0, 4],
         terrain: "crystal field",
       },
       {
+        location: [0, 5],
+        terrain: "plains",
+      },
+      {
+        location: [0, 6],
+        terrain: "plains",
+      },
+      {
+        terrain: "plains",
         location: [1, 0],
-        terrain: "steel ore",
       },
       {
         location: [1, 1],
@@ -50,14 +58,22 @@ function MapListScreen() {
       },
       {
         location: [1, 2],
-        terrain: "steel ore",
-      },
-      {
-        location: [1, 3],
         terrain: "plains",
       },
       {
+        location: [1, 3],
+        terrain: "steel ore",
+      },
+      {
         location: [1, 4],
+        terrain: "steel ore",
+      },
+      {
+        location: [1, 5],
+        terrain: "plains",
+      },
+      {
+        location: [1, 6],
         terrain: "crystal field",
       },
       {
@@ -81,6 +97,14 @@ function MapListScreen() {
         terrain: "plains",
       },
       {
+        location: [2, 5],
+        terrain: "plains",
+      },
+      {
+        location: [2, 6],
+        terrain: "crystal field",
+      },
+      {
         location: [3, 0],
         terrain: "crystal field",
       },
@@ -94,19 +118,27 @@ function MapListScreen() {
       },
       {
         location: [3, 3],
-        terrain: "plains",
+        terrain: "steel ore",
       },
       {
         location: [3, 4],
-        terrain: "steel ore",
+        terrain: "plains",
+      },
+      {
+        location: [3, 5],
+        terrain: "plains",
+      },
+      {
+        location: [3, 6],
+        terrain: "plains",
       },
       {
         location: [4, 0],
-        terrain: "crystal field",
+        terrain: "plains",
       },
       {
         location: [4, 1],
-        terrain: "steel ore",
+        terrain: "plains",
       },
       {
         location: [4, 2],
@@ -118,12 +150,76 @@ function MapListScreen() {
       },
       {
         location: [4, 4],
+        terrain: "plains",
+      },
+      {
+        location: [4, 5],
+        terrain: "plains",
+      },
+      {
+        location: [4, 6],
+        terrain: "plains",
+      },
+      {
+        location: [5, 0],
+        terrain: "crystal field",
+      },
+      {
+        location: [5, 1],
+        terrain: "plains",
+      },
+      {
+        location: [5, 2],
+        terrain: "plains",
+      },
+      {
+        location: [5, 3],
+        terrain: "steel ore",
+      },
+      {
+        location: [5, 4],
+        terrain: "steel ore",
+      },
+      {
+        location: [5, 5],
+        terrain: "plains",
+      },
+      {
+        location: [5, 6],
+        terrain: "plains",
+      },
+      {
+        location: [6, 0],
+        terrain: "steel ore",
+      },
+      {
+        location: [6, 1],
+        terrain: "plains",
+      },
+      {
+        location: [6, 2],
+        terrain: "crystal field",
+      },
+      {
+        location: [6, 3],
+        terrain: "plains",
+      },
+      {
+        location: [6, 4],
+        terrain: "plains",
+      },
+      {
+        location: [6, 5],
+        terrain: "plains",
+      },
+      {
+        location: [6, 6],
         terrain: "steel ore",
       },
     ],
     startingLocations: [
-      [0, 2],
-      [4, 2],
+      [1, 1],
+      [5, 5],
     ],
   };
 
