@@ -19,7 +19,7 @@ function NavMenu() {
             <>
               <Nav.Link href="/mapList">Maps</Nav.Link>
               <Nav.Link href="/simulator">Simulator</Nav.Link>
-              <Nav.Link href="/designer">Designer</Nav.Link>
+              <Nav.Link href="/designer/new">Designer</Nav.Link>
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/help">Help</Nav.Link>
               <Nav.Link onClick={() => dispatch(logOut())}>Log out</Nav.Link>

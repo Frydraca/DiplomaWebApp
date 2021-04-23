@@ -13,7 +13,7 @@ export function loadScripts() {
       headers: header,
     }).then(
       (success) => {
-        console.log("loaded scritpts");
+        console.log("loaded scripts");
         dispatch(
           loadAllScripts({
             scripts: success.data,
@@ -24,6 +24,27 @@ export function loadScripts() {
         dispatch(
           addError({
             name: "script loading error",
+            description: error.response.data,
+          })
+        );
+      }
+    );
+  };
+}
+
+export function deleteScript(scriptId) {
+  return (dispatch, getState) => {
+    const header = generateAuthenticationHeader(getState());
+    return axios({
+      method: "DELETE",
+      url: `${serverBaseUrl}designer/${scriptId}/delete`,
+      headers: header,
+    }).then(
+      (success) => {},
+      (error) => {
+        dispatch(
+          addError({
+            name: "script deleting error",
             description: error.response.data,
           })
         );
