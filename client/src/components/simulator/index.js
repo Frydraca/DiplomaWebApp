@@ -13,6 +13,7 @@ import {
   getPreviousTurnOfGame,
   loadCurrentMap,
 } from "../../api/Simulator";
+import BuildingImages from "./buildings";
 
 function SimulatorScreen() {
   var { id } = useParams();
@@ -40,13 +41,11 @@ function SimulatorScreen() {
     ctx.canvas.height = 700;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    const img = new Image();
-    img.src = "images/commandCenter_red.png";
-    img.onload = function () {
-      //context is the canvas context
-      ctx.drawImage(img, 300, 300);
-      //context.drawImage(myImage,x,y,weight,height);
-    };
+    // img.onload = function () {
+    //   //context is the canvas context
+    //   ctx.drawImage(img, 0, 0);
+    //   //context.drawImage(myImage,x,y,weight,height);
+    // };
 
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
@@ -78,25 +77,15 @@ function SimulatorScreen() {
       });
       let buildings = currentGameState.buildings;
       buildings.forEach((element) => {
-        ctx.beginPath();
-        ctx.rect(
+        const img = new Image();
+        img.src = BuildingImages[element.owner][element.name];
+        ctx.drawImage(
+          img,
           (element.location[0] + 1) * 50 + 10,
           (element.location[1] + 1) * 50 + 10,
           30,
           30
         );
-        switch (element.owner) {
-          case "player1":
-            ctx.fillStyle = "orange";
-            break;
-          case "serverAi":
-            ctx.fillStyle = "yellow";
-            break;
-          default:
-            ctx.fillStyle = "red";
-            break;
-        }
-        ctx.fill();
       });
       let units = currentGameState.units;
       units.forEach((element) => {
@@ -229,6 +218,7 @@ function SimulatorScreen() {
               <Table striped bordered hover>
                 <thead>
                   <tr>
+                    <th>Turn Number</th>
                     <th>Player</th>
                     <th>Steel</th>
                     <th>RoboSteel</th>
@@ -242,6 +232,7 @@ function SimulatorScreen() {
                   {currentGameState.players.map((player, index) => {
                     return (
                       <tr key={index}>
+                        <td>{currentGameState.turnNumber}</td>
                         <td>{player.playerId}</td>
                         <td>{player.resources.steel}</td>
                         <td>{player.resources.roboSteel}</td>

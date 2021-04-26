@@ -130,7 +130,7 @@ module.exports = class GameEngine {
   }
 
   CheckForGameEnd() {
-    if (this.gameState.turnNumber >= 10) {
+    if (this.gameState.turnNumber >= 30) {
       this.gameState.isRunning = false;
     }
   }
