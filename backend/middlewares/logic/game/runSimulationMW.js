@@ -8,7 +8,13 @@ module.exports = function () {
     //aiEngine
     var playerIds = ["player1", "serverAi"];
     var scripts = {};
-    var aiEngine = new AiEngine(playerIds, scripts, res.locals.gameMap);
+    console.log(res.locals.scriptContent);
+    var aiEngine = new AiEngine(
+      playerIds,
+      res.locals.ownScriptContent,
+      res.locals.enemyScriptContent,
+      res.locals.gameMap
+    );
     aiEngine.RunGame();
     res.locals.simulation = {
       startingGameState: aiEngine.game.startingGameState,

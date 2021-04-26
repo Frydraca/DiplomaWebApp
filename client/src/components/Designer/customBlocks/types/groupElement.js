@@ -65,7 +65,8 @@ export const groupElement = {
         break;
     }
 
-    var code = ", GroupElement(" + formattedValue + ", " + number_number + ")";
+    var code =
+      ", this.GroupElement(" + formattedValue + ", " + number_number + ")";
     return code;
   },
 };

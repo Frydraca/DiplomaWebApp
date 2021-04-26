@@ -8,7 +8,7 @@ function RulesScreen() {
 
   useEffect(() => {
     dispatch(initializeScreen());
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Container>

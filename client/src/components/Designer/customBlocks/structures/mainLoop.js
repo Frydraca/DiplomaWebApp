@@ -24,15 +24,7 @@ export const mainLoop = {
   generator: (block) => {
     var statements_block = Blockly.JavaScript.statementToCode(block, "Block");
     // TODO: Assemble JavaScript into code variable.
-    var code =
-      'var gameStartState = require("./gameState.json");\n\n' +
-      "const playerId = 'player1';\n" +
-      "const game = new GameEngine(gameStartState);\n\n" +
-      "while (game.IsRunning()) {\n" +
-      statements_block +
-      "\n\tgame.TurnEnd();\n};\n" +
-      "console.log(game.commands);\n" +
-      "console.log(game.gameState);\n";
+    var code = statements_block;
     return code;
   },
 };

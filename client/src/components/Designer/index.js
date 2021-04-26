@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Blockly from "node-blockly/browser";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
@@ -27,11 +27,6 @@ function EditorScreen() {
   const handleShow = () => setShow(true);
 
   const handleCreate = useCallback((name) => {
-    console.log({
-      name: name,
-      content: script.code,
-      workspace: script.workspace,
-    });
     dispatch(
       createScript({
         name: name,
@@ -42,8 +37,6 @@ function EditorScreen() {
   });
 
   function create() {
-    console.log(blocklyWorkspace);
-    console.log("opening modal");
     dispatch(
       changeEditedScript({
         code: blocklyCode,
@@ -65,7 +58,7 @@ function EditorScreen() {
     console.log("useEffect");
     dispatch(initializeScreen());
     dispatch(loadScript(id));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const script = useSelector((state) => state.script);
   if (script !== undefined) {
@@ -107,8 +100,6 @@ function EditorScreen() {
                 onChange={(code, workspace) => {
                   //console.clear();
                   //console.log(code /*, workspace*/);
-                  console.log("onchange");
-                  console.log(show);
                   if (!show) {
                     blocklyCode = code;
                     blocklyWorkspace = workspace;

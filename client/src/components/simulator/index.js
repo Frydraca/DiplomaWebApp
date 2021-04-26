@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { Button, Col, Container, Dropdown, Row, Table } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
 import { initializeScreen } from "../../api/Authentication";
+import { loadScripts, loadMyScripts } from "../../api/Profile";
 import {
   simulateGame,
   getStartOfGame,
@@ -15,22 +16,38 @@ import {
 
 function SimulatorScreen() {
   var { id } = useParams();
-  var simulationRan = false;
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(initializeScreen());
     dispatch(loadCurrentMap(id));
-  }, []);
+    dispatch(loadMyScripts());
+    dispatch(loadScripts());
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const gameId = useSelector((state) => state.currentGame.id);
+  const allScriptList = useSelector((state) => state.script.scripts);
+  const userScriptList = useSelector((state) => state.ownScripts.ownScripts);
   const currentGameState = useSelector(
     (state) => state.currentGame.currentGameState
   );
 
+  const [ownScriptId, setOwnScriptId] = useState("");
+  const [enemyScriptId, setEnemyScriptId] = useState("");
+
   const draw = (ctx) => {
-    ctx.canvas.width = 500;
-    ctx.canvas.height = 500;
+    ctx.canvas.width = 700;
+    ctx.canvas.height = 700;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    const img = new Image();
+    img.src = "images/commandCenter_red.png";
+    img.onload = function () {
+      //context is the canvas context
+      ctx.drawImage(img, 300, 300);
+      //context.drawImage(myImage,x,y,weight,height);
+    };
+
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
     if (currentGameState !== undefined) {
@@ -107,14 +124,17 @@ function SimulatorScreen() {
   };
 
   function simulate() {
-    simulationRan = true;
-    console.log(simulationRan);
-    dispatch(
-      simulateGame({
-        gameId: id,
-        script: "script",
-      })
-    );
+    console.log(ownScriptId);
+    console.log(enemyScriptId);
+    if (ownScriptId !== "" && enemyScriptId !== "") {
+      dispatch(
+        simulateGame({
+          gameId: id,
+          ownScript: ownScriptId,
+          enemyScript: enemyScriptId,
+        })
+      );
+    }
   }
   function goToStart() {
     dispatch(getStartOfGame(gameId));
@@ -158,6 +178,50 @@ function SimulatorScreen() {
               Next Turn
             </Button>
           </Col>
+        </Row>
+        <Row>
+          <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-user">
+              Select your script
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {userScriptList !== undefined ? (
+                <>
+                  {userScriptList.map((script, index) => (
+                    <Dropdown.Item
+                      onClick={() => setOwnScriptId(script._id)}
+                      key={index}
+                    >
+                      {script.name}
+                    </Dropdown.Item>
+                  ))}
+                </>
+              ) : (
+                <div></div>
+              )}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Row>
+        <Row>
+          {allScriptList !== undefined ? (
+            <Dropdown>
+              <Dropdown.Toggle variant="success" id="dropdown-all">
+                Select the opposing script
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {allScriptList.map((script, index) => (
+                  <Dropdown.Item
+                    onClick={() => setEnemyScriptId(script._id)}
+                    key={index}
+                  >
+                    {script.name}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <div></div>
+          )}
         </Row>
         {currentGameState !== undefined ? (
           <>

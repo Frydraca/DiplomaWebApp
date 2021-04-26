@@ -1,7 +1,7 @@
 module.exports = function () {
   return function (req, res, next) {
     console.log("Do next turn");
-    if (res.locals.game.currentTurn <= res.locals.game.commands.length) {
+    if (res.locals.game.currentTurn < res.locals.game.commands.length) {
       res.locals.commandsToDo =
         res.locals.game.commands[res.locals.game.currentTurn];
       res.locals.commandsToDo.forEach((command) => {

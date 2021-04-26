@@ -39,7 +39,8 @@ export const group = {
     //   delimiter = ",";
     // }
     // TODO: Assemble JavaScript into code variable.
-    var code = 'Group("' + dropdown_grouptype + '"' + statements_group + ")";
+    var code =
+      'this.Group("' + dropdown_grouptype + '"' + statements_group + ")";
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE];
   },

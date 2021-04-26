@@ -9,7 +9,9 @@ const returnAsStartingMapMW = require("../middlewares/data/gameMap/returnAsStart
 const createScriptMW = require("../middlewares/data/script/createScriptMW");
 const deleteScriptMW = require("../middlewares/data/script/deleteScriptMW");
 const getAllScriptMW = require("../middlewares/data/script/getAllScriptMW");
+const getAllOwnScriptMW = require("../middlewares/data/script/getAllOwnScriptMW");
 const getScriptMW = require("../middlewares/data/script/getScriptMW");
+const getScriptContentMW = require("../middlewares/data/script/getScriptContentMW");
 const updateScriptMW = require("../middlewares/data/script/updateScriptMW");
 const createUserForRegisterMW = require("../middlewares/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middlewares/data/user/getUserForLoginMW");
@@ -109,11 +111,12 @@ module.exports = function (app) {
   );
 
   app.post(
-    "/simulator/:gameId/simulate",
+    "/simulator/:gameId/simulate/:ownScriptId/:enemyScriptId",
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     getGameMapMW(objRepo),
+    getScriptContentMW(objRepo),
     runSimulationMW(),
     createGameSimulationMW(objRepo),
     sendJsonResponseMW()
@@ -243,6 +246,15 @@ module.exports = function (app) {
   );
 
   //scripts
+  app.get(
+    "/scripts/own",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getAllOwnScriptMW(objRepo),
+    sendJsonResponseMW()
+  );
+
   app.get(
     "/scripts",
     logIncomingCallMW(),

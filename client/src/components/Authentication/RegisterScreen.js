@@ -4,7 +4,6 @@ import { Container, Col, Button, Row, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import ReduxState from "../../store";
 import { createNewAccount, isLoggedIn } from "../../api/Authentication";
 import { clearError } from "../../store/Errors";
 
@@ -59,8 +58,17 @@ function RegisterScreen() {
                 name="email"
                 onChange={onChangeOfCredentials}
                 ref={register}
-                // isInvalid={!!errors.email}
+                isInvalid={!!errors.email}
               />
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.email
+                    ? Array.isArray(errors.email)
+                      ? errors.email[0].message
+                      : errors.email.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formUserName">
               <Form.Label>User name</Form.Label>
@@ -70,8 +78,17 @@ function RegisterScreen() {
                 name="userName"
                 onChange={onChangeOfCredentials}
                 ref={register}
-                // isInvalid={!!errors.userName}
+                isInvalid={!!errors.userName}
               />
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.userName
+                    ? Array.isArray(errors.userName)
+                      ? errors.userName[0].message
+                      : errors.userName.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
@@ -81,8 +98,17 @@ function RegisterScreen() {
                 name="password"
                 onChange={onChangeOfCredentials}
                 ref={register}
-                // isInvalid={!!errors.password}
+                isInvalid={!!errors.password}
               />
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.password
+                    ? Array.isArray(errors.password)
+                      ? errors.password[0].message
+                      : errors.password.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formRepeatPassword">
               <Form.Label>Repeat Password</Form.Label>
@@ -92,8 +118,17 @@ function RegisterScreen() {
                 name="repeatPassword"
                 onChange={onChangeOfCredentials}
                 ref={register}
-                // isInvalid={!!errors.repeatPassword}
+                isInvalid={!!errors.repeatPassword}
               />
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.repeatPassword
+                    ? Array.isArray(errors.repeatPassword)
+                      ? errors.repeatPassword[0].message
+                      : errors.repeatPassword.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
             </Form.Group>
             <Button type="submit">Register</Button>
           </Form>

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Container, Col, Row, Spinner } from "react-bootstrap";
+import { Container, Col, Row, Spinner } from "react-bootstrap";
 import { initializeScreen } from "../../api/Authentication";
-import { loadScripts } from "../../api/Profile";
+import { loadMyScripts } from "../../api/Profile";
 import { ScriptCard } from "./ScriptCard";
 
 function ProfileScreen() {
@@ -10,10 +10,10 @@ function ProfileScreen() {
 
   useEffect(() => {
     dispatch(initializeScreen());
-    dispatch(loadScripts());
-  }, []);
+    dispatch(loadMyScripts());
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const scriptList = useSelector((state) => state.script.scripts);
+  const scriptList = useSelector((state) => state.ownScripts.ownScripts);
 
   return (
     <Container>

@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Card } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { loadOneMap } from "../../api/Maps";
 
 export function MapCard({ gameMap }) {

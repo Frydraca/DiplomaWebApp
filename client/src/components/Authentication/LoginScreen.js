@@ -9,7 +9,7 @@ import { clearError } from "../../store/Errors";
 function LoginScreen() {
   const schema = yup.object({
     email: yup.string().email().required(),
-    password: yup.string().min(6).required(),
+    password: yup.string().required(),
   });
   const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
@@ -45,7 +45,17 @@ function LoginScreen() {
                 name="email"
                 onChange={onChangeOfCredentials}
                 ref={register}
+                isInvalid={!!errors.email}
               />
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.email
+                    ? Array.isArray(errors.email)
+                      ? errors.email[0].message
+                      : errors.email.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
@@ -55,7 +65,17 @@ function LoginScreen() {
                 name="password"
                 onChange={onChangeOfCredentials}
                 ref={register}
+                isInvalid={!!errors.password}
               />
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.password
+                    ? Array.isArray(errors.password)
+                      ? errors.password[0].message
+                      : errors.password.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
             </Form.Group>
             <Button type="submit">Log in</Button>
           </Form>

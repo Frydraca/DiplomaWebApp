@@ -1,12 +1,9 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logOut, isLoggedIn } from "../../api/Authentication";
 
 function NavMenu() {
-  const activePath = "";
-
   const dispatch = useDispatch();
 
   return (

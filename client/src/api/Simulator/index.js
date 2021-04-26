@@ -9,7 +9,9 @@ export function simulateGame(simulationData) {
     const header = generateAuthenticationHeader(getState());
     return axios({
       method: "POST",
-      url: serverBaseUrl + `simulator/${simulationData.gameId}/simulate`,
+      url:
+        serverBaseUrl +
+        `simulator/${simulationData.gameId}/simulate/${simulationData.ownScript}/${simulationData.enemyScript}`,
       headers: header,
       data: simulationData.scripts,
     }).then(

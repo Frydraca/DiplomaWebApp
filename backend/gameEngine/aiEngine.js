@@ -17,10 +17,14 @@ const Unit = require("./objects/Unit");
 module.exports = class AiEngine {
   players = {};
   game = {};
+  pScript = "";
+  sScript = "";
 
-  constructor(playerIds, scripts, startingGameState) {
+  constructor(playerIds, playerScript, serverScript, startingGameState) {
     this.players = playerIds;
     this.game = new GameEngine(startingGameState);
+    this.pScript = playerScript.replace("playerId", "this.players[0]");
+    this.sScript = serverScript.replace("playerId", "this.players[1]");
   }
 
   // Main run function
@@ -28,39 +32,15 @@ module.exports = class AiEngine {
     let counter = 0;
     while (this.game.IsRunning()) {
       //script player1
-      this.Do(
-        this.BuildUpTo(
-          this.players[0],
-          this.Group(
-            "Building",
-            this.GroupElement(SteelMineData, 2),
-            this.GroupElement(SolarPowerPlantData, 1),
-            this.GroupElement(CrystalMineData, 1)
-          )
-        )
-      );
-      if (counter === 6) {
-        this.Do(this.Create(this.players[0], RaiderBotData));
-      }
-      if (counter === 7) {
-        this.Do(this.Move());
-      }
-      if (counter === 8) {
-        this.Do(this.Attack());
-      }
+      console.log(this.pScript);
+      eval(this.pScript);
 
       //script player2
-      this.Do(
-        this.BuildUpTo(
-          this.players[1],
-          this.Group(
-            "Building",
-            this.GroupElement(SteelMineData, 1),
-            this.GroupElement(SolarPowerPlantData, 1),
-            this.GroupElement(CrystalMineData, 1)
-          )
-        )
-      );
+
+      console.log("serverScript");
+      console.log(this.sScript);
+
+      eval(this.sScript);
 
       this.game.TurnEnd();
       counter++;

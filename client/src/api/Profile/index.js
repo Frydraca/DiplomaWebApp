@@ -3,6 +3,7 @@ import { generateAuthenticationHeader } from "../Helpers/HeaderHelper";
 import { serverBaseUrl } from "../serverUrl";
 import { addError } from "../../store/Errors";
 import { loadAllScripts } from "../../store/Script";
+import { loadOwnScripts } from "../../store/OwnScripts";
 
 export function loadScripts() {
   return (dispatch, getState) => {
@@ -16,7 +17,35 @@ export function loadScripts() {
         console.log("loaded scripts");
         dispatch(
           loadAllScripts({
-            scripts: success.data,
+            scripts: { ...success.data },
+          })
+        );
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "script loading error",
+            description: error.response.data,
+          })
+        );
+      }
+    );
+  };
+}
+
+export function loadMyScripts() {
+  return (dispatch, getState) => {
+    const header = generateAuthenticationHeader(getState());
+    return axios({
+      method: "GET",
+      url: serverBaseUrl + "scripts/own",
+      headers: header,
+    }).then(
+      (success) => {
+        console.log("loaded own scripts");
+        dispatch(
+          loadOwnScripts({
+            scripts: { ...success.data },
           })
         );
       },

@@ -11,7 +11,7 @@ function MapListScreen() {
   useEffect(() => {
     dispatch(initializeScreen());
     dispatch(loadMaps());
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mapList = useSelector((state) => state.gameMaps.gameMaps);
 
