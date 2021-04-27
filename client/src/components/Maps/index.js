@@ -16,9 +16,9 @@ function MapListScreen() {
   const mapList = useSelector((state) => state.gameMaps.gameMaps);
 
   const newMap = {
-    name: "basic 7x7",
-    width: 7,
-    height: 7,
+    name: "big 10x10",
+    width: 10,
+    height: 10,
     tiles: [
       {
         location: [0, 0],
@@ -42,15 +42,27 @@ function MapListScreen() {
       },
       {
         location: [0, 5],
-        terrain: "plains",
+        terrain: "crystal field",
       },
       {
         location: [0, 6],
         terrain: "plains",
       },
       {
+        location: [0, 7],
         terrain: "plains",
+      },
+      {
+        location: [0, 8],
+        terrain: "plains",
+      },
+      {
+        location: [0, 9],
+        terrain: "plains",
+      },
+      {
         location: [1, 0],
+        terrain: "steel ore",
       },
       {
         location: [1, 1],
@@ -62,11 +74,11 @@ function MapListScreen() {
       },
       {
         location: [1, 3],
-        terrain: "steel ore",
+        terrain: "plains",
       },
       {
         location: [1, 4],
-        terrain: "steel ore",
+        terrain: "plains",
       },
       {
         location: [1, 5],
@@ -74,7 +86,19 @@ function MapListScreen() {
       },
       {
         location: [1, 6],
-        terrain: "crystal field",
+        terrain: "plains",
+      },
+      {
+        location: [1, 7],
+        terrain: "plains",
+      },
+      {
+        location: [1, 8],
+        terrain: "plains",
+      },
+      {
+        location: [1, 9],
+        terrain: "plains",
       },
       {
         location: [2, 0],
@@ -90,7 +114,7 @@ function MapListScreen() {
       },
       {
         location: [2, 3],
-        terrain: "plains",
+        terrain: "steel ore",
       },
       {
         location: [2, 4],
@@ -102,11 +126,23 @@ function MapListScreen() {
       },
       {
         location: [2, 6],
-        terrain: "crystal field",
+        terrain: "plains",
+      },
+      {
+        location: [2, 7],
+        terrain: "plains",
+      },
+      {
+        location: [2, 8],
+        terrain: "plains",
+      },
+      {
+        location: [2, 9],
+        terrain: "plains",
       },
       {
         location: [3, 0],
-        terrain: "crystal field",
+        terrain: "plains",
       },
       {
         location: [3, 1],
@@ -130,6 +166,18 @@ function MapListScreen() {
       },
       {
         location: [3, 6],
+        terrain: "plains",
+      },
+      {
+        location: [3, 7],
+        terrain: "crystal field",
+      },
+      {
+        location: [3, 8],
+        terrain: "plains",
+      },
+      {
+        location: [3, 9],
         terrain: "plains",
       },
       {
@@ -161,8 +209,20 @@ function MapListScreen() {
         terrain: "plains",
       },
       {
-        location: [5, 0],
+        location: [4, 7],
         terrain: "crystal field",
+      },
+      {
+        location: [4, 8],
+        terrain: "crystal field",
+      },
+      {
+        location: [4, 9],
+        terrain: "plains",
+      },
+      {
+        location: [5, 0],
+        terrain: "plains",
       },
       {
         location: [5, 1],
@@ -174,11 +234,11 @@ function MapListScreen() {
       },
       {
         location: [5, 3],
-        terrain: "steel ore",
+        terrain: "plains",
       },
       {
         location: [5, 4],
-        terrain: "steel ore",
+        terrain: "plains",
       },
       {
         location: [5, 5],
@@ -189,16 +249,28 @@ function MapListScreen() {
         terrain: "plains",
       },
       {
+        location: [5, 7],
+        terrain: "plains",
+      },
+      {
+        location: [5, 8],
+        terrain: "plains",
+      },
+      {
+        location: [5, 9],
+        terrain: "plains",
+      },
+      {
         location: [6, 0],
         terrain: "steel ore",
       },
       {
         location: [6, 1],
-        terrain: "plains",
+        terrain: "steel ore",
       },
       {
         location: [6, 2],
-        terrain: "crystal field",
+        terrain: "steel ore",
       },
       {
         location: [6, 3],
@@ -214,12 +286,144 @@ function MapListScreen() {
       },
       {
         location: [6, 6],
+        terrain: "plains",
+      },
+      {
+        location: [6, 7],
+        terrain: "plains",
+      },
+      {
+        location: [6, 8],
+        terrain: "plains",
+      },
+      {
+        location: [6, 9],
+        terrain: "plains",
+      },
+      {
+        location: [7, 0],
+        terrain: "steel ore",
+      },
+      {
+        location: [7, 1],
+        terrain: "steel ore",
+      },
+      {
+        location: [7, 2],
+        terrain: "plains",
+      },
+      {
+        location: [7, 3],
+        terrain: "plains",
+      },
+      {
+        location: [7, 4],
+        terrain: "plains",
+      },
+      {
+        location: [7, 5],
+        terrain: "plains",
+      },
+      {
+        location: [7, 6],
+        terrain: "plains",
+      },
+      {
+        location: [7, 7],
+        terrain: "plains",
+      },
+      {
+        location: [7, 8],
+        terrain: "plains",
+      },
+      {
+        location: [7, 9],
+        terrain: "crystal field",
+      },
+      {
+        location: [8, 0],
+        terrain: "crystal field",
+      },
+      {
+        location: [8, 1],
+        terrain: "plains",
+      },
+      {
+        location: [8, 2],
+        terrain: "plains",
+      },
+      {
+        location: [8, 3],
+        terrain: "plains",
+      },
+      {
+        location: [8, 4],
+        terrain: "plains",
+      },
+      {
+        location: [8, 5],
+        terrain: "steel ore",
+      },
+      {
+        location: [8, 6],
+        terrain: "plains",
+      },
+      {
+        location: [8, 7],
+        terrain: "plains",
+      },
+      {
+        location: [8, 8],
+        terrain: "plains",
+      },
+      {
+        location: [8, 9],
+        terrain: "steel ore",
+      },
+      {
+        location: [9, 0],
+        terrain: "plains",
+      },
+      {
+        location: [9, 1],
+        terrain: "plains",
+      },
+      {
+        location: [9, 2],
+        terrain: "steel ore",
+      },
+      {
+        location: [9, 3],
+        terrain: "plains",
+      },
+      {
+        location: [9, 4],
+        terrain: "plains",
+      },
+      {
+        location: [9, 5],
+        terrain: "plains",
+      },
+      {
+        location: [9, 6],
+        terrain: "plains",
+      },
+      {
+        location: [9, 7],
+        terrain: "plains",
+      },
+      {
+        location: [9, 8],
+        terrain: "plains",
+      },
+      {
+        location: [9, 9],
         terrain: "steel ore",
       },
     ],
     startingLocations: [
-      [1, 1],
-      [5, 5],
+      [0, 1],
+      [9, 8],
     ],
   };
 

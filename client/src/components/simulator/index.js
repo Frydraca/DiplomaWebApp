@@ -14,6 +14,7 @@ import {
   loadCurrentMap,
 } from "../../api/Simulator";
 import BuildingImages from "./buildings";
+import UnitImages from "./units";
 
 function SimulatorScreen() {
   var { id } = useParams();
@@ -40,13 +41,6 @@ function SimulatorScreen() {
     ctx.canvas.width = 700;
     ctx.canvas.height = 700;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-    // img.onload = function () {
-    //   //context is the canvas context
-    //   ctx.drawImage(img, 0, 0);
-    //   //context.drawImage(myImage,x,y,weight,height);
-    // };
-
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
     if (currentGameState !== undefined) {
@@ -89,25 +83,15 @@ function SimulatorScreen() {
       });
       let units = currentGameState.units;
       units.forEach((element) => {
-        ctx.beginPath();
-        ctx.rect(
+        const img = new Image();
+        img.src = UnitImages[element.owner][element.name];
+        ctx.drawImage(
+          img,
           (element.location[0] + 1) * 50 + 10,
           (element.location[1] + 1) * 50 + 10,
           30,
           30
         );
-        switch (element.owner) {
-          case "player1":
-            ctx.fillStyle = "darkviolet";
-            break;
-          case "serverAi":
-            ctx.fillStyle = "violet";
-            break;
-          default:
-            ctx.fillStyle = "red";
-            break;
-        }
-        ctx.fill();
       });
     }
   };
