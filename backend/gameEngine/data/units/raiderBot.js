@@ -8,10 +8,10 @@ module.exports = RaiderBotData = {
     roboSteel: 5,
     energyCore: 1,
   },
-  hitPoints: 100,
+  hitPoints: 10,
   armor: 5,
   speed: 3,
   canAttack: true,
   range: 4,
-  attackDamage: 1000,
+  attackDamage: 10,
 };

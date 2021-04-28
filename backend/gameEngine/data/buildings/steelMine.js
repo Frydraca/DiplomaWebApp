@@ -23,7 +23,7 @@ module.exports = SteelMineData = {
     roboSteel: 0,
     energyCore: 0,
   },
-  hitPoints: 40,
+  hitPoints: 15,
   armor: 2,
   canAttack: false,
   range: 0,

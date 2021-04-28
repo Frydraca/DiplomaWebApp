@@ -1,6 +1,6 @@
 module.exports = ArtilleryBotData = {
   owner: "",
-  name: " Artillery Bot",
+  name: "Artillery Bot",
   location: [0, 0],
   cost: {
     steel: 0,
@@ -8,10 +8,10 @@ module.exports = ArtilleryBotData = {
     roboSteel: 5,
     energyCore: 1,
   },
-  hitPoints: 100,
+  hitPoints: 8,
   armor: 5,
-  speed: 4,
+  speed: 2,
   canAttack: true,
-  range: 5,
-  attackDamage: 1000,
+  range: 6,
+  attackDamage: 20,
 };

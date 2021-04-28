@@ -23,7 +23,7 @@ module.exports = FoundryData = {
     roboSteel: 5,
     energyCore: 0,
   },
-  hitPoints: 70,
+  hitPoints: 30,
   armor: 4,
   canAttack: false,
   range: 0,

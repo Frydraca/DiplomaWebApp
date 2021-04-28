@@ -7,6 +7,7 @@ module.exports = class Unit extends GameObject {
 
   constructor(unitData, ownerId) {
     super(unitData, ownerId);
+    this.type = "unit";
     this.cost = JSON.parse(JSON.stringify(unitData.cost));
     this.speed = JSON.parse(JSON.stringify(unitData.speed));
   }

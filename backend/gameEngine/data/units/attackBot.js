@@ -8,10 +8,10 @@ module.exports = AttackBotData = {
     roboSteel: 5,
     energyCore: 1,
   },
-  hitPoints: 100,
+  hitPoints: 12,
   armor: 5,
   speed: 4,
   canAttack: true,
   range: 5,
-  attackDamage: 1000,
+  attackDamage: 15,
 };

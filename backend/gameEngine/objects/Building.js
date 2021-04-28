@@ -7,6 +7,7 @@ module.exports = class Building extends GameObject {
   production = {};
   constructor(buildingData, ownerId) {
     super(buildingData, ownerId);
+    this.type = "building";
     this.possibleTerrain = JSON.parse(
       JSON.stringify(buildingData.possibleTerrain)
     );

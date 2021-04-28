@@ -23,7 +23,7 @@ module.exports = SolarPowerPlantData = {
     roboSteel: 0,
     energyCore: 0,
   },
-  hitPoints: 30,
+  hitPoints: 15,
   armor: 0,
   canAttack: false,
   range: 0,

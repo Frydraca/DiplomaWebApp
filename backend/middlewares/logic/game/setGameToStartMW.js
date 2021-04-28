@@ -60,16 +60,21 @@ module.exports = function () {
             break;
           case "attack":
             let isBuilding = false;
+            if (command.targetObject.type === "building") {
+              isBuilding = true;
+            }
+            if (command.targetObject.type === "unit") {
+              isUnit = true;
+            }
             let targetUnit = res.locals.game.units.find(
               (unit) => unit.objectId === command.targetObject.objectId
             );
             let targetBuilding = undefined;
-            if (targetUnit === undefined) {
+            if (isBuilding) {
               targetBuilding = res.locals.game.buildings.find(
                 (building) =>
                   building.objectId === command.targetObject.objectId
               );
-              isBuilding = true;
               let index = res.locals.game.buildings.indexOf(targetBuilding);
               if (index > -1) {
                 res.locals.game.buildings.splice(index, 1);
@@ -87,8 +92,18 @@ module.exports = function () {
             );
             if (isBuilding) {
               res.locals.game.buildings.push(command.targetObject);
+              res.locals.game.tiles.find(
+                (tile) =>
+                  tile.location[0] === command.targetObject.location[0] &&
+                  tile.location[1] === command.targetObject.location[1]
+              ).buildingId = command.targetObject.objectId;
             } else {
               res.locals.game.units.push(command.targetObject);
+              res.locals.game.tiles.find(
+                (tile) =>
+                  tile.location[0] === command.targetObject.location[0] &&
+                  tile.location[1] === command.targetObject.location[1]
+              ).unitId = command.targetObject.objectId;
             }
             break;
           case "updateResources":

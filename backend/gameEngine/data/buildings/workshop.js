@@ -23,7 +23,7 @@ module.exports = WorkshopData = {
     roboSteel: 0,
     energyCore: 0,
   },
-  hitPoints: 50,
+  hitPoints: 15,
   armor: 5,
   canAttack: false,
   range: 0,

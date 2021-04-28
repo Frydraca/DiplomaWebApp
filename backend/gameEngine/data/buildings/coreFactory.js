@@ -23,7 +23,7 @@ module.exports = CoreFactoryData = {
     roboSteel: 0,
     energyCore: 1,
   },
-  hitPoints: 70,
+  hitPoints: 20,
   armor: 4,
   canAttack: false,
   range: 0,

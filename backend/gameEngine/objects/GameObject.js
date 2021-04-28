@@ -2,6 +2,7 @@ module.exports = class GameObject {
   objectId = "";
   owner = "";
   name = "";
+  type = "";
   location = [0, 0];
   hitPoints = 0;
   armor = 0;
@@ -22,6 +23,9 @@ module.exports = class GameObject {
 
   GetObjectId() {
     return this.objectId;
+  }
+  GetType() {
+    return this.type;
   }
 
   GetOwner() {

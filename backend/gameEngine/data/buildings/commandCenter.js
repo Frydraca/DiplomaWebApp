@@ -23,7 +23,7 @@ module.exports = CommandCenterData = {
     roboSteel: 0,
     energyCore: 0,
   },
-  hitPoints: 100,
+  hitPoints: 30,
   armor: 5,
   canAttack: false,
   range: 0,
