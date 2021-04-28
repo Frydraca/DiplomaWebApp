@@ -51,4 +51,16 @@ module.exports = class GameObject {
   TakeDamage(incomingDamage) {
     this.hitPoints -= Math.max(incomingDamage - this.armor, 1);
   }
+  GetDistanceFromObject(gameObject) {
+    return (
+      Math.abs(gameObject.GetLocation()[0] - this.location[0]) +
+      Math.abs(gameObject.GetLocation()[1] - this.location[1])
+    );
+  }
+  InRange(gameObject) {
+    if (this.range >= this.GetDistanceFromObject(gameObject)) {
+      return true;
+    }
+    return false;
+  }
 };

@@ -37,7 +37,12 @@ export const hasLessThan = {
     );
     var number_number = block.getFieldValue("Number");
     // TODO: Assemble JavaScript into code variable.
-    var code = "numberOf" + value_subject + " < " + number_number;
+    var code =
+      "this.GetNumberOfOwn(" +
+      value_subject +
+      ", playerId)" +
+      " < " +
+      number_number;
     return code;
   },
 };

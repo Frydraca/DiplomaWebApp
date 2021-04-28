@@ -20,11 +20,6 @@ module.exports = class GameEngine {
 
   // Public functions
 
-  // Getters
-  GetBuildingsOfPlayer(playerId) {
-    return this.buildings.filter((element) => element.GetOwner() === playerId);
-  }
-
   GetBuildingsOfGivenType(playerId, buildingData) {
     return this.gameState
       .GetBuildings()
@@ -47,6 +42,9 @@ module.exports = class GameEngine {
   }
 
   TurnEnd() {
+    this.gameState.GetUnits().forEach((unit) => {
+      unit.SetHasAction(true);
+    });
     this.UpdateResources();
     this.CheckForGameEnd();
     this.commands.push(this.currentTurnCommands);
@@ -54,8 +52,7 @@ module.exports = class GameEngine {
     this.gameState.turnNumber += 1;
   }
 
-  //TODO delete this function after testing
-  GetCurrentGameState() {
+  GetGameState() {
     return this.gameState;
   }
 
@@ -83,7 +80,9 @@ module.exports = class GameEngine {
 
   Create(gameState, unit) {
     let player = this.GetOwnerOfObject(gameState, unit);
-    let locationResponse = unit.FindLocationToCreate(gameState.GetTiles());
+    let locationResponse = gameState.GetClosestEmptyLocationToCommandCenter(
+      player
+    );
     if (unit.CanCreate(player.resources) && locationResponse.success) {
       player.resources = unit.TakeCost(player.resources);
       gameState.AddUnitToTile(unit, locationResponse.tile);
@@ -118,6 +117,10 @@ module.exports = class GameEngine {
     if (gameState.CanAttackTarget(attackerObject, targetObject)) {
       targetObject.TakeDamage(attackerObject.GetAttackDamage());
       if (targetObject.GetHitPoints() < 1) {
+        if (targetObject.GetName() === "Command Center") {
+          console.log("hello");
+          this.gameState.isRunning = false;
+        }
         return gameState.RemoveObject(targetObject);
       }
       return true;
@@ -158,5 +161,52 @@ module.exports = class GameEngine {
   DoesPlayerHaveGivenBuilding(playerId, buildingType) {
     let buildingsOfPlayer = this.GetBuildingsOfPlayer(playerId);
     buildingsOfPlayer.includes(buildingType);
+  }
+
+  GetNumberOfGameObjectByPlayerId(gameObject, playerId) {
+    let number = 0;
+
+    this.gameState.GetBuildings().forEach((building) => {
+      if (
+        building.GetName() === gameObject.name &&
+        building.GetOwner() === playerId
+      ) {
+        number++;
+      }
+    });
+
+    this.gameState.GetUnits().forEach((unit) => {
+      if (unit.GetName() === gameObject.name && unit.GetOwner() === playerId) {
+        number++;
+      }
+    });
+
+    return number;
+  }
+
+  GetClosestEnemy(gameObject) {
+    let playerId = gameObject.GetOwner();
+    let closestEnemy = {};
+    let distance = Number.POSITIVE_INFINITY;
+    this.gameState.GetUnits().forEach((unit) => {
+      if (playerId !== unit.GetOwner()) {
+        let currentDistance = unit.GetDistanceFromObject(gameObject);
+        if (currentDistance < distance) {
+          closestEnemy = unit;
+          distance = currentDistance;
+        }
+      }
+    });
+    this.gameState.GetBuildings().forEach((building) => {
+      if (playerId !== building.GetOwner()) {
+        let currentDistance = building.GetDistanceFromObject(gameObject);
+        if (currentDistance < distance) {
+          closestEnemy = building;
+          distance = currentDistance;
+        }
+      }
+    });
+
+    return closestEnemy;
   }
 };

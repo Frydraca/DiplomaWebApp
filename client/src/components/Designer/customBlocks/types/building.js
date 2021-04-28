@@ -34,7 +34,35 @@ export const building = {
   generator: (block) => {
     var dropdown_building = block.getFieldValue("Building");
     // TODO: Assemble JavaScript into code variable.
-    var code = dropdown_building;
+    var formattedValue = "";
+    // TODO Towers
+    switch (dropdown_building) {
+      case "CommandCenter":
+        formattedValue = "CommandCenterData";
+        break;
+      case "SteelMine":
+        formattedValue = "SteelMineData";
+        break;
+      case "SolarPowerPlant":
+        formattedValue = "SolarPowerPlantData";
+        break;
+      case "CrystalMine":
+        formattedValue = "CrystalMineData";
+        break;
+      case "Foundry":
+        formattedValue = "FoundryData";
+        break;
+      case "CoreFactory":
+        formattedValue = "CoreFactoryData";
+        break;
+      case "Workshop":
+        formattedValue = "WorkshopData";
+        break;
+      default:
+        formattedValue = "Unrecognized type!";
+        break;
+    }
+    var code = formattedValue;
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE];
   },

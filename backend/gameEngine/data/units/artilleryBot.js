@@ -1,6 +1,6 @@
-const RaiderBotData = {
+module.exports = ArtilleryBotData = {
   owner: "",
-  name: "Raider Bot",
+  name: " Artillery Bot",
   location: [0, 0],
   cost: {
     steel: 0,
@@ -15,5 +15,3 @@ const RaiderBotData = {
   range: 5,
   attackDamage: 1000,
 };
-
-export default RaiderBotData;

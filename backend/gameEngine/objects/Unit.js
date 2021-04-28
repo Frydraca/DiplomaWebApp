@@ -3,6 +3,7 @@ const GameObject = require("./GameObject");
 module.exports = class Unit extends GameObject {
   cost = {};
   speed = 0;
+  hasAction = false;
 
   constructor(unitData, ownerId) {
     super(unitData, ownerId);
@@ -14,7 +15,14 @@ module.exports = class Unit extends GameObject {
     return this.speed;
   }
 
-  // Public functions //
+  GetHasAction() {
+    return this.hasAction;
+  }
+
+  SetHasAction(state) {
+    this.hasAction = state;
+  }
+
   CanCreate(resources) {
     if (
       resources.steel >= this.cost.steel &&

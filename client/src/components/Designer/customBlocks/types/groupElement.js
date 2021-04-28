@@ -36,35 +36,7 @@ export const groupElement = {
       "NAME",
       Blockly.JavaScript.ORDER_ATOMIC
     );
-    var formattedValue = "";
-    // TODO Towers and units
-    switch (value_name) {
-      case "(CommandCenter)":
-        formattedValue = "CommandCenterData";
-        break;
-      case "(SteelMine)":
-        formattedValue = "SteelMineData";
-        break;
-      case "(SolarPowerPlant)":
-        formattedValue = "SolarPowerPlantData";
-        break;
-      case "(CrystalMine)":
-        formattedValue = "CrystalMineData";
-        break;
-      case "(Foundry)":
-        formattedValue = "FoundryData";
-        break;
-      case "(CoreFactory)":
-        formattedValue = "CoreFactoryData";
-        break;
-      case "(Workshop)":
-        formattedValue = "WorkshopData";
-        break;
-      default:
-        formattedValue = "Unrecognized type!";
-        break;
-    }
-
+    var formattedValue = value_name.replace("(", "").replace(")", "");
     var code =
       ", this.GroupElement(" + formattedValue + ", " + number_number + ")";
     return code;

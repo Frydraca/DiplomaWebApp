@@ -55,7 +55,6 @@ function EditorScreen() {
   }
 
   useEffect(() => {
-    console.log("useEffect");
     dispatch(initializeScreen());
     dispatch(loadScript(id));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

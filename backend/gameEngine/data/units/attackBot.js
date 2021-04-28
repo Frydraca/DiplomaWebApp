@@ -1,6 +1,6 @@
-module.exports = RaiderBotData = {
+module.exports = AttackBotData = {
   owner: "",
-  name: "Raider Bot",
+  name: "Attack Bot",
   location: [0, 0],
   cost: {
     steel: 0,
@@ -10,8 +10,8 @@ module.exports = RaiderBotData = {
   },
   hitPoints: 100,
   armor: 5,
-  speed: 3,
+  speed: 4,
   canAttack: true,
-  range: 4,
+  range: 5,
   attackDamage: 1000,
 };

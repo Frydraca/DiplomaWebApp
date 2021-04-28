@@ -37,7 +37,12 @@ export const create = {
     );
     var number_number = block.getFieldValue("Number");
     // TODO: Assemble JavaScript into code variable.
-    var code = "Create(" + value_unittocreate + ", " + number_number + ");\n";
+    var code =
+      "this.CreateNTimes(playerId, " +
+      value_unittocreate +
+      ", " +
+      number_number +
+      ");\n";
     return code;
   },
 };

@@ -10,7 +10,10 @@ const CrystalMineData = require("./data/buildings/crystalMine");
 const FoundryData = require("./data/buildings/foundry");
 const CoreFactoryData = require("./data/buildings/coreFactory");
 const WorkshopData = require("./data/buildings/workshop");
+const ArtilleryBotData = require("./data/units/artilleryBot");
+const AttackBotData = require("./data/units/attackBot");
 const RaiderBotData = require("./data/units/raiderBot");
+const TankBotData = require("./data/units/tankBot");
 const Building = require("./objects/Building");
 const Unit = require("./objects/Unit");
 
@@ -23,8 +26,8 @@ module.exports = class AiEngine {
   constructor(playerIds, playerScript, serverScript, startingGameState) {
     this.players = playerIds;
     this.game = new GameEngine(startingGameState);
-    this.pScript = playerScript.replace("playerId", "this.players[0]");
-    this.sScript = serverScript.replace("playerId", "this.players[1]");
+    this.pScript = playerScript.replace(/playerId/g, "this.players[0]");
+    this.sScript = serverScript.replace(/playerId/g, "this.players[1]");
   }
 
   // Main run function
@@ -32,15 +35,17 @@ module.exports = class AiEngine {
     let counter = 0;
     while (this.game.IsRunning()) {
       //script player1
-      console.log(this.pScript);
+      //console.log(this.pScript);
+
       eval(this.pScript);
 
       //script player2
 
-      console.log("serverScript");
-      console.log(this.sScript);
-
-      eval(this.sScript);
+      // console.log("serverScript");
+      // console.log(this.sScript);
+      if (this.game.IsRunning()) {
+        eval(this.sScript);
+      }
 
       this.game.TurnEnd();
       counter++;
@@ -59,10 +64,38 @@ module.exports = class AiEngine {
       this.game.Execute(new MoveCommand(units[0], tiles[24]));
     }
   }
-  Attack() {
-    let units = this.game.gameState.GetUnits();
-    let buildings = this.game.gameState.GetBuildings();
-    this.game.Execute(new AttackCommand(units[0], buildings[1]));
+  Attack(playerId) {
+    let units = this.game
+      .GetGameState()
+      .GetUnits()
+      .filter((unit) => unit.GetOwner() === playerId);
+    // Ha van egységed
+    // Minden egységre szabad akcióval
+    units.forEach((unit) => {
+      if (unit.GetHasAction()) {
+        // find closest enemy
+        let enemy = this.game.GetClosestEnemy(unit);
+        if (unit.InRange(enemy)) {
+          console.log("attack");
+          this.game.Execute(new AttackCommand(unit, enemy));
+        } else {
+          console.log("move");
+          this.game.Execute(
+            new MoveCommand(
+              unit,
+              this.game.GetGameState().GetTileByLocation(enemy.GetLocation())
+            )
+          );
+        }
+        unit.SetHasAction(false);
+      }
+    });
+    // Legközelebbi enemy megkeresése
+
+    // ha rangeben van attack
+
+    // ha nincs akkor mozog felé
+    //this.game.Execute(new AttackCommand(units[0], buildings[1]));
   }
 
   Build(playerId, buildingData) {
@@ -120,6 +153,12 @@ module.exports = class AiEngine {
     this.game.Execute(new CreateCommand(newUnit));
   }
 
+  CreateNTimes(playerId, unitData, number) {
+    for (let i = 0; i < number; i++) {
+      this.Create(playerId, unitData);
+    }
+  }
+
   Group(type, ...elements) {
     let group = {
       groupType: type,
@@ -134,6 +173,10 @@ module.exports = class AiEngine {
       number: number,
     };
     return element;
+  }
+
+  GetNumberOfOwn(gameObject, playerId) {
+    return this.game.GetNumberOfGameObjectByPlayerId(gameObject, playerId);
   }
 
   Do(action) {

@@ -34,7 +34,6 @@ export const group = {
     var dropdown_grouptype = block.getFieldValue("GroupType");
     var statements_group = Blockly.JavaScript.statementToCode(block, "Group");
 
-    console.log(statements_group);
     // if (len(statements_group) > 1) {
     //   delimiter = ",";
     // }

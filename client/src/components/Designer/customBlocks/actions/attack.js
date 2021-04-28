@@ -7,19 +7,7 @@ export const attack = {
     init: function () {
       this.jsonInit({
         type: "action_attack",
-        message0: "Attack with %1 Target %2",
-        args0: [
-          {
-            type: "input_value",
-            name: "AttackingUnits",
-            check: "UnitGroup",
-          },
-          {
-            type: "input_value",
-            name: "Target",
-            check: ["GameObject", "Building"],
-          },
-        ],
+        message0: "Attack",
         previousStatement: null,
         nextStatement: null,
         colour: 290,
@@ -29,19 +17,8 @@ export const attack = {
     },
   },
   generator: (block) => {
-    var value_attackingunits = Blockly.JavaScript.valueToCode(
-      block,
-      "AttackingUnits",
-      Blockly.JavaScript.ORDER_ATOMIC
-    );
-    var value_target = Blockly.JavaScript.valueToCode(
-      block,
-      "Target",
-      Blockly.JavaScript.ORDER_ATOMIC
-    );
     // TODO: Assemble JavaScript into code variable.
-    var code =
-      "AttackTarget(" + value_attackingunits + ", " + value_target + ");\n";
+    var code = "this.Attack(playerId)\n";
     return code;
   },
 };

@@ -271,6 +271,32 @@ module.exports = class GameState {
     return ret;
   }
 
+  // TODO refactor
+  GetClosestEmptyLocationToCommandCenter(player) {
+    let ret = { success: false, tile: "null" };
+    let commandCenter = this.GetBuildings().filter(
+      (element) =>
+        element.GetOwner() === player.GetPlayerId() &&
+        element.GetName() === "Command Center"
+    );
+    let commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
+    let closestTile;
+    let closestDistance = Number.POSITIVE_INFINITY;
+    this.tiles.forEach((element) => {
+      if (element.IsEmpty()) {
+        if (
+          this.GetDistanceBetweenTiles(element, commandTile) < closestDistance
+        ) {
+          closestDistance = this.GetDistanceBetweenTiles(element, commandTile);
+          closestTile = element;
+          ret.success = true;
+          ret.tile = closestTile;
+        }
+      }
+    });
+    return ret;
+  }
+
   CanAttackTarget(attackerObject, targetObject) {
     let attackerTile = this.GetTileByLocation(attackerObject.GetLocation());
     let targetTile = this.GetTileByLocation(targetObject.GetLocation());
@@ -338,13 +364,17 @@ module.exports = class GameState {
       // discard the nodes with "null" tiles
       successors = successors.filter((element) => element.tile !== "null");
       // discard the non empty nodes
-      successors = successors.filter((element) => element.tile.IsEmpty());
+      successors = successors.filter(
+        (element) => element.tile.IsEmpty() || element.tile === targetTile
+      );
 
       // for each successor
       for (let i = 0; i < successors.length; i++) {
         let currentSuccessor = successors[i];
         if (this.IsSameLocation(currentSuccessor.tile, targetTile)) {
+          console.log("endnode");
           endNode = currentSuccessor;
+          openList = [];
           break;
         }
         currentSuccessor.g =
