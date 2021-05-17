@@ -56,14 +56,6 @@ module.exports = class AiEngine {
   // Script interpeter functions //
   /////////////////////////////////
 
-  // TODO delete. just for testing
-  Move() {
-    let units = this.game.gameState.GetUnits();
-    let tiles = this.game.gameState.GetTiles();
-    if (units.length > 0) {
-      this.game.Execute(new MoveCommand(units[0], tiles[24]));
-    }
-  }
   Attack(playerId) {
     let units = this.game
       .GetGameState()
@@ -90,12 +82,6 @@ module.exports = class AiEngine {
         unit.SetHasAction(false);
       }
     });
-    // Legközelebbi enemy megkeresése
-
-    // ha rangeben van attack
-
-    // ha nincs akkor mozog felé
-    //this.game.Execute(new AttackCommand(units[0], buildings[1]));
   }
 
   Build(playerId, buildingData) {

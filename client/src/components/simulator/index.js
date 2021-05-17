@@ -71,6 +71,27 @@ function SimulatorScreen() {
       });
       let buildings = currentGameState.buildings;
       buildings.forEach((element) => {
+        // TODO refactor into hpbar function
+        let hpPercent = element.hitPoints / element.maxHitPoints;
+        ctx.beginPath();
+        ctx.rect(
+          (element.location[0] + 1) * 50 + 10,
+          (element.location[1] + 1) * 50 + 4,
+          30 * hpPercent,
+          3
+        );
+        ctx.fillStyle = "green";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.rect(
+          (element.location[0] + 1) * 50 + 10 + 30 * hpPercent,
+          (element.location[1] + 1) * 50 + 4,
+          30 - 30 * hpPercent,
+          3
+        );
+        ctx.fillStyle = "red";
+        ctx.fill();
+
         const img = new Image();
         img.src = BuildingImages[element.owner][element.name];
         ctx.drawImage(
@@ -83,6 +104,26 @@ function SimulatorScreen() {
       });
       let units = currentGameState.units;
       units.forEach((element) => {
+        let hpPercent = element.hitPoints / element.maxHitPoints;
+        ctx.beginPath();
+        ctx.rect(
+          (element.location[0] + 1) * 50 + 10,
+          (element.location[1] + 1) * 50 + 4,
+          30 * hpPercent,
+          3
+        );
+        ctx.fillStyle = "green";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.rect(
+          (element.location[0] + 1) * 50 + 10 + 30 * hpPercent,
+          (element.location[1] + 1) * 50 + 4,
+          30 - 30 * hpPercent,
+          3
+        );
+        ctx.fillStyle = "red";
+        ctx.fill();
+
         const img = new Image();
         img.src = UnitImages[element.owner][element.name];
         ctx.drawImage(

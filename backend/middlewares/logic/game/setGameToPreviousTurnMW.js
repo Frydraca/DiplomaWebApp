@@ -1,7 +1,6 @@
 module.exports = function () {
   return function (req, res, next) {
     console.log("Undo previous turn");
-    console.log(res.locals.game.currentTurn - 1);
     if (res.locals.game.currentTurn > 0) {
       res.locals.commandsToUndo = res.locals.game.commands[
         res.locals.game.currentTurn - 1
@@ -71,7 +70,6 @@ module.exports = function () {
             let targetUnit = res.locals.game.units.find(
               (unit) => unit.objectId === command.targetObject.objectId
             );
-            console.log(command.targetObject);
             let targetBuilding = undefined;
             if (isBuilding) {
               targetBuilding = res.locals.game.buildings.find(
