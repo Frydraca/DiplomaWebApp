@@ -34,7 +34,6 @@ export const block = {
       "Trigger"
     );
     var statements_action = Blockly.JavaScript.statementToCode(block, "Action");
-    // TODO: Assemble JavaScript into code variable.
     var code =
       "if(" + statements_trigger + ") {\n" + "" + statements_action + "};\n";
     return code;

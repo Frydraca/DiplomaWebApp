@@ -3,7 +3,6 @@ const AiEngine = require("../../../gameEngine/aiEngine");
 module.exports = function () {
   return function (req, res, next) {
     console.log("Run Simulation");
-    // get script
 
     //aiEngine
     var playerIds = ["player1", "serverAi"];

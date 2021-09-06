@@ -4,6 +4,7 @@ module.exports = class Unit extends GameObject {
   cost = {};
   speed = 0;
   hasAction = false;
+  groupName = "";
 
   constructor(unitData, ownerId) {
     super(unitData, ownerId);

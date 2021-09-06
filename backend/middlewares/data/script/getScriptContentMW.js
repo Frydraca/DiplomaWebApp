@@ -12,6 +12,7 @@ module.exports = function (objectrepository) {
         return next(err);
       }
       res.locals.ownScriptContent = script.content;
+      res.locals.ownScriptWorkspace = script.workspace;
     });
 
     Script.findOne({ _id: req.params.enemyScriptId }, (err, script) => {
@@ -20,6 +21,7 @@ module.exports = function (objectrepository) {
         return next(err);
       }
       res.locals.enemyScriptContent = script.content;
+      res.locals.enemyScriptWorkspace = script.workspace;
       return next();
     });
   };

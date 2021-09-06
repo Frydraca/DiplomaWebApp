@@ -30,7 +30,7 @@ export const ifElse = {
         colour: 20,
         tooltip: "",
         helpUrl: "",
-        mutator: "controls_if_mutator",
+        //mutator: "controls_if_mutator",
       });
     },
   },

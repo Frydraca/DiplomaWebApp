@@ -126,7 +126,7 @@ function EditorScreen() {
                   },
                 }}
               >
-                <Category name="Variables" custom="VARIABLE" />
+                {/* <Category name="Variables" custom="VARIABLE" />
                 <Category name="Functions" custom="PROCEDURE"></Category>
                 <Category name="Logic">
                   <block type="controls_if"></block>
@@ -165,7 +165,7 @@ function EditorScreen() {
                   </block>
                   <block type="controls_forEach"></block>
                   <block type="controls_flow_statements"></block>
-                </Category>
+                </Category> */}
               </BlocklyDrawer>
             </Col>
           ) : (
