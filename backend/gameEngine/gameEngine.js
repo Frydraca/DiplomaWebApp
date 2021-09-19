@@ -1,9 +1,5 @@
 const GameState = require("./objects/GameState");
-const AttackCommand = require("./commands/attackCommand");
-const BuildCommand = require("./commands/buildCommand");
-const CreateCommand = require("./commands/createCommand");
-const DeleteCommand = require("./commands/deleteCommand");
-const MoveCommand = require("./commands/moveCommand");
+const PricesData = require("./data/prices");
 
 module.exports = class GameEngine {
   startingGameStateData = {};
@@ -80,9 +76,8 @@ module.exports = class GameEngine {
 
   Create(gameState, unit) {
     let player = this.GetOwnerOfObject(gameState, unit);
-    let locationResponse = gameState.GetClosestEmptyLocationToCommandCenter(
-      player
-    );
+    let locationResponse =
+      gameState.GetClosestEmptyLocationToCommandCenter(player);
     if (unit.CanCreate(player.resources) && locationResponse.success) {
       player.resources = unit.TakeCost(player.resources);
       gameState.AddUnitToTile(unit, locationResponse.tile);
@@ -118,7 +113,6 @@ module.exports = class GameEngine {
       targetObject.TakeDamage(attackerObject.GetAttackDamage());
       if (targetObject.GetHitPoints() < 1) {
         if (targetObject.GetName() === "Command Center") {
-          console.log("hello");
           this.gameState.isRunning = false;
         }
         return gameState.RemoveObject(targetObject);
@@ -130,6 +124,11 @@ module.exports = class GameEngine {
 
   Delete(gameState, gameObject) {
     return gameState.RemoveObject(gameObject);
+  }
+
+  ModifyResource(gameState, playerId, resource, amount) {
+    gameState.ModifyResource(playerId, resource, amount);
+    return true;
   }
 
   CheckForGameEnd() {

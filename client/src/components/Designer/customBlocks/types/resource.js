@@ -15,7 +15,7 @@ export const resource = {
             options: [
               ["Energy", "Energy"],
               ["Steel", "Steel"],
-              ["Robosteel", "Robosteel"],
+              ["Robosteel", "RoboSteel"],
               ["Crystal", "Crystal"],
               ["Energy Core", "EnergyCore"],
               ["Credit", "Credit"],

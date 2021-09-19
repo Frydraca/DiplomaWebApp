@@ -1,3 +1,5 @@
+const ModifyResourceCommand = require("../../../../gameEngine/commands/modifyResourceCommand");
+
 // Helper functions
 function locationEqual(location1, location2) {
   if (location1[0] === location2[0] && location1[1] === location2[1]) {
@@ -61,6 +63,10 @@ module.exports = {
         units.push(command.targetObject);
       }
     }
+  },
+  doModifyResource: function (players, command) {
+    let player = players.find((player) => player.playerId === command.playerId);
+    player.resources[command.resource] += command.value;
   },
   undoBuild: function (buildings, tiles, command) {
     let buildingToRemove = buildings.find(
@@ -141,5 +147,9 @@ module.exports = {
         locationEqual(tile.location, command.targetObject.location)
       ).unitId = command.targetObject.objectId;
     }
+  },
+  undoModifyResource: function (players, command) {
+    let player = players.find((player) => player.playerId === command.playerId);
+    player.resources[command.resource] -= command.value;
   },
 };

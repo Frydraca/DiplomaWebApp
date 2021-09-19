@@ -145,6 +145,18 @@ module.exports = class GameState {
     return false;
   }
 
+  ModifyResource(playerId, resource, amount) {
+    let player = this.GetPlayerById(playerId);
+    let resources = player.GetResources();
+    if (resource in resources) {
+      resources[resource] += amount;
+      player.SetResources(resources);
+    } else {
+      console.log("Error! " + resource + " is not a valid resource type!");
+      return;
+    }
+  }
+
   AddBuildingToTile(building, tile) {
     if (this.tiles.includes(tile) && tile.IsEmpty()) {
       building.SetLocation(tile.GetLocation());

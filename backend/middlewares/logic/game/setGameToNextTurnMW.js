@@ -3,6 +3,7 @@ const {
   doCreate,
   doMove,
   doAttack,
+  doModifyResource,
 } = require("./helperFunctions/helperFunctions");
 
 module.exports = function () {
@@ -23,6 +24,9 @@ module.exports = function () {
             break;
           case "attack":
             doAttack(res.locals.game.buildings, res.locals.game.units, command);
+            break;
+          case "modify resource":
+            doModifyResource(res.locals.game.players, command);
             break;
           case "updateResources":
             res.locals.game.players = command.newPlayers;

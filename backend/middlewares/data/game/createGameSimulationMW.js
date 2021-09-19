@@ -11,6 +11,7 @@ module.exports = function (objectrepository) {
       currentCommandNumber: 0,
       commands: res.locals.simulation.commands,
       players: res.locals.simulation.startingGameState.players,
+      startingPlayers: res.locals.simulation.startingGameState.players,
       tiles: res.locals.simulation.startingGameState.tiles,
       buildings: res.locals.simulation.startingGameState.buildings,
       units: res.locals.simulation.startingGameState.units,

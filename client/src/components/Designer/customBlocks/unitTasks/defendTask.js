@@ -1,16 +1,15 @@
 import Blockly from "node-blockly/browser";
 
-export const defaultTactic = {
-  name: "Default Tactic",
-  category: "Combat Tactics",
+export const defendTask = {
+  name: "Defend Task",
+  category: "Unit Tasks",
   block: {
     init: function () {
       this.jsonInit({
-        type: "combat_default",
-        message0: "Default tactic",
-        previousStatement: null,
-        nextStatement: null,
-        colour: 0,
+        type: "defendtask",
+        message0: "Defend",
+        output: "Task",
+        colour: 60,
         tooltip: "",
         helpUrl: "",
       });
@@ -24,4 +23,4 @@ export const defaultTactic = {
   },
 };
 
-export default defaultTactic;
+export default defendTask;

@@ -1,6 +1,13 @@
+import combatGroup from "./combatGroup";
 import defaultTactic from "./defaultTactic";
-import raiding from "./raiding";
+import retreatTactic from "./retreatTactic";
+import focusFireTactic from "./focusFireTactic";
 
-export const combatTactics = [defaultTactic, raiding];
+export const combatTactics = [
+  combatGroup,
+  defaultTactic,
+  retreatTactic,
+  focusFireTactic,
+];
 
 export default combatTactics;

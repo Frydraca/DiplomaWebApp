@@ -3,6 +3,7 @@ const {
   undoCreate,
   undoMove,
   undoAttack,
+  undoModifyResource,
 } = require("./helperFunctions/helperFunctions");
 
 module.exports = function () {
@@ -34,6 +35,9 @@ module.exports = function () {
               command
             );
             break;
+          case "modify resource":
+            undoModifyResource(res.locals.game.players, command);
+            break;
           case "updateResources":
             res.locals.game.players = command.oldPlayers;
             break;
@@ -44,6 +48,9 @@ module.exports = function () {
         res.locals.game.currentCommandNumber--;
       });
       res.locals.game.currentTurn--;
+    }
+    if (res.locals.game.currentTurn === 0) {
+      res.locals.game.players = res.locals.game.startingPlayers;
     }
     return next();
   };

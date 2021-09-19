@@ -3,6 +3,7 @@ const AttackCommand = require("./commands/attackCommand");
 const BuildCommand = require("./commands/buildCommand");
 const CreateCommand = require("./commands/createCommand");
 const DeleteCommand = require("./commands/deleteCommand");
+const ModifyResourceCommand = require("./commands/modifyResourceCommand");
 const MoveCommand = require("./commands/moveCommand");
 const SteelMineData = require("./data/buildings/steelMine");
 const SolarPowerPlantData = require("./data/buildings/solarPowerPlant");
@@ -68,10 +69,8 @@ module.exports = class AiEngine {
         // find closest enemy
         let enemy = this.game.GetClosestEnemy(unit);
         if (unit.InRange(enemy)) {
-          console.log("attack");
           this.game.Execute(new AttackCommand(unit, enemy));
         } else {
-          console.log("move");
           this.game.Execute(
             new MoveCommand(
               unit,
@@ -163,6 +162,55 @@ module.exports = class AiEngine {
 
   GetNumberOfOwn(gameObject, playerId) {
     return this.game.GetNumberOfGameObjectByPlayerId(gameObject, playerId);
+  }
+
+  Trading(playerId, ...tradeRules) {
+    for (let i = 0; i < tradeRules.length; i++) {
+      tradeRules[i];
+    }
+  }
+
+  Buy(playerId, resource, value) {
+    let player = this.game.gameState.GetPlayerById(playerId);
+    let resources = player.GetResources();
+
+    if (resource in resources) {
+      if (
+        value > resources[resource] &&
+        resources.credits >= PricesData[resource]
+      ) {
+        let neededAmount = value - resources[resource];
+        let priceAmount = Math.floor(
+          resources["credits"] / PricesData[resource]
+        );
+        let amount = Math.min(neededAmount, priceAmount);
+        let price = amount * PricesData[resource] * -1;
+        this.game.Execute(
+          new ModifyResourceCommand(playerId, resource, amount)
+        );
+        this.game.Execute(
+          new ModifyResourceCommand(playerId, "credits", price)
+        );
+        console.log("BUY");
+      }
+    } else {
+      console.log(
+        "Error with Trading! " + resource + " is not a valid resource type!"
+      );
+    }
+  }
+
+  Sell(playerId, resource, value) {
+    let player = this.game.gameState.GetPlayerById(playerId);
+    let resources = player.GetResources();
+
+    if (value < resources[resource]) {
+      let amount = value - resources[resource];
+      let price = amount * PricesData[resource] * -1; // amount is negative
+      this.game.Execute(new ModifyResourceCommand(playerId, resource, amount));
+      this.game.Execute(new ModifyResourceCommand(playerId, "credits", price));
+      console.log("SELL");
+    }
   }
 
   Do(action) {

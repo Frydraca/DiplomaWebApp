@@ -10,6 +10,9 @@ import actions from "./customBlocks/actions";
 import types from "./customBlocks/types";
 import triggers from "./customBlocks/triggers";
 import combatTactics from "./customBlocks/combatTactics";
+import unitTasks from "./customBlocks/unitTasks";
+import research from "./customBlocks/research";
+import trade from "./customBlocks/trading";
 import ScriptSaveModal from "./ScriptSaveModal";
 import { changeEditedScript } from "../../store/Script";
 
@@ -95,6 +98,9 @@ function EditorScreen() {
                   ...triggers,
                   ...types,
                   ...combatTactics,
+                  ...unitTasks,
+                  ...research,
+                  ...trade,
                 ]}
                 onChange={(code, workspace) => {
                   //console.clear();
@@ -120,8 +126,17 @@ function EditorScreen() {
                     Types: {
                       colour: "180",
                     },
-                    CombatTactics: {
+                    "Combat Tactics": {
                       colour: "0",
+                    },
+                    "Unit Tasks": {
+                      colour: "60",
+                    },
+                    Research: {
+                      colour: "120",
+                    },
+                    Trading: {
+                      colour: "330",
                     },
                   },
                 }}

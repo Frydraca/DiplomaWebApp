@@ -6,7 +6,7 @@ import { AuthenticatedRoute } from "./routing/AuthenticatedRoute";
 import NavMenu from "./components/Navigation/NavMenu";
 import Padding from "./components/Navigation/Padding";
 import EditorScreen from "./components/Designer";
-import SimulatorScreen from "./components/Simulator";
+import SimulatorScreen from "./components/Simulator/Simulator";
 import MapListScreen from "./components/Maps";
 import ProfileScreen from "./components/Profile";
 import StartingScreen from "./components/Authentication/StartingScreen";

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Button, Col, Container, Dropdown, Row, Table } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
+import "../../App.css";
 import { initializeScreen } from "../../api/Authentication";
 import { loadScripts, loadMyScripts } from "../../api/Profile";
+import Sidebar from "./Sidebar/Sidebar";
 import {
   simulateGame,
   getStartOfGame,
@@ -36,6 +38,18 @@ function SimulatorScreen() {
 
   const [ownScriptId, setOwnScriptId] = useState("");
   const [enemyScriptId, setEnemyScriptId] = useState("");
+  const [currentOwnScript, setCurrentOwnScript] =
+    useState("Select your script");
+  const [currentEnemyScript, setCurrentEnemyScript] = useState(
+    "Select your opponent's script"
+  );
+
+  const selectOwnScriptCallback = useCallback((script) =>
+    selectOwnScript(script)
+  );
+  const selectEnemyScriptCallback = useCallback((script) =>
+    selectEnemyScript(script)
+  );
 
   const draw = (ctx) => {
     ctx.canvas.width = 700;
@@ -163,79 +177,145 @@ function SimulatorScreen() {
     dispatch(getPreviousTurnOfGame(gameId));
   }
 
+  function selectOwnScript(script) {
+    setCurrentOwnScript(script.name);
+    setOwnScriptId(script._id);
+  }
+  function selectEnemyScript(script) {
+    setCurrentEnemyScript(script.name);
+    setEnemyScriptId(script._id);
+  }
+
   return (
     <div className="SimulatorScreen">
+      {/* <div id="side">
+        {userScriptList !== undefined && allScriptList !== undefined ? (
+          <>
+            <Sidebar
+              ownCurrentScript={currentOwnScript}
+              ownScriptList={userScriptList}
+              ownScriptCallback={selectOwnScriptCallback}
+              enemyCurrentScript={currentEnemyScript}
+              enemyScriptList={allScriptList}
+              enemyScriptCallback={selectEnemyScriptCallback}
+            ></Sidebar>
+          </>
+        ) : (
+          <div></div>
+        )}
+      </div>
+      <div id="main">
+        <Container>
+          <Row>
+            <Col>
+              {currentGameState !== undefined ? (
+                <>
+                  <Row>
+                    <Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>Turn Number</th>
+                          <th>Player</th>
+                          <th>Steel</th>
+                          <th>RoboSteel</th>
+                          <th>Energy</th>
+                          <th>Crystals</th>
+                          <th>Energy Cores</th>
+                          <th>Credits</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentGameState.players.map((player, index) => {
+                          return (
+                            <tr key={index}>
+                              <td>{currentGameState.turnNumber}</td>
+                              <td>{player.playerId}</td>
+                              <td>{player.resources.steel}</td>
+                              <td>{player.resources.roboSteel}</td>
+                              <td>{player.resources.energy}</td>
+                              <td>{player.resources.crystal}</td>
+                              <td>{player.resources.energyCore}</td>
+                              <td>{player.resources.credits}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </Table>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Canvas draw={draw}></Canvas>
+                    </Col>
+                  </Row>
+                </>
+              ) : (
+                <div className="d-flex justify-content-center align-items-center h-100"></div>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </div> */}
       <Container>
         <Row>
           <Col md={2}>
-            <Button onClick={simulate} size="sm">
-              Run
-            </Button>
-          </Col>
-          <Col md={2}>
-            <Button onClick={goToStart} size="sm">
-              Go to Start
-            </Button>
-          </Col>
-          <Col md={2}>
-            <Button onClick={goToEnd} size="sm">
-              Go to End
-            </Button>
-          </Col>
-          <Col md={2}>
-            <Button onClick={decrementTurnToView} size="sm">
-              Previous Turn
-            </Button>
-          </Col>
-          <Col md={2}>
-            <Button onClick={incrementTurnToView} size="sm">
-              Next Turn
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-user">
-              Select your script
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {userScriptList !== undefined ? (
-                <>
-                  {userScriptList.map((script, index) => (
-                    <Dropdown.Item
-                      onClick={() => setOwnScriptId(script._id)}
-                      key={index}
-                    >
-                      {script.name}
-                    </Dropdown.Item>
-                  ))}
-                </>
+            <Container>
+              <Button onClick={simulate} size="sm">
+                Run
+              </Button>
+              <Button onClick={goToStart} size="sm">
+                Go to Start
+              </Button>
+              <Button onClick={goToEnd} size="sm">
+                Go to End
+              </Button>
+              <Button onClick={decrementTurnToView} size="sm">
+                Previous Turn
+              </Button>
+              <Button onClick={incrementTurnToView} size="sm">
+                Next Turn
+              </Button>
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-user">
+                  {currentOwnScript}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {userScriptList !== undefined ? (
+                    <>
+                      {userScriptList.map((script, index) => (
+                        <Dropdown.Item
+                          onClick={() => selectOwnScript(script)}
+                          key={index}
+                        >
+                          {script.name}
+                        </Dropdown.Item>
+                      ))}
+                    </>
+                  ) : (
+                    <div></div>
+                  )}
+                </Dropdown.Menu>
+              </Dropdown>
+              {allScriptList !== undefined ? (
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-all">
+                    {currentEnemyScript}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {allScriptList.map((script, index) => (
+                      <Dropdown.Item
+                        onClick={() => selectEnemyScript(script)}
+                        key={index}
+                      >
+                        {script.name}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
                 <div></div>
               )}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Row>
-        <Row>
-          {allScriptList !== undefined ? (
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="dropdown-all">
-                Select the opposing script
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {allScriptList.map((script, index) => (
-                  <Dropdown.Item
-                    onClick={() => setEnemyScriptId(script._id)}
-                    key={index}
-                  >
-                    {script.name}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          ) : (
-            <div></div>
-          )}
+            </Container>
+          </Col>
         </Row>
         {currentGameState !== undefined ? (
           <>

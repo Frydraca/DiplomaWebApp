@@ -1,10 +1,11 @@
 const requireOption = require("../../../config/requireOption");
+var Blockly = require("node-blockly");
 
 module.exports = function (objectrepository) {
   const Script = requireOption(objectrepository, "Script");
 
   return function (req, res, next) {
-    console.log("Get script contetn");
+    console.log("Get script content");
 
     Script.findOne({ _id: req.params.ownScriptId }, (err, script) => {
       if (err || !script) {
@@ -13,6 +14,8 @@ module.exports = function (objectrepository) {
       }
       res.locals.ownScriptContent = script.content;
       res.locals.ownScriptWorkspace = script.workspace;
+      //var code = Blockly.JavaScript.workspaceToCode(script.workspace);
+      //console.log(code);
     });
 
     Script.findOne({ _id: req.params.enemyScriptId }, (err, script) => {
