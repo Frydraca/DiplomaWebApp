@@ -68,6 +68,10 @@ module.exports = {
     let player = players.find((player) => player.playerId === command.playerId);
     player.resources[command.resource] += command.value;
   },
+  doUpgrade: function (players, command) {
+    let player = players.find((player) => player.playerId === command.playerId);
+    player.upgradeList[command.unitType][command.statType] = true;
+  },
   undoBuild: function (buildings, tiles, command) {
     let buildingToRemove = buildings.find(
       (building) => building.objectId === command.building.objectId
@@ -151,5 +155,9 @@ module.exports = {
   undoModifyResource: function (players, command) {
     let player = players.find((player) => player.playerId === command.playerId);
     player.resources[command.resource] -= command.value;
+  },
+  undoUpgrade: function (players, command) {
+    let player = players.find((player) => player.playerId === command.playerId);
+    player.upgradeList[command.unitType][command.statType] = false;
   },
 };

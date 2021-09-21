@@ -4,6 +4,7 @@ const {
   undoMove,
   undoAttack,
   undoModifyResource,
+  undoUpgrade,
 } = require("./helperFunctions/helperFunctions");
 
 module.exports = function () {
@@ -40,6 +41,9 @@ module.exports = function () {
             break;
           case "modify resource":
             undoModifyResource(res.locals.game.players, command);
+            break;
+          case "upgrade":
+            undoUpgrade(res.locals.game.players, command);
             break;
           case "updateResources":
             res.locals.game.players = command.newPlayers;

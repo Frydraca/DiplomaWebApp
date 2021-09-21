@@ -1,5 +1,4 @@
 const GameState = require("./objects/GameState");
-const PricesData = require("./data/prices");
 
 module.exports = class GameEngine {
   startingGameStateData = {};
@@ -127,8 +126,11 @@ module.exports = class GameEngine {
   }
 
   ModifyResource(gameState, playerId, resource, amount) {
-    gameState.ModifyResource(playerId, resource, amount);
-    return true;
+    return gameState.ModifyResource(playerId, resource, amount);
+  }
+
+  UpgradeStat(gameState, playerId, unitType, statType) {
+    return gameState.UpgradeStat(playerId, unitType, statType);
   }
 
   CheckForGameEnd() {

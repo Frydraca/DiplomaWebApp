@@ -1,6 +1,7 @@
 module.exports = AttackBotData = {
   owner: "",
   name: "Attack Bot",
+  upgradeType: "attackBot",
   location: [0, 0],
   cost: {
     steel: 0,

@@ -1,6 +1,7 @@
 module.exports = ArtilleryBotData = {
   owner: "",
   name: "Artillery Bot",
+  upgradeType: "artilleryBot",
   location: [0, 0],
   cost: {
     steel: 0,

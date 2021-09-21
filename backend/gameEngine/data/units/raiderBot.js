@@ -1,6 +1,7 @@
 module.exports = RaiderBotData = {
   owner: "",
   name: "Raider Bot",
+  upgradeType: "raiderBot",
   location: [0, 0],
   cost: {
     steel: 0,

@@ -41,7 +41,12 @@ export const upgradeStat = {
       Blockly.JavaScript.ORDER_ATOMIC
     );
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code =
+      ", this.UpgradeStats(playerId," +
+      value_upgradetarget +
+      ", '" +
+      dropdown_stat +
+      "')";
     return code;
   },
 };

@@ -9,22 +9,26 @@ export const SidebarData = [
   {
     title: "Run",
     icon: <PlayArrowIcon />,
-    onClickFunction: "TODO",
+    onClickFunction: "simulate",
   },
   {
     title: "Next",
     icon: <SkipNextIcon />,
+    onClickFunction: "next",
   },
   {
     title: "Previous",
     icon: <SkipPreviousIcon />,
+    onClickFunction: "previous",
   },
   {
     title: "Start",
     icon: <FirstPageIcon />,
+    onClickFunction: "start",
   },
   {
     title: "End",
     icon: <LastPageIcon />,
+    onClickFunction: "end",
   },
 ];

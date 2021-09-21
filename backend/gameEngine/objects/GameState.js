@@ -151,10 +151,18 @@ module.exports = class GameState {
     if (resource in resources) {
       resources[resource] += amount;
       player.SetResources(resources);
+      return true;
     } else {
       console.log("Error! " + resource + " is not a valid resource type!");
-      return;
+      return false;
     }
+  }
+
+  UpgradeStat(playerId, unitType, statType) {
+    let player = this.GetPlayerById(playerId);
+    let upgrades = player.GetUpgradeList();
+    upgrades.SetUpgrade(unitType, statType);
+    return true;
   }
 
   AddBuildingToTile(building, tile) {
@@ -384,7 +392,6 @@ module.exports = class GameState {
       for (let i = 0; i < successors.length; i++) {
         let currentSuccessor = successors[i];
         if (this.IsSameLocation(currentSuccessor.tile, targetTile)) {
-          console.log("endnode");
           endNode = currentSuccessor;
           openList = [];
           break;

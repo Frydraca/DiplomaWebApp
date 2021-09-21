@@ -28,7 +28,7 @@ export const tradingBlock = {
       "trading"
     );
     // TODO: Assemble JavaScript into code variable.
-    var code = "this.Trading( playerId" + statements_trading + ");\n";
+    var code = "this.Trading(playerId" + statements_trading + ");\n";
     return code;
   },
 };

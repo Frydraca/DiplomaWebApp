@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Button, Col, Container, Dropdown, Row, Table } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
-import "../../App.css";
 import { initializeScreen } from "../../api/Authentication";
 import { loadScripts, loadMyScripts } from "../../api/Profile";
 import Sidebar from "./Sidebar/Sidebar";
@@ -52,8 +51,8 @@ function SimulatorScreen() {
   );
 
   const draw = (ctx) => {
-    ctx.canvas.width = 700;
-    ctx.canvas.height = 700;
+    ctx.canvas.width = 1000;
+    ctx.canvas.height = 1000;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
@@ -151,9 +150,23 @@ function SimulatorScreen() {
     }
   };
 
+  const handleSimulate = useCallback(() => {
+    simulate();
+  });
+  const handleGoToStart = useCallback(() => {
+    goToStart();
+  });
+  const handleGoToEnd = useCallback(() => {
+    goToEnd();
+  });
+  const handleIncrementTurnToView = useCallback(() => {
+    incrementTurnToView();
+  });
+  const handleDecrementTurnToView = useCallback(() => {
+    decrementTurnToView();
+  });
+
   function simulate() {
-    console.log(ownScriptId);
-    console.log(enemyScriptId);
     if (ownScriptId !== "" && enemyScriptId !== "") {
       dispatch(
         simulateGame({
@@ -188,10 +201,17 @@ function SimulatorScreen() {
 
   return (
     <div className="SimulatorScreen">
-      {/* <div id="side">
+      <div id="side">
         {userScriptList !== undefined && allScriptList !== undefined ? (
           <>
             <Sidebar
+              model={{
+                handleSimulate,
+                handleGoToStart,
+                handleGoToEnd,
+                handleIncrementTurnToView,
+                handleDecrementTurnToView,
+              }}
               ownCurrentScript={currentOwnScript}
               ownScriptList={userScriptList}
               ownScriptCallback={selectOwnScriptCallback}
@@ -254,8 +274,8 @@ function SimulatorScreen() {
             </Col>
           </Row>
         </Container>
-      </div> */}
-      <Container>
+      </div>
+      {/* <Container>
         <Row>
           <Col md={2}>
             <Container>
@@ -360,7 +380,7 @@ function SimulatorScreen() {
         ) : (
           <div className="d-flex justify-content-center align-items-center h-100"></div>
         )}
-      </Container>
+      </Container> */}
     </div>
   );
 }

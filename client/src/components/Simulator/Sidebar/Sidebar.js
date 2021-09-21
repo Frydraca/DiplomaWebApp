@@ -1,17 +1,45 @@
 import React from "react";
-import "../../../App.css";
 import { SidebarData } from "./SidebarData";
+import SidebarRow from "./SidebarRow";
 import ScriptSelector from "./ScriptSelector";
 
 function Sidebar(props) {
+  const {
+    handleSimulate,
+    handleGoToStart,
+    handleGoToEnd,
+    handleIncrementTurnToView,
+    handleDecrementTurnToView,
+  } = props.model;
+
+  function RowOnCLick(func) {
+    switch (func) {
+      case "simulate":
+        return handleSimulate();
+      case "next":
+        return handleIncrementTurnToView();
+      case "previous":
+        return handleDecrementTurnToView();
+      case "start":
+        return handleGoToStart();
+      case "end":
+        return handleGoToEnd();
+      default:
+        return;
+    }
+  }
+
   return (
     <div className="Sidebar">
       <ul className="SidebarList">
         {SidebarData.map((value, key) => {
           return (
-            <li key={key} className="row" onClick={() => {}}>
-              <div id="icon">{value.icon}</div>
-              <div id="title">{value.title}</div>
+            <li
+              key={key}
+              className="row"
+              onClick={() => RowOnCLick(value.onClickFunction)}
+            >
+              <SidebarRow icon={value.icon} title={value.title}></SidebarRow>
             </li>
           );
         })}

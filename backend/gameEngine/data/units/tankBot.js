@@ -1,6 +1,7 @@
 module.exports = tankBotData = {
   owner: "",
   name: "Tank Bot",
+  upgradeType: "tankBot",
   location: [0, 0],
   cost: {
     steel: 0,

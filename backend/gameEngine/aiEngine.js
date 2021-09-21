@@ -5,6 +5,7 @@ const CreateCommand = require("./commands/createCommand");
 const DeleteCommand = require("./commands/deleteCommand");
 const ModifyResourceCommand = require("./commands/modifyResourceCommand");
 const MoveCommand = require("./commands/moveCommand");
+const UpgradeCommand = require("./commands/upgradeCommand");
 const SteelMineData = require("./data/buildings/steelMine");
 const SolarPowerPlantData = require("./data/buildings/solarPowerPlant");
 const CrystalMineData = require("./data/buildings/crystalMine");
@@ -17,6 +18,8 @@ const RaiderBotData = require("./data/units/raiderBot");
 const TankBotData = require("./data/units/tankBot");
 const Building = require("./objects/Building");
 const Unit = require("./objects/Unit");
+const PricesData = require("./data/prices");
+const UpgradeCostsData = require("./data/upgradeCosts");
 
 module.exports = class AiEngine {
   players = {};
@@ -134,7 +137,25 @@ module.exports = class AiEngine {
   }
 
   Create(playerId, unitData) {
-    let newUnit = new Unit(unitData, playerId);
+    let player = this.game.gameState.GetPlayerById(playerId);
+    let upgradesForUnit = player
+      .GetUpgradeList()
+      .GetUpgradesForType(unitData.upgradeType);
+    let upgradedUnitData = JSON.parse(JSON.stringify(unitData));
+    // TODO maybe custom numbers and not only +1s
+    if (upgradesForUnit.attack) {
+      upgradedUnitData.attackDamage += 1;
+    }
+    if (upgradesForUnit.armor) {
+      upgradedUnitData.armor += 1;
+    }
+    if (upgradesForUnit.hitPoints) {
+      upgradedUnitData.hitPoints += 1;
+    }
+    if (upgradesForUnit.speed) {
+      upgradedUnitData.speed += 1;
+    }
+    let newUnit = new Unit(upgradedUnitData, playerId);
     this.game.Execute(new CreateCommand(newUnit));
   }
 
@@ -191,7 +212,6 @@ module.exports = class AiEngine {
         this.game.Execute(
           new ModifyResourceCommand(playerId, "credits", price)
         );
-        console.log("BUY");
       }
     } else {
       console.log(
@@ -209,8 +229,39 @@ module.exports = class AiEngine {
       let price = amount * PricesData[resource] * -1; // amount is negative
       this.game.Execute(new ModifyResourceCommand(playerId, resource, amount));
       this.game.Execute(new ModifyResourceCommand(playerId, "credits", price));
-      console.log("SELL");
     }
+  }
+
+  Research(playerId, ...upgradeOrders) {
+    for (let i = 0; i < upgradeOrders.length; i++) {
+      upgradeOrders[i];
+    }
+  }
+
+  UpgradeStats(playerId, unit, stat) {
+    let player = this.game.gameState.GetPlayerById(playerId);
+    let resources = player.GetResources();
+    let neededResources = UpgradeCostsData[unit.upgradeType][stat];
+    if (player.GetUpgradeList().GetUpgradesForType(unit.upgradeType)[stat]) {
+      return;
+    }
+
+    for (const [resource, value] of Object.entries(neededResources)) {
+      if (resources[resource] < value) {
+        return;
+      }
+    }
+
+    for (const [resource, value] of Object.entries(neededResources)) {
+      let negativeValue = 0 - value;
+      this.game.Execute(
+        new ModifyResourceCommand(playerId, resource, negativeValue)
+      );
+    }
+    console.log("Upgrade");
+    console.log(this.game.gameState.turnNumber);
+
+    this.game.Execute(new UpgradeCommand(playerId, unit.upgradeType, stat));
   }
 
   Do(action) {

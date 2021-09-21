@@ -1,5 +1,4 @@
 import React from "react";
-import "../../../App.css";
 import { LexiconData } from "./LexiconData";
 import { LexiconElement } from "./LexiconElement";
 
