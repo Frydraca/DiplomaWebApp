@@ -2,20 +2,31 @@ import React from "react";
 import { SidebarData } from "./SidebarData";
 import SidebarRow from "./SidebarRow";
 import ScriptSelector from "./ScriptSelector";
+import TurnIncrementSelector from "./TurnIncrementSelector";
 
 function Sidebar(props) {
   const {
     handleSimulate,
+    handleStart,
+    handleStop,
     handleGoToStart,
     handleGoToEnd,
     handleIncrementTurnToView,
     handleDecrementTurnToView,
   } = props.model;
 
+  const ownScriptData = props.ownScriptData;
+  const enemyScriptData = props.enemyScriptData;
+  const turnIncrementData = props.turnIncrementData;
+
   function RowOnCLick(func) {
     switch (func) {
       case "simulate":
         return handleSimulate();
+      case "run":
+        return handleStart();
+      case "stop":
+        return handleStop();
       case "next":
         return handleIncrementTurnToView();
       case "previous":
@@ -46,17 +57,11 @@ function Sidebar(props) {
       </ul>
       <div className="SidebarLine"></div>
       <div className="ScriptSelectionList">
-        <ScriptSelector
-          currentScript={props.ownCurrentScript}
-          scriptList={props.ownScriptList}
-          scriptCallback={props.ownScriptCallback}
-        ></ScriptSelector>
-        <ScriptSelector
-          currentScript={props.enemyCurrentScript}
-          scriptList={props.enemyScriptList}
-          scriptCallback={props.enemyScriptCallback}
-        ></ScriptSelector>
+        <ScriptSelector data={ownScriptData}></ScriptSelector>
+        <ScriptSelector data={enemyScriptData}></ScriptSelector>
       </div>
+      <div className="SidebarLine"></div>
+      <TurnIncrementSelector data={turnIncrementData}></TurnIncrementSelector>
     </div>
   );
 }

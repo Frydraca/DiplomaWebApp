@@ -17,10 +17,13 @@ import {
 import BuildingImages from "./buildings";
 import UnitImages from "./units";
 import UpgradeBar from "./UpgradeBar/UpgradeBar";
+import { setSimulationState } from "../../store/SimulationState";
 
 function SimulatorScreen() {
   var { id } = useParams();
   const dispatch = useDispatch();
+
+  const simulationState = useSelector((state) => state.simulationState);
 
   useEffect(() => {
     dispatch(initializeScreen());
@@ -28,6 +31,24 @@ function SimulatorScreen() {
     dispatch(loadMyScripts());
     dispatch(loadScripts());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (simulationState === "Running") {
+      var interval = setInterval(() => {
+        dispatch(getNextTurnOfGame(gameId, 1));
+      }, 1000);
+    } else {
+      if (interval) {
+        clearInterval(interval);
+      }
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [simulationState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const gameId = useSelector((state) => state.currentGame.id);
   const allScriptList = useSelector((state) => state.script.scripts);
@@ -43,12 +64,16 @@ function SimulatorScreen() {
   const [currentEnemyScript, setCurrentEnemyScript] = useState(
     "Select your opponent's script"
   );
+  const [turnIncrementValue, setTurnIncrementValue] = useState(1);
 
   const selectOwnScriptCallback = useCallback((script) =>
     selectOwnScript(script)
   );
   const selectEnemyScriptCallback = useCallback((script) =>
     selectEnemyScript(script)
+  );
+  const selectTurnIncrementValueCallback = useCallback((value) =>
+    setTurnIncrementValue(value)
   );
 
   const draw = (ctx) => {
@@ -154,6 +179,12 @@ function SimulatorScreen() {
   const handleSimulate = useCallback(() => {
     simulate();
   });
+  const handleStart = useCallback(() => {
+    start();
+  });
+  const handleStop = useCallback(() => {
+    stop();
+  });
   const handleGoToStart = useCallback(() => {
     goToStart();
   });
@@ -178,18 +209,35 @@ function SimulatorScreen() {
       );
     }
   }
+  function start() {
+    if (simulationState !== "Not started yet") {
+      dispatch(
+        setSimulationState({
+          simulationState: "Running",
+        })
+      );
+    }
+  }
+  function stop() {
+    if (simulationState !== "Not started yet") {
+      dispatch(
+        setSimulationState({
+          simulationState: "Stop",
+        })
+      );
+    }
+  }
   function goToStart() {
     dispatch(getStartOfGame(gameId));
-    console.log(currentGameState);
   }
   function goToEnd() {
     dispatch(getEndOfGame(gameId));
   }
   function incrementTurnToView() {
-    dispatch(getNextTurnOfGame(gameId));
+    dispatch(getNextTurnOfGame(gameId, turnIncrementValue));
   }
   function decrementTurnToView() {
-    dispatch(getPreviousTurnOfGame(gameId));
+    dispatch(getPreviousTurnOfGame(gameId, turnIncrementValue));
   }
 
   function selectOwnScript(script) {
@@ -200,6 +248,40 @@ function SimulatorScreen() {
     setCurrentEnemyScript(script.name);
     setEnemyScriptId(script._id);
   }
+  function selectEnemyScript(script) {
+    setCurrentEnemyScript(script.name);
+    setEnemyScriptId(script._id);
+  }
+
+  const turnIncrementList = [1, 2, 3, 5, 10];
+
+  const UIFunctionCallbacks = {
+    handleSimulate,
+    handleStart,
+    handleStop,
+    handleGoToStart,
+    handleGoToEnd,
+    handleIncrementTurnToView,
+    handleDecrementTurnToView,
+  };
+
+  const ownScriptData = {
+    currentScript: currentOwnScript,
+    scriptList: userScriptList,
+    scriptCallback: selectOwnScriptCallback,
+  };
+
+  const enemyScriptData = {
+    currentScript: currentEnemyScript,
+    scriptList: allScriptList,
+    scriptCallback: selectEnemyScriptCallback,
+  };
+
+  const turnIncrementData = {
+    currentTurnIncrementValue: turnIncrementValue,
+    turnIncrementList: turnIncrementList,
+    turnIncrementCallback: selectTurnIncrementValueCallback,
+  };
 
   return (
     <div className="SimulatorScreen">
@@ -207,19 +289,10 @@ function SimulatorScreen() {
         {userScriptList !== undefined && allScriptList !== undefined ? (
           <>
             <Sidebar
-              model={{
-                handleSimulate,
-                handleGoToStart,
-                handleGoToEnd,
-                handleIncrementTurnToView,
-                handleDecrementTurnToView,
-              }}
-              ownCurrentScript={currentOwnScript}
-              ownScriptList={userScriptList}
-              ownScriptCallback={selectOwnScriptCallback}
-              enemyCurrentScript={currentEnemyScript}
-              enemyScriptList={allScriptList}
-              enemyScriptCallback={selectEnemyScriptCallback}
+              model={UIFunctionCallbacks}
+              ownScriptData={ownScriptData}
+              enemyScriptData={enemyScriptData}
+              turnIncrementData={turnIncrementData}
             ></Sidebar>
           </>
         ) : (

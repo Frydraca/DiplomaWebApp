@@ -3,6 +3,7 @@ import { generateAuthenticationHeader } from "../Helpers/HeaderHelper";
 import { serverBaseUrl } from "../serverUrl";
 import { addError } from "../../store/Errors";
 import { loadGame } from "../../store/Game";
+import { setSimulationState } from "../../store/SimulationState";
 
 export function simulateGame(simulationData) {
   return (dispatch, getState) => {
@@ -19,6 +20,11 @@ export function simulateGame(simulationData) {
         dispatch(
           loadGame({
             game: success.data,
+          })
+        );
+        dispatch(
+          setSimulationState({
+            simulationState: "Running",
           })
         );
         console.log("saved game simulation");
@@ -91,12 +97,12 @@ export function getEndOfGame(gameId) {
   };
 }
 
-export function getNextTurnOfGame(gameId) {
+export function getNextTurnOfGame(gameId, turnIncrement) {
   return (dispatch, getState) => {
     const header = generateAuthenticationHeader(getState());
     return axios({
       method: "GET",
-      url: `${serverBaseUrl}simulator/${gameId}/nextTurn`,
+      url: `${serverBaseUrl}simulator/${gameId}/nextTurn/${turnIncrement}`,
       headers: header,
     }).then(
       (success) => {
@@ -119,12 +125,12 @@ export function getNextTurnOfGame(gameId) {
   };
 }
 
-export function getPreviousTurnOfGame(gameId) {
+export function getPreviousTurnOfGame(gameId, turnIncrement) {
   return (dispatch, getState) => {
     const header = generateAuthenticationHeader(getState());
     return axios({
       method: "GET",
-      url: `${serverBaseUrl}simulator/${gameId}/previousTurn`,
+      url: `${serverBaseUrl}simulator/${gameId}/previousTurn/${turnIncrement}`,
       headers: header,
     }).then(
       (success) => {

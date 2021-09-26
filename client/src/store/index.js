@@ -14,12 +14,14 @@ import gameMaps from "./MapList";
 import oneMap from "./OneMap";
 import script from "./Script";
 import ownScripts from "./OwnScripts";
+import SimulationState from "./SimulationState";
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
   auth: authentication,
   errors: errors,
   user: user,
+  simulationState: SimulationState,
   currentGame: game,
   gameMaps: gameMaps,
   oneMap: oneMap,

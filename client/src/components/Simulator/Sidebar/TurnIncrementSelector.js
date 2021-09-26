@@ -1,22 +1,22 @@
 import React from "react";
 import { Dropdown } from "react-bootstrap";
 
-function ScriptSelector(props) {
+function TurnIncrementSelector(props) {
   const data = props.data;
   return (
-    <div className="ScriptSelector">
+    <div>
       <Dropdown>
         <Dropdown.Toggle variant="success" id="dropdown-user">
-          {data.currentScript}
+          {data.currentTurnIncrementValue}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <>
-            {data.scriptList.map((script, index) => (
+            {data.turnIncrementList.map((value, index) => (
               <Dropdown.Item
-                onClick={() => data.scriptCallback(script)}
+                onClick={() => data.turnIncrementCallback(value)}
                 key={index}
               >
-                {script.name}
+                {value}
               </Dropdown.Item>
             ))}
           </>
@@ -26,4 +26,4 @@ function ScriptSelector(props) {
   );
 }
 
-export default ScriptSelector;
+export default TurnIncrementSelector;

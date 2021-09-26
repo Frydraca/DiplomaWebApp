@@ -134,7 +134,7 @@ module.exports = function (app) {
   );
 
   app.get(
-    "/simulator/:gameId/nextTurn",
+    "/simulator/:gameId/nextTurn/:turnIncrement",
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
@@ -145,7 +145,7 @@ module.exports = function (app) {
   );
 
   app.get(
-    "/simulator/:gameId/previousTurn",
+    "/simulator/:gameId/previousTurn/:turnIncrement",
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
