@@ -51,8 +51,17 @@ export const combatGroup = {
       block,
       "Combat Behaviour"
     );
+    let groupId = Date.now() + Math.random();
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code =
+      "this.CombatGroup(playerId," +
+      groupId +
+      "," +
+      value_units +
+      "," +
+      value_task +
+      statements_combat_behaviour +
+      ")";
     return code;
   },
 };

@@ -8,13 +8,13 @@ import tankBot_Red from "./images/units/tank_red.png";
 import tankBot_Green from "./images/units/tank_green.png";
 
 const Units = {
-  player1: {
+  Player: {
     "Artillery Bot": artilleryBot_Red,
     "Attack Bot": attackBot_Red,
     "Raider Bot": raiderBot_Red,
     "Tank Bot": tankBot_Red,
   },
-  serverAi: {
+  "Server AI": {
     "Artillery Bot": artilleryBot_Green,
     "Attack Bot": attackBot_Green,
     "Raider Bot": raiderBot_Green,

@@ -207,7 +207,26 @@ module.exports = class GameEngine {
         }
       }
     });
-
     return closestEnemy;
+  }
+
+  DoesEnemyHasUnits(playerId) {
+    let enemyHasUnit = false;
+    this.gameState.GetUnits().forEach((unit) => {
+      if (playerId !== unit.GetOwner()) {
+        enemyHasUnit = true;
+      }
+    });
+    return enemyHasUnit;
+  }
+
+  DoesEnemyHasBuildings(playerId) {
+    let enemyHasBuilding = false;
+    this.gameState.GetBuildings().forEach((building) => {
+      if (playerId !== building.GetOwner()) {
+        enemyHasBuilding = true;
+      }
+    });
+    return enemyHasBuilding;
   }
 };

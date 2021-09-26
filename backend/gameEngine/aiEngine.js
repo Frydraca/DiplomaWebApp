@@ -18,6 +18,7 @@ const RaiderBotData = require("./data/units/raiderBot");
 const TankBotData = require("./data/units/tankBot");
 const Building = require("./objects/Building");
 const Unit = require("./objects/Unit");
+const BattleGroup = require("./objects/BattleGroup");
 const PricesData = require("./data/prices");
 const UpgradeCostsData = require("./data/upgradeCosts");
 
@@ -38,12 +39,12 @@ module.exports = class AiEngine {
   RunGame() {
     let counter = 0;
     while (this.game.IsRunning()) {
-      //script player1
+      //script Player
       //console.log(this.pScript);
 
       eval(this.pScript);
 
-      //script player2
+      //script Server AI
 
       // console.log("serverScript");
       // console.log(this.sScript);
@@ -68,7 +69,12 @@ module.exports = class AiEngine {
     // Ha van egységed
     // Minden egységre szabad akcióval
     units.forEach((unit) => {
-      if (unit.GetHasAction()) {
+      // Ha van enemy target
+      if (
+        unit.GetHasAction() &&
+        (this.game.DoesEnemyHasUnits(playerId) ||
+          this.game.DoesEnemyHasBuildings(playerId))
+      ) {
         // find closest enemy
         let enemy = this.game.GetClosestEnemy(unit);
         if (unit.InRange(enemy)) {
@@ -150,7 +156,7 @@ module.exports = class AiEngine {
       upgradedUnitData.armor += 1;
     }
     if (upgradesForUnit.hitPoints) {
-      upgradedUnitData.hitPoints += 1;
+      upgradedUnitData.hitPoints += 12;
     }
     if (upgradesForUnit.speed) {
       upgradedUnitData.speed += 1;
@@ -258,10 +264,59 @@ module.exports = class AiEngine {
         new ModifyResourceCommand(playerId, resource, negativeValue)
       );
     }
-    console.log("Upgrade");
-    console.log(this.game.gameState.turnNumber);
 
     this.game.Execute(new UpgradeCommand(playerId, unit.upgradeType, stat));
+  }
+
+  CombatGroup(playerId, groupId, group, task, ...tactics) {
+    let player = this.game.gameState.GetPlayerById(playerId);
+    if (
+      undefined ===
+      player.GetBattleGroups().find((element) => element.GetId() === groupId)
+    ) {
+      let expectedUnits = [];
+      group.elements.forEach((element) => {
+        for (let i = 0; i < element.number; i++) {
+          expectedUnits.push(element.gameObject.name);
+        }
+      });
+
+      let battleGroup = new BattleGroup(
+        playerId,
+        groupId,
+        expectedUnits,
+        task,
+        tactics
+      );
+      player.AddBattleGroup(battleGroup);
+    }
+  }
+
+  RetreatTactic(
+    groupRetreatValue,
+    individualRetreatAllowed,
+    individualRetreatPercentage
+  ) {
+    return {
+      type: "RetreatTactic",
+      contents: {
+        groupRetreatAllowed: true,
+        groupRetreatValue: groupRetreatValue,
+        individualRetreatAllowed: individualRetreatAllowed,
+        individualRetreatPercentage: individualRetreatPercentage,
+      },
+    };
+  }
+
+  FocusFireTactic(focusFireTarget, focusOnlyUnits) {
+    return {
+      type: "FocusFireTactic",
+      contents: {
+        focusFireEnabled: true,
+        focusFireTarget: focusFireTarget,
+        focusOnlyUnits: focusOnlyUnits,
+      },
+    };
   }
 
   Do(action) {

@@ -4,6 +4,7 @@ module.exports = class Player {
   playerId = "";
   resources = {};
   upgradeList = {};
+  battleGroups = [];
 
   constructor(playerData) {
     this.playerId = JSON.parse(JSON.stringify(playerData.playerId));
@@ -29,5 +30,13 @@ module.exports = class Player {
 
   SetUpgradeList(upgradeList) {
     this.upgradeList = upgradeList;
+  }
+
+  GetBattleGroups() {
+    return this.battleGroups;
+  }
+
+  AddBattleGroup(newBattleGroup) {
+    this.battleGroups.push(newBattleGroup);
   }
 };

@@ -92,6 +92,7 @@ function EditorScreen() {
           {script !== undefined ? (
             <Col>
               <BlocklyDrawer
+                className="BlocklyDrawer"
                 tools={[
                   ...structures,
                   ...actions,

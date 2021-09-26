@@ -16,6 +16,7 @@ import {
 } from "../../api/Simulator";
 import BuildingImages from "./buildings";
 import UnitImages from "./units";
+import UpgradeBar from "./UpgradeBar/UpgradeBar";
 
 function SimulatorScreen() {
   var { id } = useParams();
@@ -179,6 +180,7 @@ function SimulatorScreen() {
   }
   function goToStart() {
     dispatch(getStartOfGame(gameId));
+    console.log(currentGameState);
   }
   function goToEnd() {
     dispatch(getEndOfGame(gameId));
@@ -274,6 +276,14 @@ function SimulatorScreen() {
             </Col>
           </Row>
         </Container>
+      </div>
+      <div id="upgrades">
+        {currentGameState !== undefined &&
+        currentGameState.players.length !== 0 ? (
+          <UpgradeBar players={currentGameState.players}></UpgradeBar>
+        ) : (
+          <div></div>
+        )}
       </div>
       {/* <Container>
         <Row>

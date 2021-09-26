@@ -14,7 +14,7 @@ import workshop_Red from "./images/buildings/workshop_red.png";
 import workshop_Green from "./images/buildings/workshop_green.png";
 
 const Buildings = {
-  player1: {
+  Player: {
     "Command Center": commandCenter_Red,
     "Core Factory": coreFactory_Red,
     "Crystal Mine": crystalMine_Red,
@@ -23,7 +23,7 @@ const Buildings = {
     "Steel Mine": steelMine_Red,
     Workshop: workshop_Red,
   },
-  serverAi: {
+  "Server AI": {
     "Command Center": commandCenter_Green,
     "Core Factory": coreFactory_Green,
     "Crystal Mine": crystalMine_Green,

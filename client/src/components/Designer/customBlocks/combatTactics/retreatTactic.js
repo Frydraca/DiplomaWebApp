@@ -52,7 +52,14 @@ export const retreatTactic = {
       "individualRetreatPercentage"
     );
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code =
+      ", this.RetreatTactic(" +
+      number_retreatpercentage +
+      "," +
+      checkbox_individualretreat +
+      "," +
+      number_individualretreatpercentage +
+      ")";
     return code;
   },
 };

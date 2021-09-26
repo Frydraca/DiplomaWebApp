@@ -39,7 +39,12 @@ export const focusFireTactic = {
     var dropdown_target = block.getFieldValue("Target");
     var checkbox_unitfocus = block.getFieldValue("unitFocus") == "TRUE";
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code =
+      ", this.FocusFireTactic('" +
+      dropdown_target +
+      "'," +
+      checkbox_unitfocus +
+      ")";
     return code;
   },
 };

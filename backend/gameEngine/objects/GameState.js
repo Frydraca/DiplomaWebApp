@@ -15,7 +15,7 @@ module.exports = class GameState {
     this.isRunning = true;
     // TODO refactor player setup
     let playerData1 = {
-      playerId: "player1",
+      playerId: "Player",
       resources: {
         steel: 30,
         roboSteel: 10,
@@ -26,7 +26,7 @@ module.exports = class GameState {
       },
     };
     let playerData2 = {
-      playerId: "serverAi",
+      playerId: "Server AI",
       resources: {
         steel: 30,
         roboSteel: 10,

@@ -5,7 +5,7 @@ module.exports = function () {
     console.log("Run Simulation");
 
     //aiEngine
-    var playerIds = ["player1", "serverAi"];
+    var playerIds = ["Player", "Server AI"];
     console.log(res.locals.ownScriptContent);
     console.log(res.locals.enemyScriptContent);
     var aiEngine = new AiEngine(
