@@ -5,6 +5,7 @@ const Building = require("./Building");
 module.exports = class GameState {
   turnNumber = 1;
   isRunning = true;
+  baseBuildingLocations = [];
   players = [];
   buildings = [];
   units = [];
@@ -13,6 +14,17 @@ module.exports = class GameState {
   constructor(startingGameState) {
     this.turnNumber = 0;
     this.isRunning = true;
+    this.baseBuildingLocations = [
+      [-2, -1],
+      [-2, 1],
+      [-1, 2],
+      [-1, -2],
+      [1, -2],
+      [1, 2],
+      [2, -1],
+      [2, 1],
+    ];
+
     // TODO refactor player setup
     let playerData1 = {
       playerId: "Player",
@@ -263,6 +275,33 @@ module.exports = class GameState {
       Math.abs(tile1.GetLocation()[0] - tile2.GetLocation()[0]) +
       Math.abs(tile1.GetLocation()[1] - tile2.GetLocation()[1])
     );
+  }
+
+  GetNextBuildingLocation(player, building) {
+    let ret = { success: false, tile: "null" };
+    let commandCenter = this.GetBuildings().filter(
+      (element) =>
+        element.GetOwner() === player.GetPlayerId() &&
+        element.GetName() === "Command Center"
+    );
+    let commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
+    for (let i = 0; i < this.baseBuildingLocations.length; i++) {
+      let tile = this.GetTileByLocation([
+        commandTile.GetLocation()[0] + this.baseBuildingLocations[i][0],
+        commandTile.GetLocation()[1] + this.baseBuildingLocations[i][1],
+      ]);
+      if (
+        tile !== undefined &&
+        tile.IsEmpty() &&
+        building.IsLocationValid(tile.GetTerrain())
+      ) {
+        ret.success = true;
+        ret.tile = tile;
+        return ret;
+      }
+    }
+
+    return ret;
   }
 
   // TODO: Refactor

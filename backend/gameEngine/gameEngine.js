@@ -61,10 +61,17 @@ module.exports = class GameEngine {
 
   Build(gameState, building) {
     let player = this.GetOwnerOfObject(gameState, building);
-    let locationResponse = gameState.GetClosestBuildingLocationToCommandCenter(
-      player,
-      building
-    );
+    let locationResponse;
+    let buildingName = building.GetName();
+    if (buildingName === "Crystal Mine" || buildingName === "Steel Mine") {
+      locationResponse = gameState.GetClosestBuildingLocationToCommandCenter(
+        player,
+        building
+      );
+    } else {
+      locationResponse = gameState.GetNextBuildingLocation(player, building);
+    }
+
     if (building.CanBuild(player.resources) && locationResponse.success) {
       player.resources = building.TakeCost(player.resources);
       gameState.AddBuildingToTile(building, locationResponse.tile);

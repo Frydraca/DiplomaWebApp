@@ -37,7 +37,6 @@ module.exports = class AiEngine {
 
   // Main run function
   RunGame() {
-    let counter = 0;
     while (this.game.IsRunning()) {
       //script Player
       //console.log(this.pScript);
@@ -53,7 +52,6 @@ module.exports = class AiEngine {
       }
 
       this.game.TurnEnd();
-      counter++;
     }
   }
 

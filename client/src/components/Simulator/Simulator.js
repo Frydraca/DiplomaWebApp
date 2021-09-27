@@ -36,7 +36,7 @@ function SimulatorScreen() {
     if (simulationState === "Running") {
       var interval = setInterval(() => {
         dispatch(getNextTurnOfGame(gameId, 1));
-      }, 1000);
+      }, 500);
     } else {
       if (interval) {
         clearInterval(interval);
@@ -77,6 +77,7 @@ function SimulatorScreen() {
   );
 
   const draw = (ctx) => {
+    let cellSize = 40;
     ctx.canvas.width = 1000;
     ctx.canvas.height = 1000;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -87,10 +88,10 @@ function SimulatorScreen() {
       tiles.forEach((element) => {
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * 50,
-          (element.location[1] + 1) * 50,
-          50,
-          50
+          (element.location[0] + 1) * cellSize,
+          (element.location[1] + 1) * cellSize,
+          cellSize,
+          cellSize
         );
         switch (element.terrain) {
           case "plains":
@@ -114,18 +115,18 @@ function SimulatorScreen() {
         let hpPercent = element.hitPoints / element.maxHitPoints;
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * 50 + 10,
-          (element.location[1] + 1) * 50 + 4,
-          30 * hpPercent,
+          (element.location[0] + 1) * cellSize + 8,
+          (element.location[1] + 1) * cellSize + 4,
+          24 * hpPercent,
           3
         );
         ctx.fillStyle = "green";
         ctx.fill();
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * 50 + 10 + 30 * hpPercent,
-          (element.location[1] + 1) * 50 + 4,
-          30 - 30 * hpPercent,
+          (element.location[0] + 1) * cellSize + 8 + 30 * hpPercent,
+          (element.location[1] + 1) * cellSize + 4,
+          24 - 24 * hpPercent,
           3
         );
         ctx.fillStyle = "red";
@@ -135,10 +136,10 @@ function SimulatorScreen() {
         img.src = BuildingImages[element.owner][element.name];
         ctx.drawImage(
           img,
-          (element.location[0] + 1) * 50 + 10,
-          (element.location[1] + 1) * 50 + 10,
-          30,
-          30
+          (element.location[0] + 1) * cellSize + 8,
+          (element.location[1] + 1) * cellSize + 8,
+          24,
+          24
         );
       });
       let units = currentGameState.units;
@@ -146,18 +147,18 @@ function SimulatorScreen() {
         let hpPercent = element.hitPoints / element.maxHitPoints;
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * 50 + 10,
-          (element.location[1] + 1) * 50 + 4,
-          30 * hpPercent,
+          (element.location[0] + 1) * cellSize + 8,
+          (element.location[1] + 1) * cellSize + 4,
+          24 * hpPercent,
           3
         );
         ctx.fillStyle = "green";
         ctx.fill();
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * 50 + 10 + 30 * hpPercent,
-          (element.location[1] + 1) * 50 + 4,
-          30 - 30 * hpPercent,
+          (element.location[0] + 1) * cellSize + 8 + 30 * hpPercent,
+          (element.location[1] + 1) * cellSize + 4,
+          24 - 24 * hpPercent,
           3
         );
         ctx.fillStyle = "red";
@@ -167,10 +168,10 @@ function SimulatorScreen() {
         img.src = UnitImages[element.owner][element.name];
         ctx.drawImage(
           img,
-          (element.location[0] + 1) * 50 + 10,
-          (element.location[1] + 1) * 50 + 10,
-          30,
-          30
+          (element.location[0] + 1) * cellSize + 8,
+          (element.location[1] + 1) * cellSize + 8,
+          24,
+          24
         );
       });
     }
@@ -201,6 +202,11 @@ function SimulatorScreen() {
   function simulate() {
     if (ownScriptId !== "" && enemyScriptId !== "") {
       dispatch(
+        setSimulationState({
+          simulationState: "Stopped",
+        })
+      );
+      dispatch(
         simulateGame({
           gameId: id,
           ownScript: ownScriptId,
@@ -222,22 +228,30 @@ function SimulatorScreen() {
     if (simulationState !== "Not started yet") {
       dispatch(
         setSimulationState({
-          simulationState: "Stop",
+          simulationState: "Stopped",
         })
       );
     }
   }
   function goToStart() {
-    dispatch(getStartOfGame(gameId));
+    if (simulationState === "Stopped") {
+      dispatch(getStartOfGame(gameId));
+    }
   }
   function goToEnd() {
-    dispatch(getEndOfGame(gameId));
+    if (simulationState === "Stopped") {
+      dispatch(getEndOfGame(gameId));
+    }
   }
   function incrementTurnToView() {
-    dispatch(getNextTurnOfGame(gameId, turnIncrementValue));
+    if (simulationState === "Stopped") {
+      dispatch(getNextTurnOfGame(gameId, turnIncrementValue));
+    }
   }
   function decrementTurnToView() {
-    dispatch(getPreviousTurnOfGame(gameId, turnIncrementValue));
+    if (simulationState === "Stopped") {
+      dispatch(getPreviousTurnOfGame(gameId, turnIncrementValue));
+    }
   }
 
   function selectOwnScript(script) {
