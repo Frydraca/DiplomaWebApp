@@ -17,7 +17,7 @@ export const defendTask = {
   },
   generator: (block) => {
     // TODO: Assemble JavaScript into code variable.
-    var code = "'defend'";
+    var code = "'Defend'";
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE];
   },

@@ -1,6 +1,7 @@
 module.exports = FoundryData = {
   owner: "",
   name: "Foundry",
+  buildTime: 3,
   location: [0, 0],
   possibleTerrain: ["plains"],
   cost: {

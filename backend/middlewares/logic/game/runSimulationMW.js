@@ -6,8 +6,6 @@ module.exports = function () {
 
     //aiEngine
     var playerIds = ["Player", "Server AI"];
-    console.log(res.locals.ownScriptContent);
-    console.log(res.locals.enemyScriptContent);
     var aiEngine = new AiEngine(
       playerIds,
       res.locals.ownScriptContent,

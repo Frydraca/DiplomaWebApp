@@ -4,7 +4,6 @@ module.exports = function (objectrepository) {
   const Script = requireOption(objectrepository, "Script");
 
   return function (req, res, next) {
-    console.log("save updated game");
     res.locals.script.content = req.body.content;
     res.locals.script.workspace = req.body.workspace;
     res.locals.script.lastModified = Date.now();

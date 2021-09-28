@@ -4,7 +4,6 @@ module.exports = function (objectrepository) {
   const Script = requireOption(objectrepository, "Script");
 
   return function (req, res, next) {
-    console.log("Get script");
     if (req.params.scriptId === "new") {
       res.locals.retData = {
         script: {

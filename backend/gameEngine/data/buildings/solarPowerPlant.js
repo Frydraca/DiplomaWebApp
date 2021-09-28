@@ -1,6 +1,7 @@
 module.exports = SolarPowerPlantData = {
   owner: "",
   name: "Solar Power Plant",
+  buildTime: 3,
   location: [0, 0],
   possibleTerrain: ["plains"],
   cost: {

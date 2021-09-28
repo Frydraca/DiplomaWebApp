@@ -3,8 +3,6 @@ const requireOption = require("../../../config/requireOption");
 module.exports = function (objectrepository) {
   const User = requireOption(objectrepository, "User");
   return function (req, res, next) {
-    console.log("Get User");
-
     req.email = req.email || req.query.email;
     if (typeof req.email === "undefined") {
       return res.status(400).send("Cannot find user with this email!");

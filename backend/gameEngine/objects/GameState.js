@@ -1,6 +1,8 @@
 const Player = require("./Player");
 const Tile = require("./Tile");
 const Building = require("./Building");
+const Unit = require("./Unit");
+const WorkerBotData = require("../data/units/workerBot");
 
 module.exports = class GameState {
   turnNumber = 1;
@@ -61,6 +63,23 @@ module.exports = class GameState {
         startingGameState.startingLocations[i]
       );
     }
+
+    // let startingWorker1 = new Unit(
+    //   WorkerBotData,
+    //   this.players[0].GetPlayerId()
+    // );
+    // let startingWorker2 = new Unit(
+    //   WorkerBotData,
+    //   this.players[1].GetPlayerId()
+    // );
+    // let tile1 = this.GetTileByLocation(
+    //   startingGameState.startingWorkerLocations[0]
+    // );
+    // let tile2 = this.GetTileByLocation(
+    //   startingGameState.startingWorkerLocations[1]
+    // );
+    // this.AddUnitToTile(startingWorker1, tile1);
+    // this.AddUnitToTile(startingWorker2, tile2);
   }
 
   AddCommandCenter(owner, location) {
@@ -96,6 +115,7 @@ module.exports = class GameState {
       attackDamage: 0,
     };
     let newBuilding = new Building(buildingData, owner);
+    newBuilding.Complete();
     newBuilding.SetLocation(location);
     this.AddBuildingToTile(newBuilding, this.GetTileByLocation(location));
   }
@@ -189,8 +209,6 @@ module.exports = class GameState {
 
   AddUnitToTile(unit, tile) {
     if (this.tiles.includes(tile) && tile.IsEmpty()) {
-      unit.SetLocation(tile.GetLocation());
-      this.units.push(unit);
       this.tiles
         .find((element) => element === tile)
         .SetUnitId(unit.GetObjectId());
@@ -208,11 +226,19 @@ module.exports = class GameState {
 
   RemoveUnitFromTile(tile) {
     let targetTile = this.tiles.find((element) => element === tile);
-    this.units.splice(
-      this.units.indexOf(this.GetUnitById(targetTile.GetUnitId())),
-      1
-    );
     targetTile.SetUnitId("null");
+  }
+
+  AddUnit(unit) {
+    this.units.push(unit);
+  }
+
+  RemoveUnit(unit) {
+    this.units.splice(this.units.indexOf(unit), 1);
+  }
+
+  ChangeUnitLocation(unit, newTile) {
+    unit.SetLocation(newTile.GetLocation());
   }
 
   RemoveObject(gameObject) {
@@ -226,6 +252,7 @@ module.exports = class GameState {
       return true;
     }
     if (unit !== undefined) {
+      this.RemoveUnit(unit);
       this.RemoveUnitFromTile(this.GetTileByLocation(unit.GetLocation()));
       return true;
     }

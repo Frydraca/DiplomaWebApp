@@ -3,7 +3,6 @@ const requireOption = require("../../../config/requireOption");
 module.exports = function (objectrepository) {
   const User = requireOption(objectrepository, "User");
   return function (req, res, next) {
-    console.log("Get User For Login");
     if (
       typeof req.body.email === "undefined" ||
       typeof req.body.password === "undefined"

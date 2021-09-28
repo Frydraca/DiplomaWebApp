@@ -51,6 +51,7 @@ module.exports = class AiEngine {
         eval(this.sScript);
       }
 
+      this.game.ActivateUnits();
       this.game.TurnEnd();
     }
   }
@@ -69,7 +70,7 @@ module.exports = class AiEngine {
     units.forEach((unit) => {
       // Ha van enemy target
       if (
-        unit.GetHasAction() &&
+        unit.HasAction() &&
         (this.game.DoesEnemyHasUnits(playerId) ||
           this.game.DoesEnemyHasBuildings(playerId))
       ) {
@@ -268,25 +269,52 @@ module.exports = class AiEngine {
 
   CombatGroup(playerId, groupId, group, task, ...tactics) {
     let player = this.game.gameState.GetPlayerById(playerId);
-    if (
-      undefined ===
-      player.GetBattleGroups().find((element) => element.GetId() === groupId)
-    ) {
+    let battleGroup = player
+      .GetBattleGroups()
+      .find((element) => element.GetId() === groupId);
+    if (undefined === battleGroup) {
       let expectedUnits = [];
       group.elements.forEach((element) => {
         for (let i = 0; i < element.number; i++) {
-          expectedUnits.push(element.gameObject.name);
+          expectedUnits.push({
+            unitName: element.gameObject.name,
+            inGroup: false,
+            unitId: "",
+          });
         }
       });
 
-      let battleGroup = new BattleGroup(
+      let newBattleGroup = new BattleGroup(
         playerId,
         groupId,
         expectedUnits,
         task,
         tactics
       );
-      player.AddBattleGroup(battleGroup);
+      player.AddBattleGroup(newBattleGroup);
+    } else if (!battleGroup.HasAllUnits()) {
+      let missingUnits = battleGroup.GetMissingUnits();
+      missingUnits.forEach((unit) => {
+        let unitData = {};
+        switch (unit) {
+          case "Attack Bot":
+            unitData = AttackBotData;
+            break;
+          case "Artillery Bot":
+            unitData = ArtilleryBotData;
+            break;
+          case "Raider Bot":
+            unitData = RaiderBotData;
+            break;
+          case "Tank Bot":
+            unitData = TankBotData;
+            break;
+          default:
+            console.log("Error! Unexpected unit type! " + unit);
+            break;
+        }
+        this.Create(playerId, unitData);
+      });
     }
   }
 

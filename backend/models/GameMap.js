@@ -6,6 +6,7 @@ const GameMap = db.model("GameMap", {
   height: Number,
   tiles: {},
   startingLocations: {},
+  startingWorkerLocations: {},
 });
 
 module.exports = GameMap;

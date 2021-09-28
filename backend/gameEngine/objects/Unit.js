@@ -5,10 +5,14 @@ module.exports = class Unit extends GameObject {
   speed = 0;
   hasAction = false;
   groupName = "";
+  //Idle, Moving, Build, Pick Up resources, Put down Resources, Target, Attack, Reload
+  status = "";
 
   constructor(unitData, ownerId) {
     super(unitData, ownerId);
     this.type = "unit";
+    this.status = "Idle";
+    this.groupName = "";
     this.cost = JSON.parse(JSON.stringify(unitData.cost));
     this.speed = JSON.parse(JSON.stringify(unitData.speed));
   }
@@ -17,12 +21,25 @@ module.exports = class Unit extends GameObject {
     return this.speed;
   }
 
-  GetHasAction() {
+  HasAction() {
     return this.hasAction;
   }
 
   SetHasAction(state) {
     this.hasAction = state;
+  }
+
+  AddGroupName(groupName) {
+    this.groupName = groupName;
+  }
+
+  GetBattleGroup() {
+    return this.groupName;
+  }
+
+  InGroup() {
+    if (this.groupName === "") return false;
+    else return true;
   }
 
   CanCreate(resources) {

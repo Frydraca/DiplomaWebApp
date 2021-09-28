@@ -1,4 +1,6 @@
 const GameState = require("./objects/GameState");
+const AttackCommand = require("./commands/attackCommand");
+const MoveCommand = require("./commands/moveCommand");
 
 module.exports = class GameEngine {
   startingGameStateData = {};
@@ -40,6 +42,12 @@ module.exports = class GameEngine {
     this.gameState.GetUnits().forEach((unit) => {
       unit.SetHasAction(true);
     });
+    this.gameState.GetPlayers().forEach((player) => {
+      let battleGroups = player.GetBattleGroups();
+      battleGroups.forEach((group) => {
+        group.CheckUnits();
+      });
+    });
     this.UpdateResources();
     this.CheckForGameEnd();
     this.commands.push(this.currentTurnCommands);
@@ -57,6 +65,157 @@ module.exports = class GameEngine {
 
   GetCommands() {
     return this.commands;
+  }
+
+  ActivateUnits() {
+    for (let i = 0; i < this.gameState.units.length; i++) {
+      let unit = this.gameState.units[i];
+      //do something
+      let playerId = unit.GetOwner();
+      let player = this.gameState.GetPlayerById(playerId);
+
+      //check if in battlegroup
+      //check status
+      if (unit.InGroup()) {
+        let battleGroup = player
+          .GetBattleGroups()
+          .find((group) => group.id === unit.GetBattleGroup());
+        if (battleGroup === undefined) {
+          console.log("Error! Couldn't find battlegroup!");
+          continue;
+        }
+        switch (battleGroup.GetStatus()) {
+          case "Wait":
+            if (this.AttackCheck(unit, playerId)) {
+              let enemy = this.GetClosestEnemy(unit);
+              if (unit.InRange(enemy)) {
+                this.Execute(new AttackCommand(unit, enemy));
+                unit.SetHasAction(false);
+              }
+            }
+            break;
+          case "Active":
+            switch (battleGroup.GetTask()) {
+              case "Attack":
+                if (this.AttackCheck(unit, playerId)) {
+                  this.GeneralAttackMove(unit);
+                }
+                break;
+              case "Defend":
+                if (this.AttackCheck(unit, playerId)) {
+                  let enemy = this.GetClosestEnemy(unit);
+                  if (unit.InRange(enemy)) {
+                    this.Execute(new AttackCommand(unit, enemy));
+                    unit.SetHasAction(false);
+                  }
+                  this.GeneralDefendMove(unit, playerId);
+                }
+                break;
+              default:
+                console.log(
+                  "Error! Unrecognized battle group task: " +
+                    battleGroup.GetTask()
+                );
+                break;
+            }
+            break;
+          case "Retreat":
+            break;
+          default:
+            console.log(
+              "Error! unrecognized battle group status: " +
+                battleGroup.GetStatus()
+            );
+            break;
+        }
+      } else {
+        if (this.AttackCheck(unit, playerId)) {
+          this.GeneralAttackMove(unit);
+        }
+      }
+    }
+  }
+
+  GeneralAttackMove(unit) {
+    let enemy = this.GetClosestEnemy(unit);
+    if (unit.InRange(enemy)) {
+      this.Execute(new AttackCommand(unit, enemy));
+    } else {
+      this.Execute(
+        new MoveCommand(
+          unit,
+          this.GetGameState().GetTileByLocation(enemy.GetLocation())
+        )
+      );
+    }
+    unit.SetHasAction(false);
+  }
+
+  GeneralDefendMove(unit, playerId) {
+    // get enemies in range of command center
+    let enemiesTooClose = this.FindEnemiesInRangeOfCommandcenter(10, playerId);
+    console.log("turnnumber: " + this.gameState.turnNumber);
+    console.log("nr of enemies: " + enemiesTooClose.length);
+    if (enemiesTooClose.length === 0) return;
+    // find the closest one out of them
+    let closestEnemy = {};
+    let distance = Number.POSITIVE_INFINITY;
+    enemiesTooClose.forEach((enemy) => {
+      if (playerId !== enemy.GetOwner()) {
+        let currentDistance = unit.GetDistanceFromObject(enemy);
+        if (currentDistance < distance) {
+          closestEnemy = enemy;
+          distance = currentDistance;
+        }
+      }
+    });
+    console.log(closestEnemy);
+
+    if (unit.InRange(closestEnemy)) {
+      this.Execute(new AttackCommand(unit, closestEnemy));
+    } else {
+      this.Execute(
+        new MoveCommand(
+          unit,
+          this.GetGameState().GetTileByLocation(closestEnemy.GetLocation())
+        )
+      );
+    }
+    unit.SetHasAction(false);
+  }
+
+  AttackCheck(unit, playerId) {
+    return (
+      unit.HasAction() &&
+      (this.DoesEnemyHasUnits(playerId) || this.DoesEnemyHasBuildings(playerId))
+    );
+  }
+
+  FindEnemiesInRangeOfCommandcenter(range, playerId) {
+    let enemiesInRange = [];
+    let commandCenter = this.gameState
+      .GetBuildings()
+      .filter(
+        (element) =>
+          element.GetOwner() === playerId &&
+          element.GetName() === "Command Center"
+      )[0];
+    this.gameState.GetUnits().forEach((unit) => {
+      if (playerId !== unit.GetOwner()) {
+        if (unit.GetDistanceFromObject(commandCenter) <= range) {
+          enemiesInRange.push(unit);
+        }
+      }
+    });
+    this.gameState.GetBuildings().forEach((building) => {
+      if (playerId !== building.GetOwner()) {
+        if (building.GetDistanceFromObject(commandCenter) <= range) {
+          enemiesInRange.push(building);
+        }
+      }
+    });
+
+    return enemiesInRange;
   }
 
   Build(gameState, building) {
@@ -87,6 +246,16 @@ module.exports = class GameEngine {
     if (unit.CanCreate(player.resources) && locationResponse.success) {
       player.resources = unit.TakeCost(player.resources);
       gameState.AddUnitToTile(unit, locationResponse.tile);
+      gameState.AddUnit(unit);
+      gameState.ChangeUnitLocation(unit, locationResponse.tile);
+
+      let battleGroups = player.GetBattleGroups();
+      for (let i = 0; i < battleGroups.length; i++) {
+        if (battleGroups[i].NeedUnitType(unit.GetName())) {
+          unit.AddGroupName(battleGroups[i].GetId());
+          battleGroups[i].AddUnit(unit);
+        }
+      }
       return { success: true, location: locationResponse.tile.GetLocation() };
     }
     return { success: false, location: [] };
@@ -107,6 +276,7 @@ module.exports = class GameEngine {
     }
     gameState.RemoveUnitFromTile(currentTile);
     gameState.AddUnitToTile(unit, newTile);
+    gameState.ChangeUnitLocation(unit, newTile);
     return {
       success: true,
       start: currentTile.GetLocation(),

@@ -4,8 +4,6 @@ module.exports = function (objectrepository) {
   const Script = requireOption(objectrepository, "Script");
 
   return function (req, res, next) {
-    console.log("Create Script");
-
     var script = new Script({
       name: req.body.name,
       owner: req.user,

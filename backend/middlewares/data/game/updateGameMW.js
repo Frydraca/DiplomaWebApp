@@ -4,7 +4,6 @@ module.exports = function (objectrepository) {
   const Game = requireOption(objectrepository, "Game");
 
   return function (req, res, next) {
-    console.log("save updated game");
     res.locals.game.markModified("buildings");
     res.locals.game.markModified("players");
     res.locals.game.markModified("tiles");

@@ -3,8 +3,6 @@ const requireOption = require("../../../config/requireOption");
 module.exports = function (objectrepository) {
   const User = requireOption(objectrepository, "User");
   return function (req, res, next) {
-    console.log("Create User for register");
-    console.log(req.body);
     if (
       typeof req.body.email === "undefined" ||
       typeof req.body.userName === "undefined" ||

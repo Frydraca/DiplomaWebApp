@@ -1,6 +1,7 @@
 module.exports = WorkshopData = {
   owner: "",
   name: "Workshop",
+  buildTime: 3,
   location: [0, 0],
   possibleTerrain: ["plains"],
   cost: {

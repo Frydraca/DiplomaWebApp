@@ -133,7 +133,11 @@ function SimulatorScreen() {
         ctx.fill();
 
         const img = new Image();
-        img.src = BuildingImages[element.owner][element.name];
+        if (element.status === "Foundation") {
+          img.src = BuildingImages[element.owner][element.name];
+        } else {
+          img.src = BuildingImages[element.owner]["Foundation"];
+        }
         ctx.drawImage(
           img,
           (element.location[0] + 1) * cellSize + 8,

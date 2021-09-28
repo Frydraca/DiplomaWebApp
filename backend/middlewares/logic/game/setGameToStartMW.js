@@ -9,8 +9,6 @@ const {
 
 module.exports = function () {
   return function (req, res, next) {
-    console.log("set game to start");
-    console.log(res.locals);
     if (res.locals.game.currentTurn > 0) {
       let commandsToUndo = res.locals.game.commands
         .slice(0, res.locals.game.currentTurn)

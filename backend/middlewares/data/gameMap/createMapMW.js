@@ -4,8 +4,6 @@ module.exports = function (objectrepository) {
   const GameMap = requireOption(objectrepository, "GameMap");
 
   return function (req, res, next) {
-    console.log("Create Map");
-
     var gameMap = new GameMap({
       name: req.body.name,
       width: req.body.width,

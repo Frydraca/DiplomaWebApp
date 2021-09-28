@@ -9,12 +9,10 @@ const {
 
 module.exports = function () {
   return function (req, res, next) {
-    console.log("set game to the end");
     if (res.locals.game.currentTurn <= res.locals.game.commands.length) {
       let commandsToDo = res.locals.game.commands
         .slice(res.locals.game.currentTurn)
         .flat();
-      console.log(commandsToDo);
       commandsToDo.forEach((command) => {
         switch (command.type) {
           case "build":

@@ -5,9 +5,14 @@ module.exports = class Building extends GameObject {
   cost = {};
   usage = {};
   production = {};
+  // Foundation, Complete
+  status = "";
+  buildingProgress = 0;
   constructor(buildingData, ownerId) {
     super(buildingData, ownerId);
     this.type = "building";
+    this.status = "Foundation";
+    this.buildingProgress = 0;
     this.possibleTerrain = JSON.parse(
       JSON.stringify(buildingData.possibleTerrain)
     );
@@ -22,6 +27,19 @@ module.exports = class Building extends GameObject {
   }
 
   // Public functions //
+  GetBuildingStatus() {
+    return this.status;
+  }
+
+  Complete() {
+    this.status = "Complete";
+  }
+
+  IsBuildingComplete() {
+    if (this.status === "Foundation") return false;
+    else return true;
+  }
+
   CanBuild(resources) {
     if (
       resources.steel >= this.cost.steel &&

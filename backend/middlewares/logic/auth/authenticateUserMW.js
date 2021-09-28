@@ -3,7 +3,6 @@ const { accessTokenSecret, expTime } = require("../../../config/jwt");
 
 module.exports = function () {
   return function (req, res, next) {
-    console.log("Authenticate User");
     const user = req.user;
 
     if (user === undefined || user === null) {

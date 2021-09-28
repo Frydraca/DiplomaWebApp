@@ -1,6 +1,7 @@
 module.exports = CrystalMineData = {
   owner: "",
   name: "Crystal Mine",
+  buildTime: 3,
   location: [0, 0],
   possibleTerrain: ["crystal field"],
   cost: {

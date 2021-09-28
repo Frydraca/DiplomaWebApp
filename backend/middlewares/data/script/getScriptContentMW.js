@@ -5,8 +5,6 @@ module.exports = function (objectrepository) {
   const Script = requireOption(objectrepository, "Script");
 
   return function (req, res, next) {
-    console.log("Get script content");
-
     Script.findOne({ _id: req.params.ownScriptId }, (err, script) => {
       if (err || !script) {
         console.log("Error: coudn't find script!");
