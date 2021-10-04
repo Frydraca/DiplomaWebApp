@@ -8,13 +8,8 @@ module.exports = class ModifyResourceCommand extends Command {
     this.value = value;
   }
 
-  execute(game, gameState) {
-    return game.ModifyResource(
-      gameState,
-      this.playerId,
-      this.resource,
-      this.value
-    );
+  execute(game) {
+    return game.ModifyResource(this.playerId, this.resource, this.value);
   }
 
   GetPlayerId() {

@@ -9,8 +9,8 @@ module.exports = class AddBuildingCommand extends Command {
     this.location = location;
   }
 
-  execute(game, gameState) {
-    let result = game.AddBuilding(gameState, this.building, this.location);
+  execute(game) {
+    let result = game.AddBuilding(this.building, this.location);
     return result;
   }
 

@@ -9,8 +9,8 @@ module.exports = class RemoveBuildingCommand extends Command {
     this.location = location;
   }
 
-  execute(game, gameState) {
-    let result = game.RemoveBuilding(gameState, this.building);
+  execute(game) {
+    let result = game.RemoveBuilding(this.building);
     return result;
   }
 

@@ -9,8 +9,8 @@ module.exports = class AttackCommand extends Command {
     this.targetObject = targetObject;
   }
 
-  execute(game, gameState) {
-    return game.Attack(gameState, this.attackerObject, this.targetObject);
+  execute(game) {
+    return game.Attack(this.attackerObject, this.targetObject);
   }
 
   GetAttackerObject() {

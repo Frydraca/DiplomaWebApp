@@ -11,8 +11,8 @@ module.exports = class MoveCommand extends Command {
     this.tile = tile;
   }
 
-  execute(game, gameState) {
-    let result = game.Move(gameState, this.unitToMove, this.tile);
+  execute(game) {
+    let result = game.Move(this.unitToMove, this.tile);
     this.startLocation = result.start;
     this.endLocation = result.end;
     return result.success;

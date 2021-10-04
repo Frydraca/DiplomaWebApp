@@ -8,8 +8,8 @@ module.exports = class CreateCommand extends Command {
     this.unit = unit;
   }
 
-  execute(game, gameState) {
-    let result = game.Create(gameState, this.unit);
+  execute(game) {
+    let result = game.Create(this.unit);
     this.location = result.location;
     return result.success;
   }

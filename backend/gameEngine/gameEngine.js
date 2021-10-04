@@ -32,7 +32,7 @@ module.exports = class GameEngine {
   }
 
   Execute(command) {
-    if (command.execute(this, this.gameState)) {
+    if (command.execute(this)) {
       this.currentTurnCommands.push(command.GetResult());
     }
     return command;
@@ -220,15 +220,15 @@ module.exports = class GameEngine {
     return enemiesInRange;
   }
 
-  AddBuilding(gameState, building, location) {
-    gameState.AddBuildingToTile(
+  AddBuilding(building, location) {
+    this.gameState.AddBuildingToTile(
       building,
       this.gameState.GetTileByLocation(location)
     );
     return true;
   }
 
-  RemoveBuilding(gameState, building) {
+  RemoveBuilding(building) {
     this.gameState.RemoveBuildingFromTile(
       this.gameState.GetTileByLocation(building.GetLocation())
     );
@@ -236,36 +236,40 @@ module.exports = class GameEngine {
     return true;
   }
 
-  Build(gameState, building) {
-    let player = this.GetOwnerOfObject(gameState, building);
+  Build(building) {
+    let player = this.GetOwnerOfObject(building);
     let locationResponse;
     let buildingName = building.GetName();
     if (buildingName === "Crystal Mine" || buildingName === "Steel Mine") {
-      locationResponse = gameState.GetClosestBuildingLocationToCommandCenter(
+      locationResponse =
+        this.gameState.GetClosestBuildingLocationToCommandCenter(
+          player,
+          building
+        );
+    } else {
+      locationResponse = this.gameState.GetNextBuildingLocation(
         player,
         building
       );
-    } else {
-      locationResponse = gameState.GetNextBuildingLocation(player, building);
     }
 
     if (building.CanBuild(player.resources) && locationResponse.success) {
       player.resources = building.TakeCost(player.resources);
-      gameState.AddBuildingToTile(building, locationResponse.tile);
+      this.gameState.AddBuildingToTile(building, locationResponse.tile);
       return { success: true, location: locationResponse.tile.GetLocation() };
     }
     return { success: false, location: [] };
   }
 
-  Create(gameState, unit) {
-    let player = this.GetOwnerOfObject(gameState, unit);
+  Create(unit) {
+    let player = this.GetOwnerOfObject(unit);
     let locationResponse =
-      gameState.GetClosestEmptyLocationToCommandCenter(player);
+      this.gameState.GetClosestEmptyLocationToCommandCenter(player);
     if (unit.CanCreate(player.resources) && locationResponse.success) {
       player.resources = unit.TakeCost(player.resources);
-      gameState.AddUnitToTile(unit, locationResponse.tile);
-      gameState.AddUnit(unit);
-      gameState.ChangeUnitLocation(unit, locationResponse.tile);
+      this.gameState.AddUnitToTile(unit, locationResponse.tile);
+      this.gameState.AddUnit(unit);
+      this.gameState.ChangeUnitLocation(unit, locationResponse.tile);
 
       let battleGroups = player.GetBattleGroups();
       for (let i = 0; i < battleGroups.length; i++) {
@@ -279,9 +283,9 @@ module.exports = class GameEngine {
     return { success: false, location: [] };
   }
 
-  Move(gameState, unit, targetTile) {
-    let currentTile = gameState.GetTileByLocation(unit.GetLocation());
-    let path = gameState.FindPathBetween(currentTile, targetTile);
+  Move(unit, targetTile) {
+    let currentTile = this.gameState.GetTileByLocation(unit.GetLocation());
+    let path = this.gameState.FindPathBetween(currentTile, targetTile);
     if (path === "null") {
       console.log("path fail");
       return { success: false, start: [], end: [] };
@@ -292,9 +296,9 @@ module.exports = class GameEngine {
     } else {
       newTile = path[unit.GetSpeed()].tile;
     }
-    gameState.RemoveUnitFromTile(currentTile);
-    gameState.AddUnitToTile(unit, newTile);
-    gameState.ChangeUnitLocation(unit, newTile);
+    this.gameState.RemoveUnitFromTile(currentTile);
+    this.gameState.AddUnitToTile(unit, newTile);
+    this.gameState.ChangeUnitLocation(unit, newTile);
     return {
       success: true,
       start: currentTile.GetLocation(),
@@ -302,14 +306,14 @@ module.exports = class GameEngine {
     };
   }
 
-  Attack(gameState, attackerObject, targetObject) {
-    if (gameState.CanAttackTarget(attackerObject, targetObject)) {
+  Attack(attackerObject, targetObject) {
+    if (this.gameState.CanAttackTarget(attackerObject, targetObject)) {
       targetObject.TakeDamage(attackerObject.GetAttackDamage());
       if (targetObject.GetHitPoints() < 1) {
         if (targetObject.GetName() === "Command Center") {
           this.gameState.isRunning = false;
         }
-        gameState.RemoveObject(targetObject);
+        this.gameState.RemoveObject(targetObject);
         if (targetObject.GetType() === "building") {
           let tile = this.gameState.GetTileByLocation(
             targetObject.GetLocation()
@@ -323,16 +327,16 @@ module.exports = class GameEngine {
     return false;
   }
 
-  Delete(gameState, gameObject) {
-    return gameState.RemoveObject(gameObject);
+  Delete(gameObject) {
+    return this.gameState.RemoveObject(gameObject);
   }
 
-  ModifyResource(gameState, playerId, resource, amount) {
-    return gameState.ModifyResource(playerId, resource, amount);
+  ModifyResource(playerId, resource, amount) {
+    return this.gameState.ModifyResource(playerId, resource, amount);
   }
 
-  UpgradeStat(gameState, playerId, unitType, statType) {
-    return gameState.UpgradeStat(playerId, unitType, statType);
+  UpgradeStat(playerId, unitType, statType) {
+    return this.gameState.UpgradeStat(playerId, unitType, statType);
   }
 
   AdvanceRubble() {
@@ -340,18 +344,13 @@ module.exports = class GameEngine {
     this.gameState.GetBuildings().forEach((building) => {
       if (building.GetName() === "Rubble") {
         building.IncreaseBuildProgress(1);
-        console.log("turnnumber: " + this.gameState.turnNumber);
-        console.log(building.buildingProgress);
-        console.log(building.buildTime);
         if (building.IsComplete()) {
-          console.log("turnnumber: " + this.gameState.turnNumber);
           rubbleToDelete.push(building.GetObjectId());
         }
       }
     });
     rubbleToDelete.forEach((rubbleId) => {
       let rubble = this.gameState.GetBuildingById(rubbleId);
-      console.log("remove building");
       this.Execute(new RemoveBuildingCommand(rubble, rubble.GetLocation()));
     });
   }
@@ -378,8 +377,8 @@ module.exports = class GameEngine {
     });
   }
 
-  GetOwnerOfObject(gameState, object) {
-    return gameState.players.find(
+  GetOwnerOfObject(object) {
+    return this.gameState.players.find(
       (player) => player.playerId === object.GetOwner()
     );
   }

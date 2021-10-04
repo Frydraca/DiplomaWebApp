@@ -8,13 +8,8 @@ module.exports = class UpgradeCommand extends Command {
     this.statType = statType;
   }
 
-  execute(game, gameState) {
-    return game.UpgradeStat(
-      gameState,
-      this.playerId,
-      this.unitType,
-      this.statType
-    );
+  execute(game) {
+    return game.UpgradeStat(this.playerId, this.unitType, this.statType);
   }
 
   GetPlayerId() {

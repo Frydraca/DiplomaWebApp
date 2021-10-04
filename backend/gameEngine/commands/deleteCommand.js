@@ -7,8 +7,8 @@ module.exports = class DeleteCommand extends Command {
     this.objectToDelete = objectToDelete;
   }
 
-  execute(gameState, game) {
-    return game.Delete(gameState, this.objectToDelete);
+  execute(game) {
+    return game.Delete(this.objectToDelete);
   }
 
   GetObjectToDelete() {
