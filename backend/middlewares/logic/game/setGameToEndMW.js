@@ -5,6 +5,8 @@ const {
   doAttack,
   doModifyResource,
   doUpgrade,
+  doAddBuilding,
+  doRemoveBuilding,
 } = require("./helperFunctions/helperFunctions");
 
 module.exports = function () {
@@ -32,6 +34,20 @@ module.exports = function () {
             break;
           case "upgrade":
             doUpgrade(res.locals.game.players, command);
+            break;
+          case "add building":
+            doAddBuilding(
+              res.locals.game.buildings,
+              res.locals.game.tiles,
+              command
+            );
+            break;
+          case "remove building":
+            doRemoveBuilding(
+              res.locals.game.buildings,
+              res.locals.game.tiles,
+              command
+            );
             break;
           case "updateResources":
             res.locals.game.players = command.oldPlayers;

@@ -117,33 +117,34 @@ function SimulatorScreen() {
         ctx.rect(
           (element.location[0] + 1) * cellSize + 8,
           (element.location[1] + 1) * cellSize + 4,
-          24 * hpPercent,
+          0.6 * cellSize * hpPercent,
           3
         );
         ctx.fillStyle = "green";
         ctx.fill();
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * cellSize + 8 + 30 * hpPercent,
+          (element.location[0] + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
           (element.location[1] + 1) * cellSize + 4,
-          24 - 24 * hpPercent,
+          0.6 * cellSize - 0.6 * cellSize * hpPercent,
           3
         );
         ctx.fillStyle = "red";
         ctx.fill();
 
         const img = new Image();
-        if (element.status === "Foundation") {
-          img.src = BuildingImages[element.owner][element.name];
-        } else {
-          img.src = BuildingImages[element.owner]["Foundation"];
-        }
+        // if (element.status !== "Foundation") {
+        //   img.src = BuildingImages[element.owner][element.name];
+        // } else {
+        //   img.src = BuildingImages[element.owner]["Foundation"];
+        // }
+        img.src = BuildingImages[element.owner][element.name];
         ctx.drawImage(
           img,
           (element.location[0] + 1) * cellSize + 8,
           (element.location[1] + 1) * cellSize + 8,
-          24,
-          24
+          0.6 * cellSize,
+          0.6 * cellSize
         );
       });
       let units = currentGameState.units;
@@ -153,16 +154,16 @@ function SimulatorScreen() {
         ctx.rect(
           (element.location[0] + 1) * cellSize + 8,
           (element.location[1] + 1) * cellSize + 4,
-          24 * hpPercent,
+          0.6 * cellSize * hpPercent,
           3
         );
         ctx.fillStyle = "green";
         ctx.fill();
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * cellSize + 8 + 30 * hpPercent,
+          (element.location[0] + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
           (element.location[1] + 1) * cellSize + 4,
-          24 - 24 * hpPercent,
+          0.6 * cellSize - 0.6 * cellSize * hpPercent,
           3
         );
         ctx.fillStyle = "red";
@@ -174,8 +175,8 @@ function SimulatorScreen() {
           img,
           (element.location[0] + 1) * cellSize + 8,
           (element.location[1] + 1) * cellSize + 8,
-          24,
-          24
+          0.6 * cellSize,
+          0.6 * cellSize
         );
       });
     }

@@ -1,6 +1,10 @@
 const GameState = require("./objects/GameState");
 const AttackCommand = require("./commands/attackCommand");
 const MoveCommand = require("./commands/moveCommand");
+const AddBuildingCommand = require("./commands/addBuildingCommand");
+const RemoveBuildingCommand = require("./commands/removeBuildingCommand");
+const RubbleData = require("./data/buildings/rubble");
+const Building = require("./objects/Building");
 
 module.exports = class GameEngine {
   startingGameStateData = {};
@@ -49,6 +53,7 @@ module.exports = class GameEngine {
       });
     });
     this.UpdateResources();
+    this.AdvanceRubble();
     this.CheckForGameEnd();
     this.commands.push(this.currentTurnCommands);
     this.currentTurnCommands = [];
@@ -154,14 +159,12 @@ module.exports = class GameEngine {
   GeneralDefendMove(unit, playerId) {
     // get enemies in range of command center
     let enemiesTooClose = this.FindEnemiesInRangeOfCommandcenter(10, playerId);
-    console.log("turnnumber: " + this.gameState.turnNumber);
-    console.log("nr of enemies: " + enemiesTooClose.length);
     if (enemiesTooClose.length === 0) return;
     // find the closest one out of them
     let closestEnemy = {};
     let distance = Number.POSITIVE_INFINITY;
     enemiesTooClose.forEach((enemy) => {
-      if (playerId !== enemy.GetOwner()) {
+      if (playerId !== enemy.GetOwner() && enemy.GetOwner() !== "gaia") {
         let currentDistance = unit.GetDistanceFromObject(enemy);
         if (currentDistance < distance) {
           closestEnemy = enemy;
@@ -169,7 +172,6 @@ module.exports = class GameEngine {
         }
       }
     });
-    console.log(closestEnemy);
 
     if (unit.InRange(closestEnemy)) {
       this.Execute(new AttackCommand(unit, closestEnemy));
@@ -208,7 +210,7 @@ module.exports = class GameEngine {
       }
     });
     this.gameState.GetBuildings().forEach((building) => {
-      if (playerId !== building.GetOwner()) {
+      if (playerId !== building.GetOwner() && building.GetOwner() !== "gaia") {
         if (building.GetDistanceFromObject(commandCenter) <= range) {
           enemiesInRange.push(building);
         }
@@ -216,6 +218,22 @@ module.exports = class GameEngine {
     });
 
     return enemiesInRange;
+  }
+
+  AddBuilding(gameState, building, location) {
+    gameState.AddBuildingToTile(
+      building,
+      this.gameState.GetTileByLocation(location)
+    );
+    return true;
+  }
+
+  RemoveBuilding(gameState, building) {
+    this.gameState.RemoveBuildingFromTile(
+      this.gameState.GetTileByLocation(building.GetLocation())
+    );
+    this.gameState.RemoveBuilding(building);
+    return true;
   }
 
   Build(gameState, building) {
@@ -291,7 +309,14 @@ module.exports = class GameEngine {
         if (targetObject.GetName() === "Command Center") {
           this.gameState.isRunning = false;
         }
-        return gameState.RemoveObject(targetObject);
+        gameState.RemoveObject(targetObject);
+        if (targetObject.GetType() === "building") {
+          let tile = this.gameState.GetTileByLocation(
+            targetObject.GetLocation()
+          );
+          let newBuilding = new Building(RubbleData, "gaia");
+          this.Execute(new AddBuildingCommand(newBuilding, tile.GetLocation()));
+        }
       }
       return true;
     }
@@ -310,6 +335,27 @@ module.exports = class GameEngine {
     return gameState.UpgradeStat(playerId, unitType, statType);
   }
 
+  AdvanceRubble() {
+    let rubbleToDelete = [];
+    this.gameState.GetBuildings().forEach((building) => {
+      if (building.GetName() === "Rubble") {
+        building.IncreaseBuildProgress(1);
+        console.log("turnnumber: " + this.gameState.turnNumber);
+        console.log(building.buildingProgress);
+        console.log(building.buildTime);
+        if (building.IsComplete()) {
+          console.log("turnnumber: " + this.gameState.turnNumber);
+          rubbleToDelete.push(building.GetObjectId());
+        }
+      }
+    });
+    rubbleToDelete.forEach((rubbleId) => {
+      let rubble = this.gameState.GetBuildingById(rubbleId);
+      console.log("remove building");
+      this.Execute(new RemoveBuildingCommand(rubble, rubble.GetLocation()));
+    });
+  }
+
   CheckForGameEnd() {
     if (this.gameState.turnNumber >= 50) {
       this.gameState.isRunning = false;
@@ -319,8 +365,10 @@ module.exports = class GameEngine {
   UpdateResources() {
     let oldPlayers = JSON.parse(JSON.stringify(this.gameState.GetPlayers()));
     this.gameState.GetBuildings().forEach((building) => {
-      let player = this.gameState.GetPlayerById(building.GetOwner());
-      player.SetResources(building.UpdateResources(player.GetResources()));
+      if (building.GetOwner() !== "gaia") {
+        let player = this.gameState.GetPlayerById(building.GetOwner());
+        player.SetResources(building.UpdateResources(player.GetResources()));
+      }
     });
     let newPlayers = JSON.parse(JSON.stringify(this.gameState.GetPlayers()));
     this.currentTurnCommands.push({
@@ -367,7 +415,7 @@ module.exports = class GameEngine {
     let closestEnemy = {};
     let distance = Number.POSITIVE_INFINITY;
     this.gameState.GetUnits().forEach((unit) => {
-      if (playerId !== unit.GetOwner()) {
+      if (playerId !== unit.GetOwner() && unit.GetOwner() !== "gaia") {
         let currentDistance = unit.GetDistanceFromObject(gameObject);
         if (currentDistance < distance) {
           closestEnemy = unit;
@@ -376,7 +424,7 @@ module.exports = class GameEngine {
       }
     });
     this.gameState.GetBuildings().forEach((building) => {
-      if (playerId !== building.GetOwner()) {
+      if (playerId !== building.GetOwner() && building.GetOwner() !== "gaia") {
         let currentDistance = building.GetDistanceFromObject(gameObject);
         if (currentDistance < distance) {
           closestEnemy = building;
@@ -390,7 +438,7 @@ module.exports = class GameEngine {
   DoesEnemyHasUnits(playerId) {
     let enemyHasUnit = false;
     this.gameState.GetUnits().forEach((unit) => {
-      if (playerId !== unit.GetOwner()) {
+      if (playerId !== unit.GetOwner() && unit.GetOwner() !== "gaia") {
         enemyHasUnit = true;
       }
     });
@@ -400,7 +448,7 @@ module.exports = class GameEngine {
   DoesEnemyHasBuildings(playerId) {
     let enemyHasBuilding = false;
     this.gameState.GetBuildings().forEach((building) => {
-      if (playerId !== building.GetOwner()) {
+      if (playerId !== building.GetOwner() && building.GetOwner() !== "gaia") {
         enemyHasBuilding = true;
       }
     });

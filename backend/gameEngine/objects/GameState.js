@@ -3,6 +3,7 @@ const Tile = require("./Tile");
 const Building = require("./Building");
 const Unit = require("./Unit");
 const WorkerBotData = require("../data/units/workerBot");
+const RubbleData = require("../data/buildings/rubble");
 
 module.exports = class GameState {
   turnNumber = 1;
@@ -12,10 +13,12 @@ module.exports = class GameState {
   buildings = [];
   units = [];
   tiles = [];
+  rubbleBuildings = [];
 
   constructor(startingGameState) {
     this.turnNumber = 0;
     this.isRunning = true;
+    this.rubbleBuildings = [];
     this.baseBuildingLocations = [
       [-2, -1],
       [-2, 1],
@@ -87,6 +90,7 @@ module.exports = class GameState {
     let buildingData = {
       name: "Command Center",
       possibleTerrain: ["plains"],
+      buildTime: 0,
       location: [0, 0],
       cost: {
         steel: 0,
@@ -217,11 +221,15 @@ module.exports = class GameState {
 
   RemoveBuildingFromTile(tile) {
     let targetTile = this.tiles.find((element) => element === tile);
-    this.buildings.splice(
-      this.buildings.indexOf(this.GetBuildingById(targetTile.GetBuildingId())),
-      1
-    );
     targetTile.SetBuildingId("null");
+  }
+
+  AddBuilding(building) {
+    this.building.push(building);
+  }
+
+  RemoveBuilding(building) {
+    this.buildings.splice(this.buildings.indexOf(building), 1);
   }
 
   RemoveUnitFromTile(tile) {
@@ -249,6 +257,7 @@ module.exports = class GameState {
       this.RemoveBuildingFromTile(
         this.GetTileByLocation(building.GetLocation())
       );
+      this.RemoveBuilding(building);
       return true;
     }
     if (unit !== undefined) {

@@ -14,6 +14,7 @@ import workshop_Red from "./images/buildings/workshop_red.png";
 import workshop_Green from "./images/buildings/workshop_green.png";
 import foundation_Red from "./images/buildings/inProgress_Red.png";
 import foundation_Green from "./images/buildings/inProgress_Green.png";
+import rubble from "./images/buildings/rubble.png";
 
 const Buildings = {
   Player: {
@@ -35,6 +36,9 @@ const Buildings = {
     "Steel Mine": steelMine_Green,
     Workshop: workshop_Green,
     Foundation: foundation_Green,
+  },
+  gaia: {
+    Rubble: rubble,
   },
 };
 

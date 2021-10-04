@@ -1,0 +1,32 @@
+module.exports = RubbleData = {
+  owner: "gaia",
+  name: "Rubble",
+  buildTime: 4,
+  location: [0, 0],
+  possibleTerrain: ["plains", "steel ore", "crystal mine"],
+  cost: {
+    steel: 0,
+    crystal: 0,
+    roboSteel: 0,
+    energyCore: 0,
+  },
+  usage: {
+    energy: 0,
+    steel: 0,
+    crystal: 0,
+    roboSteel: 0,
+    energyCore: 0,
+  },
+  production: {
+    energy: 0,
+    steel: 0,
+    crystal: 0,
+    roboSteel: 0,
+    energyCore: 0,
+  },
+  hitPoints: 1,
+  armor: 0,
+  canAttack: false,
+  range: 0,
+  attackDamage: 0,
+};

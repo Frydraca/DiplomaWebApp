@@ -23,7 +23,6 @@ const authenticateUserMW = require("../middlewares/logic/auth/authenticateUserMW
 const sendBackActualUserMW = require("../middlewares/logic/auth/sendBackActualUserMW");
 const validatePasswordMW = require("../middlewares/logic/auth/validatePasswordMW");
 const setGameToEndMW = require("../middlewares/logic/game/setGameToEndMW");
-const setGameToGivenTurnMW = require("../middlewares/logic/game/setGameToGivenTurnMW");
 const setGameToNextTurnMW = require("../middlewares/logic/game/setGameToNextTurnMW");
 const setGameToPreviousTurnMW = require("../middlewares/logic/game/setGameToPreviousTurnMW");
 const setGameToStartMW = require("../middlewares/logic/game/setGameToStartMW");
@@ -162,17 +161,6 @@ module.exports = function (app) {
     getUserMW(objRepo),
     getGameMW(objRepo),
     setGameToEndMW(),
-    updateGameMW(objRepo),
-    sendJsonResponseMW()
-  );
-
-  app.get(
-    "/simulator/:gameId/:turnNumber",
-    logIncomingCallMW(),
-    authenticateWithJWTMW(),
-    getUserMW(objRepo),
-    getGameMW(objRepo),
-    setGameToGivenTurnMW(),
     updateGameMW(objRepo),
     sendJsonResponseMW()
   );

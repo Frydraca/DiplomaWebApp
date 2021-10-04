@@ -1,5 +1,3 @@
-const ModifyResourceCommand = require("../../../../gameEngine/commands/modifyResourceCommand");
-
 // Helper functions
 function locationEqual(location1, location2) {
   if (location1[0] === location2[0] && location1[1] === location2[1]) {
@@ -71,6 +69,24 @@ module.exports = {
   doUpgrade: function (players, command) {
     let player = players.find((player) => player.playerId === command.playerId);
     player.upgradeList[command.unitType][command.statType] = true;
+  },
+  doAddBuilding: function (buildings, tiles, command) {
+    buildings.push(command.building);
+    tiles.find((tile) =>
+      locationEqual(tile.location, command.location)
+    ).buildingId = command.building.objectId;
+  },
+  doRemoveBuilding: function (buildings, tiles, command) {
+    let buildingToRemove = buildings.find(
+      (building) => building.objectId === command.building.objectId
+    );
+    let buildingIndex = buildings.indexOf(buildingToRemove);
+    if (buildingIndex > -1) {
+      buildings.splice(buildingIndex, 1);
+    }
+    tiles.find((tile) =>
+      locationEqual(tile.location, command.location)
+    ).buildingId = "null";
   },
   undoBuild: function (buildings, tiles, command) {
     let buildingToRemove = buildings.find(
@@ -159,5 +175,23 @@ module.exports = {
   undoUpgrade: function (players, command) {
     let player = players.find((player) => player.playerId === command.playerId);
     player.upgradeList[command.unitType][command.statType] = false;
+  },
+  undoAddBuilding: function (buildings, tiles, command) {
+    let buildingToRemove = buildings.find(
+      (building) => building.objectId === command.building.objectId
+    );
+    let buildingIndex = buildings.indexOf(buildingToRemove);
+    if (buildingIndex > -1) {
+      buildings.splice(buildingIndex, 1);
+    }
+    tiles.find((tile) =>
+      locationEqual(tile.location, command.location)
+    ).buildingId = "null";
+  },
+  undoRemoveBuilding: function (buildings, tiles, command) {
+    buildings.push(command.building);
+    tiles.find((tile) =>
+      locationEqual(tile.location, command.location)
+    ).buildingId = command.building.objectId;
   },
 };

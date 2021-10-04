@@ -5,6 +5,8 @@ const {
   undoAttack,
   undoModifyResource,
   undoUpgrade,
+  undoAddBuilding,
+  undoRemoveBuilding,
 } = require("./helperFunctions/helperFunctions");
 
 module.exports = function () {
@@ -44,6 +46,20 @@ module.exports = function () {
               break;
             case "updateResources":
               res.locals.game.players = command.oldPlayers;
+              break;
+            case "add building":
+              undoAddBuilding(
+                res.locals.game.buildings,
+                res.locals.game.tiles,
+                command
+              );
+              break;
+            case "remove building":
+              undoRemoveBuilding(
+                res.locals.game.buildings,
+                res.locals.game.tiles,
+                command
+              );
               break;
             default:
               console.log("Error: Unknown command!");

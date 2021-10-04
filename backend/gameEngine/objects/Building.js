@@ -8,11 +8,13 @@ module.exports = class Building extends GameObject {
   // Foundation, Complete
   status = "";
   buildingProgress = 0;
+  buildTime = 0;
   constructor(buildingData, ownerId) {
     super(buildingData, ownerId);
     this.type = "building";
     this.status = "Foundation";
     this.buildingProgress = 0;
+    this.buildTime = JSON.parse(JSON.stringify(buildingData.buildTime));
     this.possibleTerrain = JSON.parse(
       JSON.stringify(buildingData.possibleTerrain)
     );
@@ -31,8 +33,17 @@ module.exports = class Building extends GameObject {
     return this.status;
   }
 
+  IncreaseBuildProgress(value) {
+    this.buildingProgress += value;
+  }
+
   Complete() {
     this.status = "Complete";
+  }
+
+  IsComplete() {
+    if (this.buildingProgress >= this.buildTime) return true;
+    return false;
   }
 
   IsBuildingComplete() {
