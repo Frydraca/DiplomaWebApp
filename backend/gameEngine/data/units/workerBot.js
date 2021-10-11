@@ -1,4 +1,4 @@
-module.exports = WorkerBotData = {
+const WorkerBotData = {
   owner: "",
   name: "Worker Bot",
   upgradeType: "none",
@@ -16,3 +16,5 @@ module.exports = WorkerBotData = {
   range: 0,
   attackDamage: 0,
 };
+
+export default WorkerBotData;

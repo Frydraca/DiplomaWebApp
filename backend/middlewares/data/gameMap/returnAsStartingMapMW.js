@@ -1,4 +1,4 @@
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     res.locals.retData = {
       id: res.locals.gameMap._id,
@@ -12,4 +12,4 @@ module.exports = function () {
     };
     return next();
   };
-};
+}

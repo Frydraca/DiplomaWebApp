@@ -1,14 +1,17 @@
-module.exports = CommandCenterData = {
+const CommandCenterData = {
   owner: "",
-  name: "Command Center",
+  objectName: "Command Center",
+  type: "Building",
   buildTime: 3,
   location: [0, 0],
-  possibleTerrain: ["plains"],
+  possibleTerrain: ["Plains"],
   cost: {
+    energy: 0,
     steel: 0,
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   usage: {
     energy: 0,
@@ -16,6 +19,7 @@ module.exports = CommandCenterData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   production: {
     energy: 10,
@@ -23,6 +27,7 @@ module.exports = CommandCenterData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   hitPoints: 30,
   armor: 5,
@@ -30,3 +35,5 @@ module.exports = CommandCenterData = {
   range: 0,
   attackDamage: 0,
 };
+
+export default CommandCenterData;

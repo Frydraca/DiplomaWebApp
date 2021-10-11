@@ -1,6 +1,6 @@
-const requireOption = require("../../../config/requireOption");
+import requireOption from "../../../config/requireOption.js";
 
-module.exports = function (objectrepository) {
+export default function (objectrepository) {
   const GameMap = requireOption(objectrepository, "GameMap");
 
   return function (req, res, next) {
@@ -21,4 +21,4 @@ module.exports = function (objectrepository) {
       return next();
     });
   };
-};
+}

@@ -38,28 +38,28 @@ export const building = {
     // TODO Towers
     switch (dropdown_building) {
       case "CommandCenter":
-        formattedValue = "CommandCenterData";
+        formattedValue = "'Command Center'";
         break;
       case "SteelMine":
-        formattedValue = "SteelMineData";
+        formattedValue = "'Steel Mine'";
         break;
       case "SolarPowerPlant":
-        formattedValue = "SolarPowerPlantData";
+        formattedValue = "'Solar Power Plant'";
         break;
       case "CrystalMine":
-        formattedValue = "CrystalMineData";
+        formattedValue = "'Crystal Mine'";
         break;
       case "Foundry":
-        formattedValue = "FoundryData";
+        formattedValue = "'Foundry'";
         break;
       case "CoreFactory":
-        formattedValue = "CoreFactoryData";
+        formattedValue = "'Core Factory'";
         break;
       case "Workshop":
-        formattedValue = "WorkshopData";
+        formattedValue = "'Workshop'";
         break;
       default:
-        formattedValue = "Unrecognized type!";
+        formattedValue = "'Unrecognized type!'";
         break;
     }
     var code = formattedValue;

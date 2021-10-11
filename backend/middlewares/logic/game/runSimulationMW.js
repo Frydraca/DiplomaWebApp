@@ -1,10 +1,11 @@
-const AiEngine = require("../../../gameEngine/aiEngine");
+import AiEngine from "../../../gameEngine/aiEngine.js";
 
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     console.log("Run Simulation");
 
     //aiEngine
+    console.log(AiEngine);
     var playerIds = ["Player", "Server AI"];
     var aiEngine = new AiEngine(
       playerIds,
@@ -14,10 +15,10 @@ module.exports = function () {
     );
     aiEngine.RunGame();
     res.locals.simulation = {
-      startingGameState: aiEngine.game.startingGameState,
-      commands: aiEngine.game.commands,
+      startingGameState: aiEngine.GetGame().GetStartingGameState(),
+      commands: aiEngine.GetGame().GetCommands(),
     };
 
     return next();
   };
-};
+}

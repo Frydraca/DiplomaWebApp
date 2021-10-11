@@ -1,4 +1,4 @@
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     req.user.isLoggedIn = true;
     req.user.save(function (err, _successful_user) {
@@ -8,4 +8,4 @@ module.exports = function () {
       return next();
     });
   };
-};
+}

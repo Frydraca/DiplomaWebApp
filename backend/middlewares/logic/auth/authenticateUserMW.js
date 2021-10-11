@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const { accessTokenSecret, expTime } = require("../../../config/jwt");
+import jwt from "jsonwebtoken";
+import { accessTokenSecret, expTime } from "../../../config/jwt.js";
 
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     const user = req.user;
 
@@ -26,4 +26,4 @@ module.exports = function () {
 
     return next();
   };
-};
+}

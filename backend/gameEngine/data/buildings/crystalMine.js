@@ -1,14 +1,17 @@
-module.exports = CrystalMineData = {
+const CrystalMineData = {
   owner: "",
-  name: "Crystal Mine",
+  objectName: "Crystal Mine",
+  type: "Building",
   buildTime: 3,
   location: [0, 0],
-  possibleTerrain: ["crystal field"],
+  possibleTerrain: ["Crystal Field"],
   cost: {
+    energy: 0,
     steel: 15,
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   usage: {
     energy: 5,
@@ -16,6 +19,7 @@ module.exports = CrystalMineData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   production: {
     energy: 10,
@@ -23,6 +27,7 @@ module.exports = CrystalMineData = {
     crystal: 3,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   hitPoints: 20,
   armor: 2,
@@ -30,3 +35,5 @@ module.exports = CrystalMineData = {
   range: 0,
   attackDamage: 0,
 };
+
+export default CrystalMineData;

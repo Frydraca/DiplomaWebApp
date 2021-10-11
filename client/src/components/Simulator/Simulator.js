@@ -88,19 +88,19 @@ function SimulatorScreen() {
       tiles.forEach((element) => {
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * cellSize,
-          (element.location[1] + 1) * cellSize,
+          (element.location.x + 1) * cellSize,
+          (element.location.y + 1) * cellSize,
           cellSize,
           cellSize
         );
         switch (element.terrain) {
-          case "plains":
+          case "Plains":
             ctx.fillStyle = "lightgreen";
             break;
-          case "steel ore":
+          case "Steel Ore":
             ctx.fillStyle = "grey";
             break;
-          case "crystal field":
+          case "Crystal Field":
             ctx.fillStyle = "lightskyblue";
             break;
           default:
@@ -115,8 +115,8 @@ function SimulatorScreen() {
         let hpPercent = element.hitPoints / element.maxHitPoints;
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * cellSize + 8,
-          (element.location[1] + 1) * cellSize + 4,
+          (element.location.x + 1) * cellSize + 8,
+          (element.location.y + 1) * cellSize + 4,
           0.6 * cellSize * hpPercent,
           3
         );
@@ -124,8 +124,8 @@ function SimulatorScreen() {
         ctx.fill();
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
-          (element.location[1] + 1) * cellSize + 4,
+          (element.location.x + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
+          (element.location.y + 1) * cellSize + 4,
           0.6 * cellSize - 0.6 * cellSize * hpPercent,
           3
         );
@@ -141,8 +141,8 @@ function SimulatorScreen() {
         img.src = BuildingImages[element.owner][element.name];
         ctx.drawImage(
           img,
-          (element.location[0] + 1) * cellSize + 8,
-          (element.location[1] + 1) * cellSize + 8,
+          (element.location.x + 1) * cellSize + 8,
+          (element.location.y + 1) * cellSize + 8,
           0.6 * cellSize,
           0.6 * cellSize
         );
@@ -152,8 +152,8 @@ function SimulatorScreen() {
         let hpPercent = element.hitPoints / element.maxHitPoints;
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * cellSize + 8,
-          (element.location[1] + 1) * cellSize + 4,
+          (element.location.x + 1) * cellSize + 8,
+          (element.location.y + 1) * cellSize + 4,
           0.6 * cellSize * hpPercent,
           3
         );
@@ -161,8 +161,8 @@ function SimulatorScreen() {
         ctx.fill();
         ctx.beginPath();
         ctx.rect(
-          (element.location[0] + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
-          (element.location[1] + 1) * cellSize + 4,
+          (element.location.x + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
+          (element.location.y + 1) * cellSize + 4,
           0.6 * cellSize - 0.6 * cellSize * hpPercent,
           3
         );
@@ -173,8 +173,8 @@ function SimulatorScreen() {
         img.src = UnitImages[element.owner][element.name];
         ctx.drawImage(
           img,
-          (element.location[0] + 1) * cellSize + 8,
-          (element.location[1] + 1) * cellSize + 8,
+          (element.location.x + 1) * cellSize + 8,
+          (element.location.y + 1) * cellSize + 8,
           0.6 * cellSize,
           0.6 * cellSize
         );
@@ -343,7 +343,7 @@ function SimulatorScreen() {
                           return (
                             <tr key={index}>
                               <td>{currentGameState.turnNumber}</td>
-                              <td>{player.playerId}</td>
+                              <td>{player.playerName}</td>
                               <td>{player.resources.steel}</td>
                               <td>{player.resources.roboSteel}</td>
                               <td>{player.resources.energy}</td>
@@ -377,112 +377,6 @@ function SimulatorScreen() {
           <div></div>
         )}
       </div>
-      {/* <Container>
-        <Row>
-          <Col md={2}>
-            <Container>
-              <Button onClick={simulate} size="sm">
-                Run
-              </Button>
-              <Button onClick={goToStart} size="sm">
-                Go to Start
-              </Button>
-              <Button onClick={goToEnd} size="sm">
-                Go to End
-              </Button>
-              <Button onClick={decrementTurnToView} size="sm">
-                Previous Turn
-              </Button>
-              <Button onClick={incrementTurnToView} size="sm">
-                Next Turn
-              </Button>
-              <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-user">
-                  {currentOwnScript}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {userScriptList !== undefined ? (
-                    <>
-                      {userScriptList.map((script, index) => (
-                        <Dropdown.Item
-                          onClick={() => selectOwnScript(script)}
-                          key={index}
-                        >
-                          {script.name}
-                        </Dropdown.Item>
-                      ))}
-                    </>
-                  ) : (
-                    <div></div>
-                  )}
-                </Dropdown.Menu>
-              </Dropdown>
-              {allScriptList !== undefined ? (
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-all">
-                    {currentEnemyScript}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {allScriptList.map((script, index) => (
-                      <Dropdown.Item
-                        onClick={() => selectEnemyScript(script)}
-                        key={index}
-                      >
-                        {script.name}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              ) : (
-                <div></div>
-              )}
-            </Container>
-          </Col>
-        </Row>
-        {currentGameState !== undefined ? (
-          <>
-            <Row>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Turn Number</th>
-                    <th>Player</th>
-                    <th>Steel</th>
-                    <th>RoboSteel</th>
-                    <th>Energy</th>
-                    <th>Crystals</th>
-                    <th>Energy Cores</th>
-                    <th>Credits</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentGameState.players.map((player, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{currentGameState.turnNumber}</td>
-                        <td>{player.playerId}</td>
-                        <td>{player.resources.steel}</td>
-                        <td>{player.resources.roboSteel}</td>
-                        <td>{player.resources.energy}</td>
-                        <td>{player.resources.crystal}</td>
-                        <td>{player.resources.energyCore}</td>
-                        <td>{player.resources.credits}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </Row>
-            <Row>
-              <Col>
-                <Canvas draw={draw}></Canvas>
-              </Col>
-            </Row>
-          </>
-        ) : (
-          <div className="d-flex justify-content-center align-items-center h-100"></div>
-        )}
-      </Container> */}
     </div>
   );
 }

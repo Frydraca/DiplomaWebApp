@@ -1,4 +1,4 @@
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     res.locals.retData = {
       id: req.user.id,
@@ -7,4 +7,4 @@ module.exports = function () {
     };
     return next();
   };
-};
+}

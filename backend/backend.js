@@ -1,13 +1,15 @@
-var express = require("express");
-var cors = require("cors");
+import express from "express";
+import cors from "cors";
 var app = express();
-const bodyParser = require("body-parser");
-
-app.use(bodyParser.json());
-app.use(cors());
-
+import pkg from "body-parser";
+const { json } = pkg;
 // Load routing
-require("./routing/index")(app);
+import routes from "./routing/index.js";
+//require("./routing/index")(app);
+
+app.use(json());
+app.use(cors());
+routes(app);
 
 var server = app.listen(5000, function () {
   console.log("Running on :5000");

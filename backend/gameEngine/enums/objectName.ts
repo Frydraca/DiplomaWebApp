@@ -1,0 +1,15 @@
+export enum ObjectName {
+  CommandCenter = "Command Center",
+  CoreFactory = "Core Factory",
+  CrystalMine = "Crystal Mine",
+  Foundry = "Foundry",
+  Rubble = "Rubble",
+  SolarPowerPlant = "Solar Power Plant",
+  SteelMine = "Steel Mine",
+  Workshop = "Workshop",
+  ArtilleryBot = "Artillery Bot",
+  AttackBot = "Attack Bot",
+  RaiderBot = "Raider Bot",
+  TankBot = "Tank Bot",
+  WorkerBot = "Worker Bot",
+}

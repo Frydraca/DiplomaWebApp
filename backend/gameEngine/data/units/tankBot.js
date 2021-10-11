@@ -1,13 +1,16 @@
-module.exports = tankBotData = {
+const tankBotData = {
   owner: "",
-  name: "Tank Bot",
+  objectName: "Tank Bot",
+  type: "Unit",
   upgradeType: "tankBot",
   location: [0, 0],
   cost: {
+    energy: 0,
     steel: 0,
     crystal: 0,
     roboSteel: 5,
     energyCore: 1,
+    credits: 0,
   },
   hitPoints: 15,
   armor: 5,
@@ -16,3 +19,5 @@ module.exports = tankBotData = {
   range: 4,
   attackDamage: 10,
 };
+
+export default tankBotData;

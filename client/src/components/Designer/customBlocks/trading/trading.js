@@ -59,22 +59,22 @@ export const trading = {
     var formattedResource = "";
     switch (value_resource) {
       case "(Energy)":
-        formattedResource = "energy";
+        formattedResource = "Energy";
         break;
       case "(Steel)":
-        formattedResource = "steel";
+        formattedResource = "Steel";
         break;
       case "(RoboSteel)":
-        formattedResource = "roboSteel";
+        formattedResource = "Robosteel";
         break;
       case "(Crystal)":
-        formattedResource = "crystal";
+        formattedResource = "Crystal";
         break;
       case "(EnergyCore)":
-        formattedResource = "energyCore";
+        formattedResource = "Energy Core";
         break;
       case "(Credits)":
-        formattedResource = "credits";
+        formattedResource = "Credits";
         break;
       default:
         formattedResource = "Unrecognized type!";

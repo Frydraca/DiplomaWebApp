@@ -1,14 +1,17 @@
-module.exports = SteelMineData = {
+const SteelMineData = {
   owner: "",
-  name: "Steel Mine",
+  objectName: "Steel Mine",
+  type: "Building",
   buildTime: 3,
   location: [0, 0],
-  possibleTerrain: ["steel ore"],
+  possibleTerrain: ["Steel Ore"],
   cost: {
+    energy: 0,
     steel: 15,
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   usage: {
     energy: 5,
@@ -16,6 +19,7 @@ module.exports = SteelMineData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   production: {
     energy: 0,
@@ -23,6 +27,7 @@ module.exports = SteelMineData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   hitPoints: 15,
   armor: 2,
@@ -30,3 +35,5 @@ module.exports = SteelMineData = {
   range: 0,
   attackDamage: 0,
 };
+
+export default SteelMineData;

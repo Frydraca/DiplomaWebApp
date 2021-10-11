@@ -1,4 +1,4 @@
-const db = require("../config/db");
+import db from "../config/db.js";
 
 const User = db.model("User", {
   email: String,
@@ -7,4 +7,4 @@ const User = db.model("User", {
   isLoggedIn: Boolean,
 });
 
-module.exports = User;
+export default User;

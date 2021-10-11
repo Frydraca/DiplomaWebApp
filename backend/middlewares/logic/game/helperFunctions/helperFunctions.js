@@ -6,192 +6,220 @@ function locationEqual(location1, location2) {
   return false;
 }
 
-module.exports = {
-  doBuild: function (buildings, tiles, command) {
-    buildings.push(command.building);
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.building.location)
-    ).buildingId = command.building.objectId;
-  },
-  doCreate: function (units, tiles, command) {
-    units.push(command.unit);
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.unit.location)
-    ).unitId = command.unit.objectId;
-  },
-  doMove: function (units, tiles, command) {
-    let unitToMoveId = tiles.find((tile) =>
-      locationEqual(tile.location, command.startLocation)
-    ).unitId;
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.startLocation)
-    ).unitId = "null";
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.endLocation)
-    ).unitId = unitToMoveId;
-    units.find((unit) => unit.objectId === unitToMoveId).location =
-      command.endLocation;
-  },
-  doAttack: function (buildings, units, command) {
-    let isBuilding = false;
-    let targetUnit = units.find(
-      (unit) => unit.objectId === command.targetObject.objectId
-    );
-    let targetBuilding = undefined;
-    if (targetUnit === undefined) {
-      targetBuilding = buildings.find(
-        (building) => building.objectId === command.targetObject.objectId
-      );
-      isBuilding = true;
-      let index = buildings.indexOf(targetBuilding);
-      if (index > -1) {
-        buildings.splice(index, 1);
-      }
-    } else {
-      let index = units.indexOf(targetUnit);
-      if (index > -1) {
-        units.splice(index, 1);
-      }
-    }
+export function doAddBuilding(buildings, tiles, command) {
+  buildings.push(command.building);
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.location)
+  ).buildingId = command.building.objectId;
+}
 
-    if (command.targetObject.hitPoints > 0) {
-      if (isBuilding) {
-        buildings.push(command.targetObject);
-      } else {
-        units.push(command.targetObject);
-      }
-    }
-  },
-  doModifyResource: function (players, command) {
-    let player = players.find((player) => player.playerId === command.playerId);
-    player.resources[command.resource] += command.value;
-  },
-  doUpgrade: function (players, command) {
-    let player = players.find((player) => player.playerId === command.playerId);
-    player.upgradeList[command.unitType][command.statType] = true;
-  },
-  doAddBuilding: function (buildings, tiles, command) {
-    buildings.push(command.building);
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.location)
-    ).buildingId = command.building.objectId;
-  },
-  doRemoveBuilding: function (buildings, tiles, command) {
-    let buildingToRemove = buildings.find(
-      (building) => building.objectId === command.building.objectId
-    );
-    let buildingIndex = buildings.indexOf(buildingToRemove);
-    if (buildingIndex > -1) {
-      buildings.splice(buildingIndex, 1);
-    }
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.location)
-    ).buildingId = "null";
-  },
-  undoBuild: function (buildings, tiles, command) {
-    let buildingToRemove = buildings.find(
-      (building) => building.objectId === command.building.objectId
-    );
-    let buildingIndex = buildings.indexOf(buildingToRemove);
-    if (buildingIndex > -1) {
-      buildings.splice(buildingIndex, 1);
-    }
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.building.location)
-    ).buildingId = "null";
-  },
-  undoCreate: function (units, tiles, command) {
-    let unitToRemove = units.find(
-      (unit) => unit.objectId === command.unit.objectId
-    );
-    let unitIndex = units.indexOf(unitToRemove);
-    if (unitIndex > -1) {
-      units.splice(unitIndex, 1);
-    }
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.unit.location)
-    ).unit = "null";
-  },
-  undoMove: function (units, tiles, command) {
-    let unitToMoveId = tiles.find((tile) =>
-      locationEqual(tile.location, command.endLocation)
-    ).unitId;
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.startLocation)
-    ).unitId = unitToMoveId;
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.endLocation)
-    ).unitId = "null";
-    units.find((unit) => unit.objectId === unitToMoveId).location =
-      command.startLocation;
-  },
-  undoAttack: function (buildings, units, tiles, command) {
-    let isBuilding = false;
-    if (command.targetObject.type === "building") {
-      isBuilding = true;
-    }
-    if (command.targetObject.type === "unit") {
-      isUnit = true;
-    }
-    let targetUnit = units.find(
-      (unit) => unit.objectId === command.targetObject.objectId
-    );
-    let targetBuilding = undefined;
-    if (isBuilding) {
-      targetBuilding = buildings.find(
-        (building) => building.objectId === command.targetObject.objectId
-      );
-      let index = buildings.indexOf(targetBuilding);
-      if (index > -1) {
-        buildings.splice(index, 1);
-      }
-    } else {
-      let index = units.indexOf(targetUnit);
-      if (index > -1) {
-        units.splice(index, 1);
-      }
-    }
+export function doRemoveBuilding(buildings, tiles, command) {
+  let buildingToRemove = buildings.find(
+    (building) => building.objectId === command.building.objectId
+  );
+  let buildingIndex = buildings.indexOf(buildingToRemove);
+  if (buildingIndex > -1) {
+    buildings.splice(buildingIndex, 1);
+  }
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.location)
+  ).buildingId = "null";
+}
 
-    command.targetObject.hitPoints += Math.max(
-      command.attackerObject.attackDamage - command.targetObject.armor,
-      1
+export function doAddUnit(units, tiles, command) {
+  units.push(command.unit);
+  tiles.find((tile) => locationEqual(tile.location, command.location)).unitId =
+    command.unit.objectId;
+}
+
+export function doRemoveUnit(units, tiles, command) {
+  let unitToRemove = units.find(
+    (unit) => unit.objectId === command.unit.objectId
+  );
+  let unitIndex = units.indexOf(unitToRemove);
+  if (unitIndex > -1) {
+    units.splice(unitIndex, 1);
+  }
+  tiles.find((tile) => locationEqual(tile.location, command.location)).unitId =
+    "null";
+}
+
+export function doMoveUnit(units, tiles, command) {
+  let unitToMove = units.find(
+    (unit) => unit.objectId === command.unit.objectId
+  );
+  unitToMove.location = command.endLocation;
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.startLocation)
+  ).unitId = "null";
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.endLocation)
+  ).unitId = command.unit.objectId;
+}
+
+export function doDamageObject(buildings, units, command) {
+  if (command.object.type === "Building") {
+    let buildingToDamage = buildings.find(
+      (building) => building.objectId === command.object.objectId
     );
-    if (isBuilding) {
-      buildings.push(command.targetObject);
-      tiles.find((tile) =>
-        locationEqual(tile.location, command.targetObject.location)
-      ).buildingId = command.targetObject.objectId;
-    } else {
-      units.push(command.targetObject);
-      tiles.find((tile) =>
-        locationEqual(tile.location, command.targetObject.location)
-      ).unitId = command.targetObject.objectId;
-    }
-  },
-  undoModifyResource: function (players, command) {
-    let player = players.find((player) => player.playerId === command.playerId);
-    player.resources[command.resource] -= command.value;
-  },
-  undoUpgrade: function (players, command) {
-    let player = players.find((player) => player.playerId === command.playerId);
-    player.upgradeList[command.unitType][command.statType] = false;
-  },
-  undoAddBuilding: function (buildings, tiles, command) {
-    let buildingToRemove = buildings.find(
-      (building) => building.objectId === command.building.objectId
+    buildingToDamage.hitPoints -= command.damage;
+  }
+  if (command.object.type === "Unit") {
+    let unitToDamage = units.find(
+      (unit) => unit.objectId === command.object.objectId
     );
-    let buildingIndex = buildings.indexOf(buildingToRemove);
-    if (buildingIndex > -1) {
-      buildings.splice(buildingIndex, 1);
-    }
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.location)
-    ).buildingId = "null";
-  },
-  undoRemoveBuilding: function (buildings, tiles, command) {
-    buildings.push(command.building);
-    tiles.find((tile) =>
-      locationEqual(tile.location, command.location)
-    ).buildingId = command.building.objectId;
-  },
-};
+    unitToDamage.hitPoints -= command.damage;
+  }
+}
+
+export function doModifyResource(players, command) {
+  let player = players.find((player) => player.playerName === command.playerId);
+  player.resources[command.resource] += command.value;
+}
+
+export function doUpgrade(players, command) {
+  let player = players.find((player) => player.playerName === command.playerId);
+  let upgrade = "";
+  switch (command.statType) {
+    case "Armor":
+      upgrade = "armor";
+      break;
+    case "Attack":
+      upgrade = "attack";
+      break;
+    case "Hit Points":
+      upgrade = "hitPoints";
+      break;
+    case "Speed":
+      upgrade = "speed";
+      break;
+    default:
+      break;
+  }
+  switch (command.unitType) {
+    case "Artillery Bot":
+      player.upgradeList.artilleryBotUpgrades[upgrade] = true;
+      break;
+    case "Attack Bot":
+      player.upgradeList.attackBotUpgrades[upgrade] = true;
+      break;
+    case "Raider Bot":
+      player.upgradeList.raiderBotUpgrades[upgrade] = true;
+      break;
+    case "Tank Bot":
+      player.upgradeList.tankBotUpgrades[upgrade] = true;
+      break;
+    default:
+      break;
+  }
+}
+
+// Undo functions
+
+export function undoAddBuilding(buildings, tiles, command) {
+  let buildingToRemove = buildings.find(
+    (building) => building.objectId === command.building.objectId
+  );
+  let buildingIndex = buildings.indexOf(buildingToRemove);
+  if (buildingIndex > -1) {
+    buildings.splice(buildingIndex, 1);
+  }
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.location)
+  ).buildingId = "null";
+}
+
+export function undoRemoveBuilding(buildings, tiles, command) {
+  buildings.push(command.building);
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.location)
+  ).buildingId = command.building.objectId;
+}
+
+export function undoAddUnit(units, tiles, command) {
+  let unitToRemove = units.find(
+    (unit) => unit.objectId === command.unit.objectId
+  );
+  let unitIndex = units.indexOf(unitToRemove);
+  if (unitIndex > -1) {
+    units.splice(unitIndex, 1);
+  }
+  tiles.find((tile) => locationEqual(tile.location, command.location)).unitId =
+    "null";
+}
+
+export function undoRemoveUnit(units, tiles, command) {
+  units.push(command.unit);
+  tiles.find((tile) => locationEqual(tile.location, command.location)).unitId =
+    command.unit.objectId;
+}
+
+export function undoMoveUnit(units, tiles, command) {
+  let unitToMove = units.find(
+    (unit) => unit.objectId === command.unit.objectId
+  );
+  unitToMove.location = command.startLocation;
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.startLocation)
+  ).unitId = command.unit.objectId;
+  tiles.find((tile) =>
+    locationEqual(tile.location, command.endLocation)
+  ).unitId = "null";
+}
+
+export function undoDamageObject(buildings, units, command) {
+  if (command.object.type === "Building") {
+    let buildingToDamage = buildings.find(
+      (building) => building.objectId === command.object.objectId
+    );
+    buildingToDamage.hitPoints += command.damage;
+  }
+  if (command.object.type === "Unit") {
+    let unitToDamage = units.find(
+      (unit) => unit.objectId === command.object.objectId
+    );
+    unitToDamage.hitPoints += command.damage;
+  }
+}
+
+export function undoModifyResource(players, command) {
+  let player = players.find((player) => player.playerName === command.playerId);
+  player.resources[command.resource] -= command.value;
+}
+
+export function undoUpgrade(players, command) {
+  let player = players.find((player) => player.playerName === command.playerId);
+  let upgrade = "";
+  switch (command.statType) {
+    case "Armor":
+      upgrade = "armor";
+      break;
+    case "Attack":
+      upgrade = "attack";
+      break;
+    case "Hit Points":
+      upgrade = "hitPoints";
+      break;
+    case "Speed":
+      upgrade = "speed";
+      break;
+    default:
+      break;
+  }
+  switch (command.unitType) {
+    case "Artillery Bot":
+      player.upgradeList.artilleryBotUpgrades[upgrade] = false;
+      break;
+    case "Attack Bot":
+      player.upgradeList.attackBotUpgrades[upgrade] = false;
+      break;
+    case "Raider Bot":
+      player.upgradeList.raiderBotUpgrades[upgrade] = false;
+      break;
+    case "Tank Bot":
+      player.upgradeList.tankBotUpgrades[upgrade] = false;
+      break;
+    default:
+      break;
+  }
+}

@@ -1,5 +1,6 @@
-const Schema = require("mongoose").Schema;
-const db = require("../config/db");
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+import db from "../config/db.js";
 
 const Script = db.model("Script", {
   name: String,
@@ -10,4 +11,4 @@ const Script = db.model("Script", {
   workspace: String,
 });
 
-module.exports = Script;
+export default Script;

@@ -1,14 +1,17 @@
-module.exports = SolarPowerPlantData = {
+const SolarPowerPlantData = {
   owner: "",
-  name: "Solar Power Plant",
+  objectName: "Solar Power Plant",
+  type: "Building",
   buildTime: 3,
   location: [0, 0],
-  possibleTerrain: ["plains"],
+  possibleTerrain: ["Plains"],
   cost: {
+    energy: 0,
     steel: 10,
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   usage: {
     energy: 0,
@@ -16,6 +19,7 @@ module.exports = SolarPowerPlantData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   production: {
     energy: 30,
@@ -23,6 +27,7 @@ module.exports = SolarPowerPlantData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   hitPoints: 15,
   armor: 0,
@@ -30,3 +35,5 @@ module.exports = SolarPowerPlantData = {
   range: 0,
   attackDamage: 0,
 };
+
+export default SolarPowerPlantData;

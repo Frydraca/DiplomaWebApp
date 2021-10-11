@@ -13,10 +13,10 @@ export const upgradeStat = {
             type: "field_dropdown",
             name: "stat",
             options: [
-              ["attack", "attack"],
-              ["armor", "armor"],
-              ["hit points", "hitPoints"],
-              ["move speed", "speed"],
+              ["attack", "Attack"],
+              ["armor", "Armor"],
+              ["hit points", "Hit Points"],
+              ["move speed", "Speed"],
             ],
           },
           {

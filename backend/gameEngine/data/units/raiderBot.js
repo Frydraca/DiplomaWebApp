@@ -1,13 +1,16 @@
-module.exports = RaiderBotData = {
+const RaiderBotData = {
   owner: "",
-  name: "Raider Bot",
+  objectName: "Raider Bot",
+  type: "Unit",
   upgradeType: "raiderBot",
   location: [0, 0],
   cost: {
+    energy: 0,
     steel: 0,
     crystal: 0,
     roboSteel: 5,
     energyCore: 1,
+    credits: 0,
   },
   hitPoints: 10,
   armor: 5,
@@ -16,3 +19,5 @@ module.exports = RaiderBotData = {
   range: 4,
   attackDamage: 10,
 };
+
+export default RaiderBotData;

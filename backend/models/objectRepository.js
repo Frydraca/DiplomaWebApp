@@ -1,11 +1,11 @@
-const User = require("./User");
-const Script = require("./Script");
-const GameMap = require("./GameMap");
-const Game = require("./Game");
-const Cell = require("./Cell");
-const Building = require("./Building");
-const Unit = require("./Unit");
-const Player = require("./Player");
+import User from "./User.js";
+import Script from "./Script.js";
+import GameMap from "./GameMap.js";
+import Game from "./Game.js";
+import Cell from "./Cell.js";
+import Building from "./Building.js";
+import Unit from "./Unit.js";
+import Player from "./Player.js";
 
 const objRepo = {
   User: User,
@@ -18,4 +18,4 @@ const objRepo = {
   Player: Player,
 };
 
-module.exports = objRepo;
+export default objRepo;

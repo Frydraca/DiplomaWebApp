@@ -1,5 +1,6 @@
-const Schema = require("mongoose").Schema;
-const db = require("../config/db");
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+import db from "../config/db.js";
 
 const Cell = db.model("Cell", {
   location: [Number],
@@ -8,4 +9,4 @@ const Cell = db.model("Cell", {
   unit: { type: Schema.Types.ObjectId, ref: "Unit" },
 });
 
-module.exports = Cell;
+export default Cell;

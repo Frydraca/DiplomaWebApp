@@ -1,5 +1,6 @@
-const Schema = require("mongoose").Schema;
-const db = require("../config/db");
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+import db from "../config/db.js";
 
 const Player = db.model("Player", {
   resources: {
@@ -12,4 +13,4 @@ const Player = db.model("Player", {
   },
 });
 
-module.exports = Player;
+export default Player;

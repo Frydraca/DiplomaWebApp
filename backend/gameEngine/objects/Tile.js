@@ -1,58 +1,46 @@
-module.exports = class Tile {
-  location = [0, 0];
-  terrain = "";
-  buildingId = "";
-  unitId = "";
-
-  constructor(tileData, buildingId, unitId) {
-    this.location = JSON.parse(JSON.stringify(tileData.location));
-    this.terrain = JSON.parse(JSON.stringify(tileData.terrain));
-    this.buildingId = JSON.parse(JSON.stringify(buildingId));
-    this.unitId = JSON.parse(JSON.stringify(unitId));
-  }
-
-  GetLocation() {
-    return this.location;
-  }
-
-  GetTerrain() {
-    return this.terrain;
-  }
-
-  GetBuildingId() {
-    return this.buildingId;
-  }
-
-  SetBuildingId(buildingId) {
-    this.buildingId = buildingId;
-  }
-
-  GetUnitId() {
-    return this.unitId;
-  }
-
-  SetUnitId(unitId) {
-    this.unitId = unitId;
-  }
-
-  IsEmpty() {
-    if (this.buildingId === "null" && this.unitId === "null") {
-      return true;
+var Tile = /** @class */ (function () {
+    function Tile(location, terrain, buildingId, unitId) {
+        this.location = location;
+        this.terrain = terrain;
+        this.buildingId = buildingId;
+        this.unitId = unitId;
     }
-    return false;
-  }
-
-  HasUnit() {
-    if (this.unitId === "null") {
-      return false;
-    }
-    return true;
-  }
-
-  HasBuilding() {
-    if (this.buildingId === "null") {
-      return false;
-    }
-    return true;
-  }
-};
+    Tile.prototype.GetLocation = function () {
+        return this.location;
+    };
+    Tile.prototype.GetTerrain = function () {
+        return this.terrain;
+    };
+    Tile.prototype.GetBuildingId = function () {
+        return this.buildingId;
+    };
+    Tile.prototype.SetBuildingId = function (buildingId) {
+        this.buildingId = buildingId;
+    };
+    Tile.prototype.GetUnitId = function () {
+        return this.unitId;
+    };
+    Tile.prototype.SetUnitId = function (unitId) {
+        this.unitId = unitId;
+    };
+    Tile.prototype.IsEmpty = function () {
+        if (this.buildingId === null && this.unitId === null) {
+            return true;
+        }
+        return false;
+    };
+    Tile.prototype.HasUnit = function () {
+        if (this.unitId === null) {
+            return false;
+        }
+        return true;
+    };
+    Tile.prototype.HasBuilding = function () {
+        if (this.buildingId === null) {
+            return false;
+        }
+        return true;
+    };
+    return Tile;
+}());
+export default Tile;

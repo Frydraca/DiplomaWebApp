@@ -1,15 +1,16 @@
-const {
-  undoBuild,
-  undoCreate,
-  undoMove,
-  undoAttack,
-  undoModifyResource,
-  undoUpgrade,
+import { CommandType } from "../../../gameEngine/enums/commandType.js";
+import {
   undoAddBuilding,
   undoRemoveBuilding,
-} = require("./helperFunctions/helperFunctions");
+  undoAddUnit,
+  undoRemoveUnit,
+  undoModifyResource,
+  undoUpgrade,
+  undoMoveUnit,
+  undoDamageObject,
+} from "./helperFunctions/helperFunctions.js";
 
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     if (res.locals.game.currentTurn > 0) {
       let commandsToUndo = res.locals.game.commands
@@ -17,53 +18,61 @@ module.exports = function () {
         .flat()
         .reverse();
       commandsToUndo.forEach((command) => {
-        switch (command.type) {
-          case "build":
-            undoBuild(
-              res.locals.game.buildings,
-              res.locals.game.tiles,
-              command
-            );
-            break;
-          case "create":
-            undoCreate(res.locals.game.units, res.locals.game.tiles, command);
-            break;
-          case "move":
-            undoMove(res.locals.game.units, res.locals.game.tiles, command);
-            break;
-          case "attack":
-            undoAttack(
-              res.locals.game.buildings,
-              res.locals.game.units,
-              res.locals.game.tiles,
-              command
-            );
-            break;
-          case "modify resource":
-            undoModifyResource(res.locals.game.players, command);
-            break;
-          case "upgrade":
-            undoUpgrade(res.locals.game.players, command);
-            break;
-          case "updateResources":
-            res.locals.game.players = command.newPlayers;
-            break;
-          case "add building":
+        let currentCommand = command.command;
+        switch (currentCommand.type) {
+          case CommandType.AddBuilding:
             undoAddBuilding(
               res.locals.game.buildings,
               res.locals.game.tiles,
-              command
+              currentCommand
             );
             break;
-          case "remove building":
+          case CommandType.RemoveBuilding:
             undoRemoveBuilding(
               res.locals.game.buildings,
               res.locals.game.tiles,
-              command
+              currentCommand
             );
             break;
+          case CommandType.AddUnit:
+            undoAddUnit(
+              res.locals.game.units,
+              res.locals.game.tiles,
+              currentCommand
+            );
+            break;
+          case CommandType.RemoveUnit:
+            undoRemoveUnit(
+              res.locals.game.units,
+              res.locals.game.tiles,
+              currentCommand
+            );
+            break;
+          case CommandType.MoveUnit:
+            undoMoveUnit(
+              res.locals.game.units,
+              res.locals.game.tiles,
+              currentCommand
+            );
+            break;
+          case CommandType.DamageObject:
+            undoDamageObject(
+              res.locals.game.buildings,
+              res.locals.game.units,
+              currentCommand
+            );
+            break;
+          case CommandType.ModifyResource:
+            undoModifyResource(res.locals.game.players, currentCommand);
+            break;
+          case CommandType.UpdateResource:
+            res.locals.game.players = currentCommand.oldPlayers;
+            break;
+          case CommandType.Upgrade:
+            undoUpgrade(res.locals.game.players, currentCommand);
+            break;
           default:
-            console.log("Error: Unknown command!");
+            console.log("Error: Unknown command! " + currentCommand.type);
             break;
         }
       });
@@ -73,4 +82,4 @@ module.exports = function () {
     }
     return next();
   };
-};
+}

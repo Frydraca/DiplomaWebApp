@@ -1,38 +1,38 @@
-const createGameSimulationMW = require("../middlewares/data/game/createGameSimulationMW");
-const getGameMW = require("../middlewares/data/game/getGameMW");
-const updateGameMW = require("../middlewares/data/game/updateGameMW");
-const createMapMW = require("../middlewares/data/gameMap/createMapMW");
-const getAllMapsMW = require("../middlewares/data/gameMap/getAllMapsMW");
-const getGameMapMW = require("../middlewares/data/gameMap/getGameMapMW");
-const returnOneGameMapMW = require("../middlewares/data/gameMap/returnOneGameMapMW");
-const returnAsStartingMapMW = require("../middlewares/data/gameMap/returnAsStartingMapMW");
-const createScriptMW = require("../middlewares/data/script/createScriptMW");
-const deleteScriptMW = require("../middlewares/data/script/deleteScriptMW");
-const getAllScriptMW = require("../middlewares/data/script/getAllScriptMW");
-const getAllOwnScriptMW = require("../middlewares/data/script/getAllOwnScriptMW");
-const getScriptMW = require("../middlewares/data/script/getScriptMW");
-const getScriptContentMW = require("../middlewares/data/script/getScriptContentMW");
-const updateScriptMW = require("../middlewares/data/script/updateScriptMW");
-const createUserForRegisterMW = require("../middlewares/data/user/createUserForRegisterMW");
-const getUserForLoginMW = require("../middlewares/data/user/getUserForLoginMW");
-const getUserMW = require("../middlewares/data/user/getUserMW");
-const logUserInMW = require("../middlewares/data/user/logUserInMW");
-const logUserOutMW = require("../middlewares/data/user/logUserOutMW");
-const authenticateWithJWTMW = require("../middlewares/logic/auth/authenticateWithJWTMW");
-const authenticateUserMW = require("../middlewares/logic/auth/authenticateUserMW");
-const sendBackActualUserMW = require("../middlewares/logic/auth/sendBackActualUserMW");
-const validatePasswordMW = require("../middlewares/logic/auth/validatePasswordMW");
-const setGameToEndMW = require("../middlewares/logic/game/setGameToEndMW");
-const setGameToNextTurnMW = require("../middlewares/logic/game/setGameToNextTurnMW");
-const setGameToPreviousTurnMW = require("../middlewares/logic/game/setGameToPreviousTurnMW");
-const setGameToStartMW = require("../middlewares/logic/game/setGameToStartMW");
-const runSimulationMW = require("../middlewares/logic/game/runSimulationMW");
-const logIncomingCallMW = require("../middlewares/logic/log/logIncomingCallMW");
-const sendJsonResponseMW = require("../middlewares/logic/sendJsonResponseMW");
+import createGameSimulationMW from "../middlewares/data/game/createGameSimulationMW.js";
+import getGameMW from "../middlewares/data/game/getGameMW.js";
+import updateGameMW from "../middlewares/data/game/updateGameMW.js";
+import createMapMW from "../middlewares/data/gameMap/createMapMW.js";
+import getAllMapsMW from "../middlewares/data/gameMap/getAllMapsMW.js";
+import getGameMapMW from "../middlewares/data/gameMap/getGameMapMW.js";
+import returnOneGameMapMW from "../middlewares/data/gameMap/returnOneGameMapMW.js";
+import returnAsStartingMapMW from "../middlewares/data/gameMap/returnAsStartingMapMW.js";
+import createScriptMW from "../middlewares/data/script/createScriptMW.js";
+import deleteScriptMW from "../middlewares/data/script/deleteScriptMW.js";
+import getAllScriptMW from "../middlewares/data/script/getAllScriptMW.js";
+import getAllOwnScriptMW from "../middlewares/data/script/getAllOwnScriptMW.js";
+import getScriptMW from "../middlewares/data/script/getScriptMW.js";
+import getScriptContentMW from "../middlewares/data/script/getScriptContentMW.js";
+import updateScriptMW from "../middlewares/data/script/updateScriptMW.js";
+import createUserForRegisterMW from "../middlewares/data/user/createUserForRegisterMW.js";
+import getUserForLoginMW from "../middlewares/data/user/getUserForLoginMW.js";
+import getUserMW from "../middlewares/data/user/getUserMW.js";
+import logUserInMW from "../middlewares/data/user/logUserInMW.js";
+import logUserOutMW from "../middlewares/data/user/logUserOutMW.js";
+import authenticateWithJWTMW from "../middlewares/logic/auth/authenticateWithJWTMW.js";
+import authenticateUserMW from "../middlewares/logic/auth/authenticateUserMW.js";
+import sendBackActualUserMW from "../middlewares/logic/auth/sendBackActualUserMW.js";
+import validatePasswordMW from "../middlewares/logic/auth/validatePasswordMW.js";
+import setGameToEndMW from "../middlewares/logic/game/setGameToEndMW.js";
+import setGameToNextTurnMW from "../middlewares/logic/game/setGameToNextTurnMW.js";
+import setGameToPreviousTurnMW from "../middlewares/logic/game/setGameToPreviousTurnMW.js";
+import setGameToStartMW from "../middlewares/logic/game/setGameToStartMW.js";
+import runSimulationMW from "../middlewares/logic/game/runSimulationMW.js";
+import logIncomingCallMW from "../middlewares/logic/log/logIncomingCallMW.js";
+import sendJsonResponseMW from "../middlewares/logic/sendJsonResponseMW.js";
 
-const objRepo = require("../models/objectRepository");
+import objRepo from "../models/objectRepository.js";
 
-module.exports = function (app) {
+export default function routes(app) {
   // Authentication
   app.post(
     "/register",
@@ -251,4 +251,4 @@ module.exports = function (app) {
     getAllScriptMW(objRepo),
     sendJsonResponseMW()
   );
-};
+}

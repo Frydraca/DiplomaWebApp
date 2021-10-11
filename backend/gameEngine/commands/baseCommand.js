@@ -1,16 +1,10 @@
-module.exports = class Command {
-  type = "";
-  constructor(type) {
-    this.type = type;
-  }
-
-  GetType() {
-    return this.type;
-  }
-
-  GetResult() {
-    return {
-      type: "",
+var Command = /** @class */ (function () {
+    function Command(type) {
+        this.type = type;
+    }
+    Command.prototype.GetType = function () {
+        return this.type;
     };
-  }
-};
+    return Command;
+}());
+export default Command;

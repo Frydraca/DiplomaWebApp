@@ -33,19 +33,19 @@ export const unit = {
     var formattedValue = "";
     switch (dropdown_unit) {
       case "ArtilleryBots":
-        formattedValue = "ArtilleryBotData";
+        formattedValue = "'Artillery Bot'";
         break;
       case "AttackBots":
-        formattedValue = "AttackBotData";
+        formattedValue = "'Attack Bot'";
         break;
       case "RaiderBots":
-        formattedValue = "RaiderBotData";
+        formattedValue = "'Raider Bot'";
         break;
       case "TankBots":
-        formattedValue = "TankBotData";
+        formattedValue = "'Tank Bot'";
         break;
       default:
-        formattedValue = "Unrecognized type!";
+        formattedValue = "'Unrecognized type!'";
         break;
     }
     var code = formattedValue;

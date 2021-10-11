@@ -1,78 +1,29 @@
-module.exports = UpgradeCostsData = {
-  attackBot: {
-    attack: {
-      crystal: 20,
-      credits: 100,
-    },
-    armor: {
-      roboSteel: 10,
-      credits: 100,
-    },
-    hitPoints: {
-      steel: 50,
-      credits: 50,
-    },
-    speed: {
-      steel: 10,
-      credits: 10,
-      energyCore: 1,
-    },
-  },
-  artilleryBot: {
-    attack: {
-      crystal: 20,
-      credits: 100,
-    },
-    armor: {
-      roboSteel: 10,
-      credits: 100,
-    },
-    hitPoints: {
-      steel: 50,
-      credits: 50,
-    },
-    speed: {
-      steel: 100,
-      credits: 100,
-      energyCore: 5,
-    },
-  },
-  tankBot: {
-    attack: {
-      crystal: 20,
-      credits: 100,
-    },
-    armor: {
-      roboSteel: 10,
-      credits: 100,
-    },
-    hitPoints: {
-      steel: 50,
-      credits: 50,
-    },
-    speed: {
-      steel: 100,
-      credits: 100,
-      energyCore: 5,
-    },
-  },
-  raiderBot: {
-    attack: {
-      crystal: 20,
-      credits: 100,
-    },
-    armor: {
-      roboSteel: 10,
-      credits: 100,
-    },
-    hitPoints: {
-      steel: 50,
-      credits: 50,
-    },
-    speed: {
-      steel: 100,
-      credits: 100,
-      energyCore: 5,
-    },
-  },
-};
+import { UpgradeType } from "../enums/upgradeType.js";
+var UpgradeCostsData = /** @class */ (function () {
+    function UpgradeCostsData(unitType, armorCost, attackCost, hitPointsCost, speedCost) {
+        this.unitType = unitType;
+        this.armorCost = armorCost;
+        this.attackCost = attackCost;
+        this.hitPointsCost = hitPointsCost;
+        this.speedCost = speedCost;
+    }
+    UpgradeCostsData.prototype.GetUnitType = function () {
+        return this.unitType;
+    };
+    UpgradeCostsData.prototype.GetUpgradeCost = function (upgradeType) {
+        switch (upgradeType) {
+            case UpgradeType.Armor:
+                return this.armorCost;
+            case UpgradeType.Attack:
+                return this.attackCost;
+            case UpgradeType.HitPoints:
+                return this.hitPointsCost;
+            case UpgradeType.Speed:
+                return this.speedCost;
+            default:
+                return null;
+        }
+    };
+    return UpgradeCostsData;
+}());
+export default UpgradeCostsData;

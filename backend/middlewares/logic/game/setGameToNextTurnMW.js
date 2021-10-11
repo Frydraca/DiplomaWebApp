@@ -1,67 +1,77 @@
-const {
-  doBuild,
-  doCreate,
-  doMove,
-  doAttack,
-  doModifyResource,
-  doUpgrade,
+import { CommandType } from "../../../gameEngine/enums/commandType.js";
+import {
   doAddBuilding,
   doRemoveBuilding,
-} = require("./helperFunctions/helperFunctions");
+  doAddUnit,
+  doRemoveUnit,
+  doMoveUnit,
+  doDamageObject,
+  doModifyResource,
+  doUpgrade,
+} from "./helperFunctions/helperFunctions.js";
 
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     for (let i = 0; i < req.params.turnIncrement; i++) {
       if (res.locals.game.currentTurn < res.locals.game.commands.length) {
         let commandsToDo =
           res.locals.game.commands[res.locals.game.currentTurn];
         commandsToDo.forEach((command) => {
-          switch (command.type) {
-            case "build":
-              doBuild(
-                res.locals.game.buildings,
-                res.locals.game.tiles,
-                command
-              );
-              break;
-            case "create":
-              doCreate(res.locals.game.units, res.locals.game.tiles, command);
-              break;
-            case "move":
-              doMove(res.locals.game.units, res.locals.game.tiles, command);
-              break;
-            case "attack":
-              doAttack(
-                res.locals.game.buildings,
-                res.locals.game.units,
-                command
-              );
-              break;
-            case "modify resource":
-              doModifyResource(res.locals.game.players, command);
-              break;
-            case "updateResources":
-              res.locals.game.players = command.newPlayers;
-              break;
-            case "upgrade":
-              doUpgrade(res.locals.game.players, command);
-              break;
-            case "add building":
+          let currentCommand = command.command;
+          switch (currentCommand.type) {
+            case CommandType.AddBuilding:
               doAddBuilding(
                 res.locals.game.buildings,
                 res.locals.game.tiles,
-                command
+                currentCommand
               );
               break;
-            case "remove building":
+            case CommandType.RemoveBuilding:
               doRemoveBuilding(
                 res.locals.game.buildings,
                 res.locals.game.tiles,
-                command
+                currentCommand
               );
               break;
+            case CommandType.AddUnit:
+              doAddUnit(
+                res.locals.game.units,
+                res.locals.game.tiles,
+                currentCommand
+              );
+              break;
+            case CommandType.RemoveUnit:
+              doRemoveUnit(
+                res.locals.game.units,
+                res.locals.game.tiles,
+                currentCommand
+              );
+              break;
+            case CommandType.MoveUnit:
+              doMoveUnit(
+                res.locals.game.units,
+                res.locals.game.tiles,
+                currentCommand
+              );
+              break;
+            case CommandType.DamageObject:
+              doDamageObject(
+                res.locals.game.buildings,
+                res.locals.game.units,
+                currentCommand
+              );
+              break;
+            case CommandType.ModifyResource:
+              doModifyResource(res.locals.game.players, currentCommand);
+              break;
+            case CommandType.UpdateResource:
+              res.locals.game.players = currentCommand.newPlayers;
+              break;
+            case CommandType.Upgrade:
+              doUpgrade(res.locals.game.players, currentCommand);
+              break;
             default:
-              console.log("Error: Unknown command!");
+              console.log("Error: Unknown command! " + currentCommand.type);
               break;
           }
           res.locals.game.currentCommandNumber++;
@@ -71,4 +81,4 @@ module.exports = function () {
     }
     return next();
   };
-};
+}

@@ -1,531 +1,366 @@
-const Player = require("./Player");
-const Tile = require("./Tile");
-const Building = require("./Building");
-const Unit = require("./Unit");
-const WorkerBotData = require("../data/units/workerBot");
-const RubbleData = require("../data/buildings/rubble");
-
-module.exports = class GameState {
-  turnNumber = 1;
-  isRunning = true;
-  baseBuildingLocations = [];
-  players = [];
-  buildings = [];
-  units = [];
-  tiles = [];
-  rubbleBuildings = [];
-
-  constructor(startingGameState) {
-    this.turnNumber = 0;
-    this.isRunning = true;
-    this.rubbleBuildings = [];
-    this.baseBuildingLocations = [
-      [-2, -1],
-      [-2, 1],
-      [-1, 2],
-      [-1, -2],
-      [1, -2],
-      [1, 2],
-      [2, -1],
-      [2, 1],
-    ];
-
-    // TODO refactor player setup
-    let playerData1 = {
-      playerId: "Player",
-      resources: {
-        steel: 30,
-        roboSteel: 10,
-        crystal: 0,
-        energyCore: 3,
-        energy: 10,
-        credits: 0,
-      },
-    };
-    let playerData2 = {
-      playerId: "Server AI",
-      resources: {
-        steel: 30,
-        roboSteel: 10,
-        crystal: 0,
-        energyCore: 3,
-        energy: 10,
-        credits: 0,
-      },
-    };
-    this.players.push(new Player(playerData1));
-    this.players.push(new Player(playerData2));
-    startingGameState.tiles.forEach((element) => {
-      let buildingId = "null";
-      let unitId = "null";
-      this.tiles.push(new Tile(element, buildingId, unitId));
-    });
-    for (let i = 0; i < this.players.length; i++) {
-      this.AddCommandCenter(
-        this.players[i].GetPlayerId(),
-        startingGameState.startingLocations[i]
-      );
+import { DirectionType } from "../enums/directionType.js";
+import { ObjectName } from "../enums/objectName.js";
+import BuildingData from "../types/DataTypes/buildingData.js";
+import LocationType from "../types/locationType.js";
+import PathNode from "../types/pathNode.js";
+import PlayerData from "../types/DataTypes/playerData.js";
+import Resources from "../types/resources.js";
+import Building from "./Building.js";
+import Player from "./Player.js";
+import CommandCenterData from "../data/buildings/commandCenter.js";
+var GameState = /** @class */ (function () {
+    function GameState(startingGameState) {
+        var _this = this;
+        this.savedStartingGameState = startingGameState;
+        this.turnNumber = 0;
+        this.isRunning = true;
+        this.baseBuildingLocations = [
+            new LocationType(-2, -1),
+            new LocationType(-2, 1),
+            new LocationType(-1, 2),
+            new LocationType(-1, -2),
+            new LocationType(1, -2),
+            new LocationType(1, 2),
+            new LocationType(2, -1),
+            new LocationType(2, 1),
+        ];
+        this.players = new Array();
+        this.tiles = new Array();
+        this.buildings = new Array();
+        this.units = new Array();
+        // TODO refactor player setup
+        var startingResources = new Resources(10, 30, 10, 0, 3, 0);
+        var playerData1 = new PlayerData("Player", startingResources);
+        var playerData2 = new PlayerData("Server AI", startingResources);
+        this.players.push(new Player(playerData1));
+        this.players.push(new Player(playerData2));
+        startingGameState.GetTiles().forEach(function (element) {
+            _this.tiles.push(element);
+        });
+        for (var i = 0; i < this.players.length; i++) {
+            this.AddCommandCenter(this.players[i].GetPlayerName(), startingGameState.GetStartingLocations()[i]);
+        }
     }
-
-    // let startingWorker1 = new Unit(
-    //   WorkerBotData,
-    //   this.players[0].GetPlayerId()
-    // );
-    // let startingWorker2 = new Unit(
-    //   WorkerBotData,
-    //   this.players[1].GetPlayerId()
-    // );
-    // let tile1 = this.GetTileByLocation(
-    //   startingGameState.startingWorkerLocations[0]
-    // );
-    // let tile2 = this.GetTileByLocation(
-    //   startingGameState.startingWorkerLocations[1]
-    // );
-    // this.AddUnitToTile(startingWorker1, tile1);
-    // this.AddUnitToTile(startingWorker2, tile2);
-  }
-
-  AddCommandCenter(owner, location) {
-    //Todo refactor
-    let buildingData = {
-      name: "Command Center",
-      possibleTerrain: ["plains"],
-      buildTime: 0,
-      location: [0, 0],
-      cost: {
-        steel: 0,
-        crystal: 0,
-        roboSteel: 0,
-        energyCore: 0,
-      },
-      usage: {
-        energy: 0,
-        steel: 0,
-        crystal: 0,
-        roboSteel: 0,
-        energyCore: 0,
-      },
-      production: {
-        energy: 10,
-        steel: 0,
-        crystal: 0,
-        roboSteel: 0,
-        energyCore: 0,
-      },
-      hitPoints: 100,
-      armor: 5,
-      canAttack: false,
-      range: 0,
-      attackDamage: 0,
-    };
-    let newBuilding = new Building(buildingData, owner);
-    newBuilding.Complete();
-    newBuilding.SetLocation(location);
-    this.AddBuildingToTile(newBuilding, this.GetTileByLocation(location));
-  }
-
-  GetTurnNumber() {
-    return this.turnNumber;
-  }
-
-  IsRunning() {
-    return this.IsRunning;
-  }
-
-  GetPlayers() {
-    return this.players;
-  }
-
-  GetPlayerById(playerId) {
-    return this.players.find((element) => element.GetPlayerId() === playerId);
-  }
-
-  GetBuildings() {
-    return this.buildings;
-  }
-
-  GetBuildingById(buildingId) {
-    return this.buildings.find(
-      (element) => element.GetObjectId() === buildingId
-    );
-  }
-
-  GetUnits() {
-    return this.units;
-  }
-
-  GetUnitById(unitId) {
-    return this.units.find((element) => element.GetObjectId() === unitId);
-  }
-
-  GetTiles() {
-    return this.tiles;
-  }
-
-  GetTileByLocation(location) {
-    return this.tiles.find(
-      (element) =>
-        element.location[0] === location[0] &&
-        element.location[1] === location[1]
-    );
-  }
-
-  GetObjectByLocation(location) {
-    let tile = this.GetTileByLocation(location);
-    if (tile.HasUnit()) {
-      return this.GetUnitById(tile.GetUnitId());
-    }
-    if (tile.HasBuilding()) {
-      return this.GetBuildingById(tile.GetBuildingId());
-    }
-    return false;
-  }
-
-  ModifyResource(playerId, resource, amount) {
-    let player = this.GetPlayerById(playerId);
-    let resources = player.GetResources();
-    if (resource in resources) {
-      resources[resource] += amount;
-      player.SetResources(resources);
-      return true;
-    } else {
-      console.log("Error! " + resource + " is not a valid resource type!");
-      return false;
-    }
-  }
-
-  UpgradeStat(playerId, unitType, statType) {
-    let player = this.GetPlayerById(playerId);
-    let upgrades = player.GetUpgradeList();
-    upgrades.SetUpgrade(unitType, statType);
-    return true;
-  }
-
-  AddBuildingToTile(building, tile) {
-    if (this.tiles.includes(tile) && tile.IsEmpty()) {
-      building.SetLocation(tile.GetLocation());
-      this.buildings.push(building);
-      this.tiles
-        .find((element) => element === tile)
-        .SetBuildingId(building.GetObjectId());
-    }
-  }
-
-  AddUnitToTile(unit, tile) {
-    if (this.tiles.includes(tile) && tile.IsEmpty()) {
-      this.tiles
-        .find((element) => element === tile)
-        .SetUnitId(unit.GetObjectId());
-    }
-  }
-
-  RemoveBuildingFromTile(tile) {
-    let targetTile = this.tiles.find((element) => element === tile);
-    targetTile.SetBuildingId("null");
-  }
-
-  AddBuilding(building) {
-    this.building.push(building);
-  }
-
-  RemoveBuilding(building) {
-    this.buildings.splice(this.buildings.indexOf(building), 1);
-  }
-
-  RemoveUnitFromTile(tile) {
-    let targetTile = this.tiles.find((element) => element === tile);
-    targetTile.SetUnitId("null");
-  }
-
-  AddUnit(unit) {
-    this.units.push(unit);
-  }
-
-  RemoveUnit(unit) {
-    this.units.splice(this.units.indexOf(unit), 1);
-  }
-
-  ChangeUnitLocation(unit, newTile) {
-    unit.SetLocation(newTile.GetLocation());
-  }
-
-  RemoveObject(gameObject) {
-    let objectId = gameObject.GetObjectId();
-    let building = this.GetBuildingById(objectId);
-    let unit = this.GetUnitById(objectId);
-    if (building !== undefined) {
-      this.RemoveBuildingFromTile(
-        this.GetTileByLocation(building.GetLocation())
-      );
-      this.RemoveBuilding(building);
-      return true;
-    }
-    if (unit !== undefined) {
-      this.RemoveUnit(unit);
-      this.RemoveUnitFromTile(this.GetTileByLocation(unit.GetLocation()));
-      return true;
-    }
-    return false;
-  }
-
-  GetNeighbourTile(homeTile, direction) {
-    let homeLocation = homeTile.GetLocation();
-    let neighbourLocation;
-    switch (direction) {
-      case "North":
-        neighbourLocation = [homeLocation[0], homeLocation[1] - 1];
-        break;
-      case "East":
-        neighbourLocation = [homeLocation[0] + 1, homeLocation[1]];
-        break;
-      case "South":
-        neighbourLocation = [homeLocation[0], homeLocation[1] + 1];
-        break;
-      case "West":
-        neighbourLocation = [homeLocation[0] - 1, homeLocation[1]];
-        break;
-      default:
-        neighbourLocation = "null";
-        break;
-    }
-    let ret = this.tiles.find(
-      (element) =>
-        element.GetLocation()[0] === neighbourLocation[0] &&
-        element.GetLocation()[1] === neighbourLocation[1]
-    );
-    if (ret === undefined) {
-      return "null";
-    }
-    return ret;
-  }
-
-  IsSameLocation(tile1, tile2) {
-    return (
-      tile1.GetLocation()[0] === tile2.GetLocation()[0] &&
-      tile1.GetLocation()[1] === tile2.GetLocation()[1]
-    );
-  }
-
-  GetDistanceBetweenTiles(tile1, tile2) {
-    return (
-      Math.abs(tile1.GetLocation()[0] - tile2.GetLocation()[0]) +
-      Math.abs(tile1.GetLocation()[1] - tile2.GetLocation()[1])
-    );
-  }
-
-  GetNextBuildingLocation(player, building) {
-    let ret = { success: false, tile: "null" };
-    let commandCenter = this.GetBuildings().filter(
-      (element) =>
-        element.GetOwner() === player.GetPlayerId() &&
-        element.GetName() === "Command Center"
-    );
-    let commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
-    for (let i = 0; i < this.baseBuildingLocations.length; i++) {
-      let tile = this.GetTileByLocation([
-        commandTile.GetLocation()[0] + this.baseBuildingLocations[i][0],
-        commandTile.GetLocation()[1] + this.baseBuildingLocations[i][1],
-      ]);
-      if (
-        tile !== undefined &&
-        tile.IsEmpty() &&
-        building.IsLocationValid(tile.GetTerrain())
-      ) {
-        ret.success = true;
-        ret.tile = tile;
+    GameState.prototype.GetClone = function () {
+        var ret = new GameState(this.savedStartingGameState);
+        var retBuildings = ret.GetBuildings();
+        retBuildings[0].SetObjectId(this.buildings[0].GetObjectId());
+        retBuildings[1].SetObjectId(this.buildings[1].GetObjectId());
         return ret;
-      }
-    }
-
-    return ret;
-  }
-
-  // TODO: Refactor
-  GetClosestBuildingLocationToCommandCenter(player, building) {
-    let ret = { success: false, tile: "null" };
-    let commandCenter = this.GetBuildings().filter(
-      (element) =>
-        element.GetOwner() === player.GetPlayerId() &&
-        element.GetName() === "Command Center"
-    );
-    let commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
-    let closestTile;
-    let closestDistance = Number.POSITIVE_INFINITY;
-    this.tiles.forEach((element) => {
-      if (building.IsLocationValid(element.GetTerrain()) && element.IsEmpty()) {
-        if (
-          this.GetDistanceBetweenTiles(element, commandTile) < closestDistance
-        ) {
-          closestDistance = this.GetDistanceBetweenTiles(element, commandTile);
-          closestTile = element;
-          ret.success = true;
-          ret.tile = closestTile;
+    };
+    GameState.prototype.AddCommandCenter = function (owner, location) {
+        var buildingData = new BuildingData(CommandCenterData);
+        var newBuilding = new Building(buildingData, owner);
+        newBuilding.Complete();
+        newBuilding.SetLocation(location);
+        this.AddBuildingToTile(newBuilding, this.GetTileByLocation(location));
+        this.AddBuilding(newBuilding);
+    };
+    GameState.prototype.GetTurnNumber = function () {
+        return this.turnNumber;
+    };
+    GameState.prototype.IncreaseTurnNumber = function (value) {
+        this.turnNumber += value;
+    };
+    GameState.prototype.IsRunning = function () {
+        return this.isRunning;
+    };
+    GameState.prototype.SetIsRunning = function (state) {
+        this.isRunning = state;
+    };
+    GameState.prototype.GetPlayers = function () {
+        return this.players;
+    };
+    GameState.prototype.GetPlayerByName = function (playerName) {
+        return this.players.find(function (element) { return element.GetPlayerName() === playerName; });
+    };
+    GameState.prototype.GetBuildings = function () {
+        return this.buildings;
+    };
+    GameState.prototype.GetBuildingById = function (buildingId) {
+        return this.buildings.find(function (element) { return element.GetObjectId() === buildingId; });
+    };
+    GameState.prototype.GetUnits = function () {
+        return this.units;
+    };
+    GameState.prototype.GetUnitById = function (unitId) {
+        return this.units.find(function (element) { return element.GetObjectId() === unitId; });
+    };
+    GameState.prototype.GetTiles = function () {
+        return this.tiles;
+    };
+    GameState.prototype.GetTileByLocation = function (location) {
+        return this.tiles.find(function (element) {
+            return element.GetLocation().SameLocation(location);
+        });
+    };
+    GameState.prototype.GetObjectByLocation = function (location) {
+        var tile = this.GetTileByLocation(location);
+        if (tile.HasUnit()) {
+            return this.GetUnitById(tile.GetUnitId());
         }
-      }
-    });
-    return ret;
-  }
-
-  // TODO refactor
-  GetClosestEmptyLocationToCommandCenter(player) {
-    let ret = { success: false, tile: "null" };
-    let commandCenter = this.GetBuildings().filter(
-      (element) =>
-        element.GetOwner() === player.GetPlayerId() &&
-        element.GetName() === "Command Center"
-    );
-    let commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
-    let closestTile;
-    let closestDistance = Number.POSITIVE_INFINITY;
-    this.tiles.forEach((element) => {
-      if (element.IsEmpty()) {
-        if (
-          this.GetDistanceBetweenTiles(element, commandTile) < closestDistance
-        ) {
-          closestDistance = this.GetDistanceBetweenTiles(element, commandTile);
-          closestTile = element;
-          ret.success = true;
-          ret.tile = closestTile;
+        if (tile.HasBuilding()) {
+            return this.GetBuildingById(tile.GetBuildingId());
         }
-      }
-    });
-    return ret;
-  }
-
-  CanAttackTarget(attackerObject, targetObject) {
-    let attackerTile = this.GetTileByLocation(attackerObject.GetLocation());
-    let targetTile = this.GetTileByLocation(targetObject.GetLocation());
-    if (
-      attackerObject.GetCanAttack() &&
-      attackerObject.GetOwner() !== targetObject.GetOwner() &&
-      attackerObject.GetRange() >=
-        this.GetDistanceBetweenTiles(attackerTile, targetTile)
-    ) {
-      return true;
-    }
-    return false;
-  }
-
-  FindPathBetween(startingTile, targetTile) {
-    let openList = [];
-    let closedList = [];
-    let startingNode = { tile: startingTile, f: 0, g: 0, h: 0, parent: "null" };
-    let endNode;
-    openList.push(startingNode);
-    while (openList.length !== 0) {
-      // Find the node with the lowest f value
-      let lowestFValue = Number.POSITIVE_INFINITY;
-      let currentNode = {};
-      openList.forEach((element) => {
-        if (element.f < lowestFValue) {
-          lowestFValue = element.f;
-          currentNode = element;
+        return null;
+    };
+    GameState.prototype.ModifyResource = function (playerName, resourceType, amount) {
+        var player = this.GetPlayerByName(playerName);
+        var resources = player.GetResources();
+        resources.ModifyResource(resourceType, amount);
+        player.SetResources(resources); // TODO is setresources neccesery? reference question
+    };
+    GameState.prototype.UpgradeStat = function (playerName, unitType, upgradeType) {
+        var player = this.GetPlayerByName(playerName);
+        var upgrades = player.GetUpgradeList();
+        upgrades.SetUpgrade(unitType, upgradeType);
+    };
+    GameState.prototype.AddBuildingToTile = function (building, tile) {
+        if (this.tiles.includes(tile) && tile.IsEmpty()) {
+            this.tiles
+                .find(function (element) { return element === tile; })
+                .SetBuildingId(building.GetObjectId());
         }
-      });
-
-      // Pop off the node
-      let index = openList.indexOf(currentNode);
-      openList.splice(index, 1);
-      // Generate the 4 successor and set their parents to current
-      let northNode = {
-        tile: this.GetNeighbourTile(currentNode.tile, "North"),
-        f: 0,
-        g: 0,
-        h: 0,
-        parent: currentNode,
-      };
-      let eastNode = {
-        tile: this.GetNeighbourTile(currentNode.tile, "East"),
-        f: 0,
-        g: 0,
-        h: 0,
-        parent: currentNode,
-      };
-      let southNode = {
-        tile: this.GetNeighbourTile(currentNode.tile, "South"),
-        f: 0,
-        g: 0,
-        h: 0,
-        parent: currentNode,
-      };
-      let westNode = {
-        tile: this.GetNeighbourTile(currentNode.tile, "West"),
-        f: 0,
-        g: 0,
-        h: 0,
-        parent: currentNode,
-      };
-      let successors = [northNode, eastNode, southNode, westNode];
-      // discard the nodes with "null" tiles
-      successors = successors.filter((element) => element.tile !== "null");
-      // discard the non empty nodes
-      successors = successors.filter(
-        (element) => element.tile.IsEmpty() || element.tile === targetTile
-      );
-
-      // for each successor
-      for (let i = 0; i < successors.length; i++) {
-        let currentSuccessor = successors[i];
-        if (this.IsSameLocation(currentSuccessor.tile, targetTile)) {
-          endNode = currentSuccessor;
-          openList = [];
-          break;
+    };
+    GameState.prototype.AddUnitToTile = function (unit, tile) {
+        if (this.tiles.includes(tile) && tile.IsEmpty()) {
+            this.tiles
+                .find(function (element) { return element === tile; })
+                .SetUnitId(unit.GetObjectId());
         }
-        currentSuccessor.g =
-          currentSuccessor.parent.g +
-          this.GetDistanceBetweenTiles(
-            currentSuccessor.tile,
-            currentSuccessor.parent.tile
-          );
-        currentSuccessor.h = this.GetDistanceBetweenTiles(
-          currentSuccessor.tile,
-          targetTile
-        );
-        currentSuccessor.f = currentSuccessor.g + currentSuccessor.h;
-
-        // if there is a node in the open list which has the same tile
-        // and lower f score then skip this successor
-        if (
-          openList.find(
-            (element) =>
-              element.tile === currentSuccessor.tile &&
-              element.f <= currentSuccessor.f
-          ) !== undefined
-        ) {
-          continue;
+    };
+    GameState.prototype.RemoveBuildingFromTile = function (tile) {
+        var targetTile = this.tiles.find(function (element) { return element === tile; });
+        targetTile.SetBuildingId(null);
+    };
+    GameState.prototype.AddBuilding = function (building) {
+        this.buildings.push(building);
+    };
+    GameState.prototype.RemoveBuilding = function (building) {
+        this.buildings.splice(this.buildings.indexOf(building), 1);
+    };
+    GameState.prototype.RemoveUnitFromTile = function (tile) {
+        var targetTile = this.tiles.find(function (element) { return element === tile; });
+        targetTile.SetUnitId(null);
+    };
+    GameState.prototype.AddUnit = function (unit) {
+        this.units.push(unit);
+    };
+    GameState.prototype.RemoveUnit = function (unit) {
+        this.units.splice(this.units.indexOf(unit), 1);
+    };
+    GameState.prototype.ChangeUnitLocation = function (unit, location) {
+        unit.SetLocation(location);
+    };
+    GameState.prototype.RemoveObject = function (gameObject) {
+        var objectId = gameObject.GetObjectId();
+        // TODO Do a fork based on the type of GameObject
+        var building = this.GetBuildingById(objectId);
+        var unit = this.GetUnitById(objectId);
+        if (building !== undefined) {
+            this.RemoveBuildingFromTile(this.GetTileByLocation(building.GetLocation()));
+            this.RemoveBuilding(building);
         }
-
-        // if there is a node in the closed list which has the same tile
-        // and lower f score then skip this successor
-        // otherwise add the successor to the openList
-        if (
-          closedList.find(
-            (element) =>
-              element.tile === currentSuccessor.tile &&
-              element.f <= currentSuccessor.f
-          ) !== undefined
-        ) {
-          continue;
+        if (unit !== undefined) {
+            this.RemoveUnit(unit);
+            this.RemoveUnitFromTile(this.GetTileByLocation(unit.GetLocation()));
         }
-        openList.push(currentSuccessor);
-      }
-      closedList.push(currentNode);
-    }
-
-    // return path
-    if (endNode === undefined) {
-      return "null";
-    }
-    let path = [];
-    let lastNode = endNode;
-    let pathEnded = false;
-    while (!pathEnded) {
-      path.push(lastNode);
-      if (lastNode.parent === "null") {
-        pathEnded = true;
-      }
-      lastNode = lastNode.parent;
-    }
-    return path.reverse();
-  }
-};
+    };
+    GameState.prototype.GetNeighbourTile = function (homeTile, direction) {
+        var homeLocation = homeTile.GetLocation();
+        var neighbourLocation;
+        switch (direction) {
+            case DirectionType.North:
+                neighbourLocation = new LocationType(homeLocation.GetX(), homeLocation.GetY() - 1);
+                break;
+            case DirectionType.East:
+                neighbourLocation = new LocationType(homeLocation.GetX() + 1, homeLocation.GetY());
+                break;
+            case DirectionType.South:
+                neighbourLocation = new LocationType(homeLocation.GetX(), homeLocation.GetY() + 1);
+                break;
+            case DirectionType.West:
+                neighbourLocation = new LocationType(homeLocation.GetX() - 1, homeLocation.GetY());
+                break;
+            default:
+                console.log("Error! Invalid direction type: " + direction);
+                break;
+        }
+        var ret = this.tiles.find(function (element) {
+            return element.GetLocation().SameLocation(neighbourLocation);
+        });
+        if (ret === undefined) {
+            return null;
+        }
+        return ret;
+    };
+    // TODO is this function needed?
+    GameState.prototype.IsSameLocation = function (tile1, tile2) {
+        return tile1.GetLocation().SameLocation(tile2.GetLocation());
+    };
+    GameState.prototype.GetDistanceBetweenTiles = function (tile1, tile2) {
+        return tile1.GetLocation().DistanceFrom(tile2.GetLocation());
+    };
+    GameState.prototype.GetNextBuildingLocation = function (player, building) {
+        var commandCenter = this.GetBuildings().filter(function (element) {
+            return element.GetOwner() === player.GetPlayerName() &&
+                element.GetName() === ObjectName.CommandCenter;
+        });
+        var commandLocation = commandCenter[0].GetLocation();
+        for (var i = 0; i < this.baseBuildingLocations.length; i++) {
+            var tile = this.GetTileByLocation(new LocationType(commandLocation.GetX() + this.baseBuildingLocations[i].GetX(), commandLocation.GetY() + this.baseBuildingLocations[i].GetY()));
+            if (tile !== undefined &&
+                tile.IsEmpty() &&
+                building.IsLocationValid(tile.GetTerrain())) {
+                return tile.GetLocation();
+            }
+        }
+        return null;
+    };
+    // TODO: Refactor
+    GameState.prototype.GetClosestBuildingLocationToCommandCenter = function (player, building) {
+        var _this = this;
+        var ret;
+        var commandCenter = this.GetBuildings().filter(function (element) {
+            return element.GetOwner() === player.GetPlayerName() &&
+                element.GetName() === "Command Center";
+        });
+        var commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
+        var closestTile;
+        var closestDistance = Number.POSITIVE_INFINITY;
+        this.tiles.forEach(function (element) {
+            if (building.IsLocationValid(element.GetTerrain()) && element.IsEmpty()) {
+                if (_this.GetDistanceBetweenTiles(element, commandTile) < closestDistance) {
+                    closestDistance = _this.GetDistanceBetweenTiles(element, commandTile);
+                    closestTile = element;
+                    ret = closestTile.GetLocation();
+                }
+            }
+        });
+        return ret;
+    };
+    // TODO refactor
+    GameState.prototype.GetClosestEmptyLocationToCommandCenter = function (player) {
+        var _this = this;
+        var ret;
+        var commandCenter = this.GetBuildings().filter(function (element) {
+            return element.GetOwner() === player.GetPlayerName() &&
+                element.GetName() === "Command Center";
+        });
+        var commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
+        var closestTile;
+        var closestDistance = Number.POSITIVE_INFINITY;
+        this.tiles.forEach(function (element) {
+            if (element.IsEmpty()) {
+                if (_this.GetDistanceBetweenTiles(element, commandTile) < closestDistance) {
+                    closestDistance = _this.GetDistanceBetweenTiles(element, commandTile);
+                    closestTile = element;
+                    ret = closestTile.GetLocation();
+                }
+            }
+        });
+        return ret;
+    };
+    GameState.prototype.CanAttackTarget = function (attackerObject, targetObject) {
+        var attackerTile = this.GetTileByLocation(attackerObject.GetLocation());
+        var targetTile = this.GetTileByLocation(targetObject.GetLocation());
+        if (attackerObject.GetCanAttack() &&
+            attackerObject.GetOwner() !== targetObject.GetOwner() &&
+            attackerObject.GetRange() >=
+                this.GetDistanceBetweenTiles(attackerTile, targetTile)) {
+            return true;
+        }
+        return false;
+    };
+    GameState.prototype.FindPathBetween = function (startingTile, targetTile) {
+        var openList = new Array();
+        var closedList = new Array();
+        var startingNode = new PathNode(startingTile, null, 0, 0, 0);
+        var endNode;
+        openList.push(startingNode);
+        var _loop_1 = function () {
+            // Find the node with the lowest f value
+            var lowestFValue = Number.POSITIVE_INFINITY;
+            var currentNode;
+            openList.forEach(function (element) {
+                if (element.GetF() < lowestFValue) {
+                    lowestFValue = element.GetF();
+                    currentNode = element;
+                }
+            });
+            // Pop off the node
+            var index = openList.indexOf(currentNode);
+            openList.splice(index, 1);
+            // Generate the 4 successor and set their parents to current
+            var northNode = new PathNode(this_1.GetNeighbourTile(currentNode.GetTile(), DirectionType.North), currentNode, 0, 0, 0);
+            var eastNode = new PathNode(this_1.GetNeighbourTile(currentNode.GetTile(), DirectionType.East), currentNode, 0, 0, 0);
+            var southNode = new PathNode(this_1.GetNeighbourTile(currentNode.GetTile(), DirectionType.South), currentNode, 0, 0, 0);
+            var westNode = new PathNode(this_1.GetNeighbourTile(currentNode.GetTile(), DirectionType.West), currentNode, 0, 0, 0);
+            var successors = [northNode, eastNode, southNode, westNode];
+            // discard the nodes with "null" tiles
+            successors = successors.filter(function (element) { return element.GetTile() !== null; });
+            // discard the non empty nodes
+            successors = successors.filter(function (element) {
+                return element.GetTile().IsEmpty() || element.GetTile() === targetTile;
+            });
+            var _loop_2 = function (i) {
+                var currentSuccessor = successors[i];
+                if (this_1.IsSameLocation(currentSuccessor.GetTile(), targetTile)) {
+                    endNode = currentSuccessor;
+                    openList = [];
+                    return "break";
+                }
+                currentSuccessor.SetG(currentSuccessor.GetParent().GetG() +
+                    this_1.GetDistanceBetweenTiles(currentSuccessor.GetTile(), currentSuccessor.GetParent().GetTile()));
+                currentSuccessor.SetH(this_1.GetDistanceBetweenTiles(currentSuccessor.GetTile(), targetTile));
+                currentSuccessor.SetF(currentSuccessor.GetG() + currentSuccessor.GetH());
+                // if there is a node in the open list which has the same tile
+                // and lower f score then skip this successor
+                if (openList.find(function (element) {
+                    return element.GetTile() === currentSuccessor.GetTile() &&
+                        element.GetF() <= currentSuccessor.GetF();
+                }) !== undefined) {
+                    return "continue";
+                }
+                // if there is a node in the closed list which has the same tile
+                // and lower f score then skip this successor
+                // otherwise add the successor to the openList
+                if (closedList.find(function (element) {
+                    return element.GetTile() === currentSuccessor.GetTile() &&
+                        element.GetF() <= currentSuccessor.GetF();
+                }) !== undefined) {
+                    return "continue";
+                }
+                openList.push(currentSuccessor);
+            };
+            // for each successor
+            for (var i = 0; i < successors.length; i++) {
+                var state_1 = _loop_2(i);
+                if (state_1 === "break")
+                    break;
+            }
+            closedList.push(currentNode);
+        };
+        var this_1 = this;
+        while (openList.length !== 0) {
+            _loop_1();
+        }
+        // return path
+        if (endNode === undefined) {
+            return null;
+        }
+        var path = new Array();
+        var lastNode = endNode;
+        var pathEnded = false;
+        while (!pathEnded) {
+            path.push(lastNode);
+            if (lastNode.GetParent() === null) {
+                pathEnded = true;
+            }
+            lastNode = lastNode.GetParent();
+        }
+        return path.reverse();
+    };
+    return GameState;
+}());
+export default GameState;

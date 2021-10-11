@@ -1,6 +1,6 @@
-const requireOption = require("../../../config/requireOption");
+import requireOption from "../../../config/requireOption.js";
 
-module.exports = function (objectrepository) {
+export default function (objectrepository) {
   const Game = requireOption(objectrepository, "Game");
 
   return function (req, res, next) {
@@ -10,11 +10,11 @@ module.exports = function (objectrepository) {
       currentTurn: 0,
       currentCommandNumber: 0,
       commands: res.locals.simulation.commands,
-      players: res.locals.simulation.startingGameState.players,
-      startingPlayers: res.locals.simulation.startingGameState.players,
-      tiles: res.locals.simulation.startingGameState.tiles,
-      buildings: res.locals.simulation.startingGameState.buildings,
-      units: res.locals.simulation.startingGameState.units,
+      players: res.locals.simulation.startingGameState.GetPlayers(),
+      startingPlayers: res.locals.simulation.startingGameState.GetPlayers(),
+      tiles: res.locals.simulation.startingGameState.GetTiles(),
+      buildings: res.locals.simulation.startingGameState.GetBuildings(),
+      units: res.locals.simulation.startingGameState.GetUnits(),
     });
 
     game.save(function (err, successfulGame) {
@@ -29,4 +29,4 @@ module.exports = function (objectrepository) {
       return next();
     });
   };
-};
+}

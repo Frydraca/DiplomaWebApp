@@ -1,14 +1,17 @@
-module.exports = WorkshopData = {
+const WorkshopData = {
   owner: "",
-  name: "Workshop",
+  objectName: "Workshop",
+  type: "Building",
   buildTime: 3,
   location: [0, 0],
-  possibleTerrain: ["plains"],
+  possibleTerrain: ["Plains"],
   cost: {
+    energy: 0,
     steel: 30,
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   usage: {
     energy: 5,
@@ -16,6 +19,7 @@ module.exports = WorkshopData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   production: {
     energy: 0,
@@ -23,6 +27,7 @@ module.exports = WorkshopData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   hitPoints: 15,
   armor: 5,
@@ -30,3 +35,5 @@ module.exports = WorkshopData = {
   range: 0,
   attackDamage: 0,
 };
+
+export default WorkshopData;

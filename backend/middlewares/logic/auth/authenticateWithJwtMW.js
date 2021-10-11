@@ -1,8 +1,8 @@
-const { accessTokenSecret } = require("../../../config/jwt");
-const jwt = require("jsonwebtoken");
-const url = require("url");
+import { accessTokenSecret } from "../../../config/jwt.js";
+import jwt from "jsonwebtoken";
+import url from "url";
 
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     const authHeader = req.headers.authorization;
 
@@ -30,4 +30,4 @@ module.exports = function () {
       return res.status(401).send("You have no access!");
     }
   };
-};
+}

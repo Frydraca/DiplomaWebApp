@@ -1,14 +1,17 @@
-module.exports = FoundryData = {
+const FoundryData = {
   owner: "",
-  name: "Foundry",
+  objectName: "Foundry",
+  type: "Building",
   buildTime: 3,
   location: [0, 0],
-  possibleTerrain: ["plains"],
+  possibleTerrain: ["Plains"],
   cost: {
+    energy: 0,
     steel: 50,
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   usage: {
     energy: 10,
@@ -16,6 +19,7 @@ module.exports = FoundryData = {
     crystal: 0,
     roboSteel: 0,
     energyCore: 0,
+    credits: 0,
   },
   production: {
     energy: 0,
@@ -23,6 +27,7 @@ module.exports = FoundryData = {
     crystal: 0,
     roboSteel: 5,
     energyCore: 0,
+    credits: 0,
   },
   hitPoints: 30,
   armor: 4,
@@ -30,3 +35,5 @@ module.exports = FoundryData = {
   range: 0,
   attackDamage: 0,
 };
+
+export default FoundryData;

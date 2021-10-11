@@ -1,6 +1,6 @@
-const requireOption = require("../../../config/requireOption");
+import requireOption from "../../../config/requireOption.js";
 
-module.exports = function (objectrepository) {
+export default function (objectrepository) {
   const User = requireOption(objectrepository, "User");
   return function (req, res, next) {
     if (
@@ -19,4 +19,4 @@ module.exports = function (objectrepository) {
       return next();
     });
   };
-};
+}

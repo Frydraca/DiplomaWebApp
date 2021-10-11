@@ -1,4 +1,4 @@
-const db = require("../config/db");
+import db from "../config/db.js";
 
 const GameMap = db.model("GameMap", {
   name: String,
@@ -9,4 +9,4 @@ const GameMap = db.model("GameMap", {
   startingWorkerLocations: {},
 });
 
-module.exports = GameMap;
+export default GameMap;

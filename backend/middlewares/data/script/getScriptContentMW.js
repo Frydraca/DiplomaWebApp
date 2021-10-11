@@ -1,7 +1,7 @@
-const requireOption = require("../../../config/requireOption");
-var Blockly = require("node-blockly");
+import requireOption from "../../../config/requireOption.js";
+//var Blockly = require("node-blockly");
 
-module.exports = function (objectrepository) {
+export default function (objectrepository) {
   const Script = requireOption(objectrepository, "Script");
 
   return function (req, res, next) {
@@ -26,4 +26,4 @@ module.exports = function (objectrepository) {
       return next();
     });
   };
-};
+}

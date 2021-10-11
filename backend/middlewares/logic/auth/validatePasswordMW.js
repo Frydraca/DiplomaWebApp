@@ -1,4 +1,4 @@
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     console.log("Validate Password");
     if (req.body.password !== req.user.password) {
@@ -6,4 +6,4 @@ module.exports = function () {
     }
     return next();
   };
-};
+}

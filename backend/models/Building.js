@@ -1,5 +1,6 @@
-const Schema = require("mongoose").Schema;
-const db = require("../config/db");
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+import db from "../config/db.js";
 
 const Building = db.model("Building", {
   name: String,
@@ -11,4 +12,4 @@ const Building = db.model("Building", {
   attackDamage: Number,
 });
 
-module.exports = Building;
+export default Building;

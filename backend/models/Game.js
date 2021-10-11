@@ -1,5 +1,6 @@
-const Schema = require("mongoose").Schema;
-const db = require("../config/db");
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+import db from "../config/db.js";
 
 // TODO starting... for everything?
 
@@ -14,4 +15,4 @@ const Game = db.model("Game", {
   units: {},
 });
 
-module.exports = Game;
+export default Game;

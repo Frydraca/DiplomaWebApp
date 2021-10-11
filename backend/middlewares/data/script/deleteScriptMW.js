@@ -1,4 +1,4 @@
-module.exports = function () {
+export default function () {
   return function (req, res, next) {
     if (typeof res.locals.script === "undefined") {
       return next();
@@ -12,4 +12,4 @@ module.exports = function () {
       return next();
     });
   };
-};
+}

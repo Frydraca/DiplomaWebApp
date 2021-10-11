@@ -1,72 +1,75 @@
-module.exports = class GameObject {
-  objectId = "";
-  owner = "";
-  name = "";
-  type = "";
-  location = [0, 0];
-  hitPoints = 0;
-  maxHitPoints = 0;
-  armor = 0;
-  canAttack = false;
-  range = 0;
-  attackDamage = 0;
-  constructor(objectData, ownerId) {
-    this.objectId = Date.now() + Math.random();
-    this.owner = JSON.parse(JSON.stringify(ownerId));
-    this.name = JSON.parse(JSON.stringify(objectData.name));
-    this.location = JSON.parse(JSON.stringify(objectData.location));
-    this.hitPoints = JSON.parse(JSON.stringify(objectData.hitPoints));
-    this.maxHitPoints = JSON.parse(JSON.stringify(objectData.hitPoints));
-    this.armor = JSON.parse(JSON.stringify(objectData.armor));
-    this.canAttack = JSON.parse(JSON.stringify(objectData.canAttack));
-    this.range = JSON.parse(JSON.stringify(objectData.range));
-    this.attackDamage = JSON.parse(JSON.stringify(objectData.attackDamage));
-  }
-
-  GetObjectId() {
-    return this.objectId;
-  }
-  GetType() {
-    return this.type;
-  }
-
-  GetOwner() {
-    return this.owner;
-  }
-  GetName() {
-    return this.name;
-  }
-  GetLocation() {
-    return this.location;
-  }
-  SetLocation(location) {
-    this.location = location;
-  }
-  GetHitPoints() {
-    return this.hitPoints;
-  }
-  GetCanAttack() {
-    return this.canAttack;
-  }
-  GetRange() {
-    return this.range;
-  }
-  GetAttackDamage() {
-    return this.attackDamage;
-  }
-  TakeDamage(incomingDamage) {
-    this.hitPoints -= Math.max(incomingDamage - this.armor, 1);
-  }
-  GetDistanceFromObject(gameObject) {
-    return (
-      Math.abs(gameObject.GetLocation()[0] - this.location[0]) +
-      Math.abs(gameObject.GetLocation()[1] - this.location[1])
-    );
-  }
-  InRange(gameObject) {
-    if (this.range >= this.GetDistanceFromObject(gameObject)) {
-      return true;
+var GameObject = /** @class */ (function () {
+    function GameObject(objectData, owner) {
+        this.objectId = Date.now() + Math.random();
+        this.owner = JSON.parse(JSON.stringify(owner));
+        this.name = objectData.GetObjectName();
+        this.type = objectData.GetType();
+        this.location = objectData.GetLocation();
+        this.cost = objectData.GetCost();
+        this.hitPoints = objectData.GetHitPoints();
+        this.maxHitPoints = objectData.GetHitPoints();
+        this.armor = objectData.GetArmor();
+        this.canAttack = objectData.GetCanAttack();
+        this.range = objectData.GetRange();
+        this.attackDamage = objectData.GetAttackDamage();
     }
-    return false;
-  }
-};
+    GameObject.prototype.GetObjectId = function () {
+        return this.objectId;
+    };
+    GameObject.prototype.SetObjectId = function (id) {
+        this.objectId = id;
+    };
+    GameObject.prototype.GetType = function () {
+        return this.type;
+    };
+    GameObject.prototype.GetOwner = function () {
+        return this.owner;
+    };
+    GameObject.prototype.GetName = function () {
+        return this.name;
+    };
+    GameObject.prototype.GetLocation = function () {
+        return this.location;
+    };
+    GameObject.prototype.SetLocation = function (location) {
+        this.location = location;
+    };
+    GameObject.prototype.GetHitPoints = function () {
+        return this.hitPoints;
+    };
+    GameObject.prototype.GetCanAttack = function () {
+        return this.canAttack;
+    };
+    GameObject.prototype.GetRange = function () {
+        return this.range;
+    };
+    GameObject.prototype.GetAttackDamage = function () {
+        return this.attackDamage;
+    };
+    GameObject.prototype.TakeDamage = function (incomingDamage) {
+        var damageTaken = Math.max(incomingDamage - this.armor, 1);
+        this.hitPoints -= damageTaken;
+        return damageTaken;
+    };
+    GameObject.prototype.GetDistanceFromObject = function (gameObject) {
+        return (Math.abs(gameObject.GetLocation().GetX() - this.location.GetX()) +
+            Math.abs(gameObject.GetLocation().GetY() - this.location.GetY()));
+    };
+    GameObject.prototype.InRange = function (gameObject) {
+        if (this.range >= this.GetDistanceFromObject(gameObject)) {
+            return true;
+        }
+        return false;
+    };
+    GameObject.prototype.UpgradeArmor = function (value) {
+        this.armor += value;
+    };
+    GameObject.prototype.UpgradeAttackDamage = function (value) {
+        this.attackDamage += value;
+    };
+    GameObject.prototype.UpgradeHitPoints = function (value) {
+        this.hitPoints += value;
+    };
+    return GameObject;
+}());
+export default GameObject;
