@@ -3,6 +3,7 @@ import { SidebarData } from "./SidebarData";
 import SidebarRow from "./SidebarRow";
 import ScriptSelector from "./ScriptSelector";
 import TurnIncrementSelector from "./TurnIncrementSelector";
+import SidebarHover from "./SidebarHover";
 
 function Sidebar(props) {
   const {
@@ -18,6 +19,7 @@ function Sidebar(props) {
   const ownScriptData = props.ownScriptData;
   const enemyScriptData = props.enemyScriptData;
   const turnIncrementData = props.turnIncrementData;
+  const hoveredObject = props.hoveredObject;
 
   function RowOnCLick(func) {
     switch (func) {
@@ -62,6 +64,8 @@ function Sidebar(props) {
       </div>
       <div className="SidebarLine"></div>
       <TurnIncrementSelector data={turnIncrementData}></TurnIncrementSelector>
+      <div className="UpgradeBarLineThick"></div>
+      <SidebarHover data={hoveredObject}></SidebarHover>
     </div>
   );
 }

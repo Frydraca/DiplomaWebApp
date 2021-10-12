@@ -8,7 +8,7 @@ function UpgradeBar(props) {
   let players = props.players;
   return (
     <div className="UpgradeBar">
-      <div className="UpgradePlayer">{players[0].playerId}</div>
+      <div className="UpgradePlayer">{players[0].playerName}</div>
       <div className="UpgradeBarLine"></div>
       <ul className="UpgradeBarList">
         {Object.entries(players[0].upgradeList).map((value, key) => {
@@ -34,7 +34,7 @@ function UpgradeBar(props) {
           );
         })}
         <div className="UpgradeBarLineThick"></div>
-        <div className="UpgradePlayer">{players[1].playerId}</div>
+        <div className="UpgradePlayer">{players[1].playerName}</div>
         <div className="UpgradeBarLine"></div>
         {Object.entries(players[1].upgradeList).map((value, key) => {
           return (

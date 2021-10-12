@@ -65,13 +65,13 @@ body {
   background-color: #293846;
 }
 
-.row #icon {
+.SidebarList .row #icon {
   flex: 30%;
   display: grid;
   place-items: center;
 }
 
-.row #title {
+.SidebarList .row #title {
   flex: 70%;
 }
 
@@ -91,6 +91,35 @@ body {
   height: auto;
   width: 100%;
   padding: 0;
+}
+
+.SidebarHover {
+  color: white;
+  justify-content: center;
+  align-items: center;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.SidebarHover .row #icon {
+  height: 35px;
+  flex: 30%;
+  display: grid;
+  place-items: center;
+}
+
+.SidebarHover .row #stat {
+  height: 35px;
+  flex: 45%;
+  display: grid;
+  place-items: center;
+}
+
+.SidebarHover .row #data {
+  height: 35px;
+  flex: 25%;
+  display: grid;
+  place-items: center;
 }
 
 .UpgradeBar {

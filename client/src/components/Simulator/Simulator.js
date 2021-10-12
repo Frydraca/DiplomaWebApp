@@ -18,12 +18,22 @@ import BuildingImages from "./buildings";
 import UnitImages from "./units";
 import UpgradeBar from "./UpgradeBar/UpgradeBar";
 import { setSimulationState } from "../../store/SimulationState";
+import useMousePosition from "./useMousePosition";
+import HoverTip from "./HoverTip/HoverTip";
 
 function SimulatorScreen() {
   var { id } = useParams();
   const dispatch = useDispatch();
 
   const simulationState = useSelector((state) => state.simulationState);
+
+  const [ref, mousePosition] = useMousePosition();
+
+  useEffect(() => {
+    // do something with the mouse position values here
+    // console.log(mousePosition);
+    getHoveredObject();
+  }, [mousePosition]);
 
   useEffect(() => {
     dispatch(initializeScreen());
@@ -66,6 +76,22 @@ function SimulatorScreen() {
   );
   const [turnIncrementValue, setTurnIncrementValue] = useState(1);
 
+  const [canvasLeft, setCanvasLeft] = useState(1);
+  const [canvasTop, setCanvasTop] = useState(1);
+  const [canvasInit, setCanvasInit] = useState(true);
+  const [hoveredObject, setHoveredObject] = useState({
+    objectName: "Object",
+    owner: "No one",
+    stats: {
+      attack: 0,
+      armor: 0,
+      hp: 0,
+      maxHp: 0,
+      speed: 0,
+      range: 0,
+    },
+  });
+
   const selectOwnScriptCallback = useCallback((script) =>
     selectOwnScript(script)
   );
@@ -83,6 +109,14 @@ function SimulatorScreen() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
+
+    if (canvasInit) {
+      var canvasRect = ctx.canvas.getBoundingClientRect();
+      setCanvasTop(canvasRect.top);
+      setCanvasLeft(canvasRect.left);
+      setCanvasInit(false);
+    }
+
     if (currentGameState !== undefined) {
       let tiles = currentGameState.tiles;
       tiles.forEach((element) => {
@@ -179,6 +213,19 @@ function SimulatorScreen() {
           0.6 * cellSize
         );
       });
+      if (canvasRect !== undefined) {
+        ctx.beginPath();
+        ctx.rect(
+          Math.floor((mousePosition.left - canvasRect.left) / cellSize) *
+            cellSize,
+          Math.floor((mousePosition.top - canvasRect.top) / cellSize) *
+            cellSize,
+          cellSize,
+          cellSize
+        );
+        ctx.fillStyle = "blue";
+        ctx.fill();
+      }
     }
   };
 
@@ -218,6 +265,7 @@ function SimulatorScreen() {
           enemyScript: enemyScriptId,
         })
       );
+      setCanvasInit(true);
     }
   }
   function start() {
@@ -228,6 +276,7 @@ function SimulatorScreen() {
         })
       );
     }
+    setCanvasInit(true);
   }
   function stop() {
     if (simulationState !== "Not started yet") {
@@ -272,6 +321,50 @@ function SimulatorScreen() {
     setEnemyScriptId(script._id);
   }
 
+  function getHoveredObject() {
+    if (currentGameState !== undefined) {
+      var coordX = Math.floor((mousePosition.left - canvasLeft) / 40) - 1;
+      var coordY = Math.floor((mousePosition.top - canvasTop) / 40) - 1;
+      console.log("ccordX: " + coordX);
+      console.log("ccordY: " + coordY);
+
+      let buildings = currentGameState.buildings;
+      buildings.forEach((element) => {
+        if (element.location.x === coordX && element.location.y === coordY) {
+          setHoveredObject({
+            objectName: element.name,
+            owner: element.owner,
+            stats: {
+              attack: element.attackDamage,
+              armor: element.armor,
+              hp: element.hitPoints,
+              maxHp: element.maxHitPoints,
+              speed: 0,
+              range: element.range,
+            },
+          });
+        }
+      });
+      let units = currentGameState.units;
+      units.forEach((element) => {
+        if (element.location.x === coordX && element.location.y === coordY) {
+          setHoveredObject({
+            objectName: element.name,
+            owner: element.owner,
+            stats: {
+              attack: element.attackDamage,
+              armor: element.armor,
+              hp: element.hitPoints,
+              maxHp: element.maxHitPoints,
+              speed: element.speed,
+              range: element.range,
+            },
+          });
+        }
+      });
+    }
+  }
+
   const turnIncrementList = [1, 2, 3, 5, 10];
 
   const UIFunctionCallbacks = {
@@ -303,7 +396,7 @@ function SimulatorScreen() {
   };
 
   return (
-    <div className="SimulatorScreen">
+    <div className="SimulatorScreen" ref={ref}>
       <div id="side">
         {userScriptList !== undefined && allScriptList !== undefined ? (
           <>
@@ -312,6 +405,7 @@ function SimulatorScreen() {
               ownScriptData={ownScriptData}
               enemyScriptData={enemyScriptData}
               turnIncrementData={turnIncrementData}
+              hoveredObject={hoveredObject}
             ></Sidebar>
           </>
         ) : (
