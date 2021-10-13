@@ -18,13 +18,15 @@ export const resource = {
               ["Robosteel", "RoboSteel"],
               ["Crystal", "Crystal"],
               ["Energy Core", "EnergyCore"],
-              ["Credit", "Credit"],
+              ["Credits", "Credits"],
             ],
           },
         ],
         output: ["GameObject", "Resource"],
         colour: 180,
-        tooltip: "",
+        tooltip:
+          "Resource types of the game. Use as type input.\n" +
+          "Output: Resource",
         helpUrl: "",
       });
     },

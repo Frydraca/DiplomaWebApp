@@ -21,10 +21,15 @@ export const orBlock = {
             name: "ConditionB",
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: "Trigger",
+        nextStatement: "Trigger",
         colour: 230,
-        tooltip: "",
+        tooltip:
+          "Combine two trigger conditions in an OR relation.\n" +
+          "Mandatory input: At least one Trigger for each input field\n" +
+          "Previous Statement: Trigger\n" +
+          "Next Statement: Trigger or nothing\n" +
+          "Statement type: Trigger",
         helpUrl: "",
       });
     },
@@ -39,7 +44,8 @@ export const orBlock = {
       "ConditionB"
     );
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code =
+      "(" + statements_conditiona + ") || (" + statements_conditionb + ")";
     return code;
   },
 };

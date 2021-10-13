@@ -25,7 +25,11 @@ export const group = {
         ],
         output: "Group",
         colour: 180,
-        tooltip: "",
+        tooltip:
+          "Block to construct groups of Buildings or Units. Must specify the group type with the dropdown options. Building and Unit group elements can not be mixed.\n" +
+          "Mandatory Input: At least one GroupElement statement.\n" +
+          "Output: Group\n" +
+          "Statement type: Group",
         helpUrl: "",
       });
     },
@@ -34,9 +38,6 @@ export const group = {
     var dropdown_grouptype = block.getFieldValue("GroupType");
     var statements_group = Blockly.JavaScript.statementToCode(block, "Group");
 
-    // if (len(statements_group) > 1) {
-    //   delimiter = ",";
-    // }
     // TODO: Assemble JavaScript into code variable.
     var code =
       'this.Group("' + dropdown_grouptype + '"' + statements_group + ")";

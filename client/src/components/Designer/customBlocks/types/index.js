@@ -3,7 +3,17 @@ import resource from "./resource";
 import unit from "./unit";
 import group from "./group";
 import groupElement from "./groupElement";
+import { upgrade } from "./upgrade";
+import { unitUpgrade } from "./unitUpgrade";
 
-export const types = [building, resource, unit, group, groupElement];
+export const types = [
+  group,
+  groupElement,
+  building,
+  resource,
+  unit,
+  upgrade,
+  unitUpgrade,
+];
 
 export default types;

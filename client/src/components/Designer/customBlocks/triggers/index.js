@@ -3,15 +3,14 @@ import enemyAttackedBuilding from "./enemyAttackedBuilding";
 import enemyAttacked from "./enemyAttacked";
 import enemyUnit from "./enemyUnit";
 import enemyUnitPercentage from "./enemyUnitPercentage";
-import hasLessThan from "./hasLessThan";
+import haveComparator from "./haveComparator";
 import haveSomething from "./haveSomething";
 
 export const triggers = [
   orBlock,
   haveSomething,
-  hasLessThan,
+  haveComparator,
   enemyAttacked,
-  enemyAttackedBuilding,
   enemyUnit,
   enemyUnitPercentage,
 ];

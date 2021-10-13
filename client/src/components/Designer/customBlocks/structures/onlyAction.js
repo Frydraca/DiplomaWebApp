@@ -12,12 +12,23 @@ export const onlyAction = {
           {
             type: "input_statement",
             name: "Action",
+            check: ["Action", "CombatGroup"],
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: [
+          "MainBlock",
+          "ActionBlock",
+          "ResearchBlock",
+          "TradeBlock",
+        ],
+        nextStatement: ["ActionBlock"],
         colour: 20,
-        tooltip: "",
+        tooltip:
+          "Block to add Actions to the script.\n" +
+          "Mandatory Input: At least one Action or CombatGroup statement.\n" +
+          "Previous Connection: MainBlock, ActionBlock, ResearchBlock, TradeBlock\n" +
+          "Next Connection: ActionBlock or nothing\n" +
+          "Statement type: ActionBlock",
         helpUrl: "",
       });
     },

@@ -24,7 +24,12 @@ export const groupElement = {
         previousStatement: ["Group", "GroupElement"],
         nextStatement: "GroupElement",
         colour: 180,
-        tooltip: "",
+        tooltip:
+          "Block to specify the number of objects in a given type. Use for constructing groups.  Amount number is non-negative only.\n" +
+          "Mandatory Input: Building or Unit.\n" +
+          "Previous Statement: Group or GroupElement\n" +
+          "Next Statement: GroupElement or nothing\n" +
+          "Statement type: GroupElement",
         helpUrl: "",
       });
     },

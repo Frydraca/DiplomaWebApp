@@ -36,10 +36,14 @@ export const retreatTactic = {
             max: 100,
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: "Tactic",
+        nextStatement: "Tactic",
         colour: 0,
-        tooltip: "",
+        tooltip:
+          "Define a retreat combat tactic. Use for combat groups.\n" +
+          "Previous Statement: Tactic\n" +
+          "Next Statement: Tactic or nothing\n" +
+          "Statement type: Tactic",
         helpUrl: "",
       });
     },

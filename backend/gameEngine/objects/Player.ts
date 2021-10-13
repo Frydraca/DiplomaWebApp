@@ -8,39 +8,59 @@ export default class Player {
   private resources: Resources;
   private upgradeList: UpgradeList;
   private battleGroups: BattleGroup[];
+  private wasAttacked: boolean;
+  private wasAttackedLastTurn: boolean;
 
   constructor(playerData: PlayerData) {
     this.playerName = playerData.GetPlayerName();
     this.resources = playerData.GetResources();
     this.upgradeList = new UpgradeList();
     this.battleGroups = new Array<BattleGroup>();
+    this.wasAttacked = false;
+    this.wasAttackedLastTurn = false;
   }
 
-  GetPlayerName(): string {
+  public GetPlayerName(): string {
     return this.playerName;
   }
 
-  GetResources(): Resources {
+  public GetResources(): Resources {
     return this.resources;
   }
 
-  SetResources(resources: Resources) {
+  public SetResources(resources: Resources) {
     this.resources.Init(resources);
   }
 
-  GetUpgradeList(): UpgradeList {
+  public GetUpgradeList(): UpgradeList {
     return this.upgradeList;
   }
 
-  SetUpgradeList(upgradeList: UpgradeList): void {
+  public SetUpgradeList(upgradeList: UpgradeList): void {
     this.upgradeList = upgradeList;
   }
 
-  GetBattleGroups(): BattleGroup[] {
+  public GetWasAttacked(): boolean {
+    return this.wasAttacked;
+  }
+
+  public SetWasAttacked(state: boolean): void {
+    this.wasAttacked = state;
+  }
+
+  public GetWasAttackedLastTurn(): boolean {
+    return this.wasAttackedLastTurn;
+  }
+
+  public SetWasAttackedLastTurn(state: boolean): void {
+    this.wasAttackedLastTurn = state;
+  }
+
+  public GetBattleGroups(): BattleGroup[] {
     return this.battleGroups;
   }
 
-  AddBattleGroup(newBattleGroup: BattleGroup): void {
+  public AddBattleGroup(newBattleGroup: BattleGroup): void {
     this.battleGroups.push(newBattleGroup);
   }
 }

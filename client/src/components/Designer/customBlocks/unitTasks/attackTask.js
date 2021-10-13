@@ -8,9 +8,9 @@ export const attackTask = {
       this.jsonInit({
         type: "attacktask",
         message0: "Attack",
-        output: "Task",
+        output: "UnitTask",
         colour: 60,
-        tooltip: "",
+        tooltip: "Attack unit task. Use as type input.\n" + "Output: UnitTask",
         helpUrl: "",
       });
     },

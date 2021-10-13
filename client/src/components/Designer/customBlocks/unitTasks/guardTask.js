@@ -15,9 +15,9 @@ export const guardTask = {
             check: "Building",
           },
         ],
-        output: "Task",
+        output: "UnitTask",
         colour: 60,
-        tooltip: "",
+        tooltip: "Guard unit task. Use as type input.\n" + "Output: UnitTask",
         helpUrl: "",
       });
     },

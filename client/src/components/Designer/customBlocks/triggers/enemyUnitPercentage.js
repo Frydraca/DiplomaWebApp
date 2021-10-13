@@ -22,10 +22,15 @@ export const enemyUnitPercentage = {
             max: 100,
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: "Trigger",
+        nextStatement: "Trigger",
         colour: 230,
-        tooltip: "",
+        tooltip:
+          "Gets the percentage of a given unit in the enemy's army, and returns true if its equal to or over the given number. the given number must be between 0 and 100.\n" +
+          "Mandatory input: Unit\n" +
+          "Previous Statement: Trigger\n" +
+          "Next Statement: Trigger or nothing\n" +
+          "Statement type: Trigger",
         helpUrl: "",
       });
     },
@@ -38,7 +43,11 @@ export const enemyUnitPercentage = {
     );
     var number_percentage = block.getFieldValue("percentage");
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code =
+      "this.GetPercentageOfOwn(" +
+      value_unit +
+      ", enemyId) >= " +
+      number_percentage;
     return code;
   },
 };

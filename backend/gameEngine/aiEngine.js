@@ -35,8 +35,10 @@ var AiEngine = /** @class */ (function () {
         this.sScript = "";
         this.players = playerIds;
         this.game = new GameEngine(new GameMap(startingGameState));
-        this.pScript = playerScript.replace(/playerId/g, "this.players[0]");
-        this.sScript = serverScript.replace(/playerId/g, "this.players[1]");
+        playerScript = playerScript.replace(/playerId/g, "this.players[0]");
+        this.pScript = playerScript.replace(/enemyId/g, "this.players[1]");
+        serverScript = serverScript.replace(/playerId/g, "this.players[1]");
+        this.sScript = serverScript.replace(/enemyId/g, "this.players[0]");
         this.prices = new PricesData();
         this.upgradeCostData = new UpgradeCostCollectionData();
     }
@@ -163,6 +165,26 @@ var AiEngine = /** @class */ (function () {
     AiEngine.prototype.GetNumberOfOwn = function (objectName, playerName) {
         var object = this.MakeObjectFromType(objectName, playerName);
         return this.game.GetNumberOfGameObjectByPlayerName(object, playerName);
+    };
+    AiEngine.prototype.GetPercentageOfOwn = function (objectName, playerName) {
+        var object = this.MakeObjectFromType(objectName, playerName);
+        return this.game.GetPercentageOfUnitByPlayer(object, playerName);
+    };
+    AiEngine.prototype.Have = function (playerName, objectName, upgradeType) {
+        if (upgradeType === undefined) {
+            if (this.GetNumberOfOwn(objectName, playerName) > 0)
+                return true;
+            else
+                return false;
+        }
+        var player = this.game.GetGameState().GetPlayerByName(playerName);
+        return player
+            .GetUpgradeList()
+            .GetUpgradesForType(objectName)
+            .GetUpgrade(upgradeType);
+    };
+    AiEngine.prototype.PlayerWasAttacked = function (playerName) {
+        return this.game.CheckIfPlayerWasAttacked(playerName);
     };
     AiEngine.prototype.Trading = function (playerName) {
         var tradeRules = [];

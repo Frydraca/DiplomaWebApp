@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Button, Col, Container, Dropdown, Row, Table } from "react-bootstrap";
+import { Col, Container, Row, Table } from "react-bootstrap";
 import Canvas from "../tools/Canvas";
 import { initializeScreen } from "../../api/Authentication";
 import { loadScripts, loadMyScripts } from "../../api/Profile";
@@ -19,7 +19,6 @@ import UnitImages from "./units";
 import UpgradeBar from "./UpgradeBar/UpgradeBar";
 import { setSimulationState } from "../../store/SimulationState";
 import useMousePosition from "./useMousePosition";
-import HoverTip from "./HoverTip/HoverTip";
 
 function SimulatorScreen() {
   var { id } = useParams();
@@ -110,12 +109,12 @@ function SimulatorScreen() {
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
 
-    if (canvasInit) {
-      var canvasRect = ctx.canvas.getBoundingClientRect();
-      setCanvasTop(canvasRect.top);
-      setCanvasLeft(canvasRect.left);
-      setCanvasInit(false);
-    }
+    // if (canvasInit) {
+    //   var canvasRect = ctx.canvas.getBoundingClientRect();
+    //   setCanvasTop(canvasRect.top);
+    //   setCanvasLeft(canvasRect.left);
+    //   setCanvasInit(false);
+    // }
 
     if (currentGameState !== undefined) {
       let tiles = currentGameState.tiles;
@@ -213,19 +212,6 @@ function SimulatorScreen() {
           0.6 * cellSize
         );
       });
-      if (canvasRect !== undefined) {
-        ctx.beginPath();
-        ctx.rect(
-          Math.floor((mousePosition.left - canvasRect.left) / cellSize) *
-            cellSize,
-          Math.floor((mousePosition.top - canvasRect.top) / cellSize) *
-            cellSize,
-          cellSize,
-          cellSize
-        );
-        ctx.fillStyle = "blue";
-        ctx.fill();
-      }
     }
   };
 
@@ -325,8 +311,6 @@ function SimulatorScreen() {
     if (currentGameState !== undefined) {
       var coordX = Math.floor((mousePosition.left - canvasLeft) / 40) - 1;
       var coordY = Math.floor((mousePosition.top - canvasTop) / 40) - 1;
-      console.log("ccordX: " + coordX);
-      console.log("ccordY: " + coordY);
 
       let buildings = currentGameState.buildings;
       buildings.forEach((element) => {

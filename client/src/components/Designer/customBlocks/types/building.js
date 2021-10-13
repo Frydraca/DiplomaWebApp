@@ -24,9 +24,10 @@ export const building = {
             ],
           },
         ],
-        output: ["GameObject", "Building"],
+        output: "Building",
         colour: 180,
-        tooltip: "",
+        tooltip:
+          "Building types of the game. Use as type input.\nOutput: Building",
         helpUrl: "",
       });
     },

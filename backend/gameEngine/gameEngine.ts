@@ -68,6 +68,8 @@ export default class GameEngine {
     });
 
     this.gameState.GetPlayers().forEach((player: Player) => {
+      player.SetWasAttackedLastTurn(player.GetWasAttacked());
+      player.SetWasAttacked(false);
       let battleGroups = player.GetBattleGroups();
       battleGroups.forEach((group: BattleGroup) => {
         group.CheckUnits();
@@ -144,6 +146,7 @@ export default class GameEngine {
   }
 
   public DamageObject(object: GameObject, damage: number): boolean {
+    this.gameState.GetPlayerByName(object.GetOwner()).SetWasAttacked(true);
     return true;
   }
 
@@ -301,23 +304,25 @@ export default class GameEngine {
           element.GetOwner() === playerName &&
           element.GetName() === ObjectName.CommandCenter
       )[0];
-    this.gameState.GetUnits().forEach((unit) => {
-      if (playerName !== unit.GetOwner()) {
-        if (unit.GetDistanceFromObject(commandCenter) <= range) {
-          enemiesInRange.push(unit);
+    if (commandCenter !== undefined) {
+      this.gameState.GetUnits().forEach((unit) => {
+        if (playerName !== unit.GetOwner()) {
+          if (unit.GetDistanceFromObject(commandCenter) <= range) {
+            enemiesInRange.push(unit);
+          }
         }
-      }
-    });
-    this.gameState.GetBuildings().forEach((building) => {
-      if (
-        playerName !== building.GetOwner() &&
-        building.GetOwner() !== "gaia"
-      ) {
-        if (building.GetDistanceFromObject(commandCenter) <= range) {
-          enemiesInRange.push(building);
+      });
+      this.gameState.GetBuildings().forEach((building) => {
+        if (
+          playerName !== building.GetOwner() &&
+          building.GetOwner() !== "gaia"
+        ) {
+          if (building.GetDistanceFromObject(commandCenter) <= range) {
+            enemiesInRange.push(building);
+          }
         }
-      }
-    });
+      });
+    }
     return enemiesInRange;
   }
 
@@ -488,6 +493,10 @@ export default class GameEngine {
     return number;
   }
 
+  public CheckIfPlayerWasAttacked(playerName: string): boolean {
+    return this.gameState.GetPlayerByName(playerName).GetWasAttackedLastTurn();
+  }
+
   public GetClosestEnemy(gameObject: GameObject) {
     let playerName = gameObject.GetOwner();
     let closestEnemy: GameObject;
@@ -542,6 +551,27 @@ export default class GameEngine {
     });
 
     return count;
+  }
+
+  public GetPercentageOfUnitByPlayer(
+    gameObject: GameObject,
+    playerName: string
+  ): number {
+    let count = 0;
+    let totalCount = 0;
+
+    this.gameState.GetUnits().forEach((unit) => {
+      if (
+        unit.GetName() === gameObject.GetName() &&
+        unit.GetOwner() === playerName
+      ) {
+        count++;
+      }
+      if (unit.GetOwner() === playerName) totalCount++;
+    });
+    if (totalCount === 0) return 0;
+
+    return (count / totalCount) * 100;
   }
 
   public DoesEnemyHasUnits(playerName: string): boolean {

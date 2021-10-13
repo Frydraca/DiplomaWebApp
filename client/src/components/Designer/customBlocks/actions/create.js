@@ -12,19 +12,24 @@ export const create = {
           {
             type: "field_number",
             name: "Number",
-            value: 0,
-            min: 0,
+            value: 1,
+            min: 1,
           },
           {
             type: "input_value",
             name: "UnitToCreate",
-            check: ["Unit", "UnitGroup"],
+            check: "Unit",
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: "Action",
+        nextStatement: "Action",
         colour: 290,
-        tooltip: "",
+        tooltip:
+          "Action to create a unit the given times. The quantity value must be positive.\n" +
+          "Mandatory Input: Unit\n" +
+          "Previous Statement: Action\n" +
+          "Next Statement: Action or nothing\n" +
+          "Statement type: Action",
         helpUrl: "",
       });
     },

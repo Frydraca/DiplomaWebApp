@@ -17,18 +17,28 @@ export const ifElse = {
           {
             type: "input_statement",
             name: "TrueAction",
-            check: "Action",
+            check: ["Action", "CombatGroup"],
           },
           {
             type: "input_statement",
             name: "FalseAction",
-            check: "Action",
+            check: ["Action", "CombatGroup"],
           },
         ],
-        previousStatement: "Structure",
-        nextStatement: "Structure",
+        previousStatement: [
+          "MainBlock",
+          "ActionBlock",
+          "ResearchBlock",
+          "TradeBlock",
+        ],
+        nextStatement: "ActionBlock",
         colour: 20,
-        tooltip: "",
+        tooltip:
+          "Block to add Actions with Triggers to the script with an if-else fork. If the trigger condition is true, then the action(s) in the true branch will run, if the condition is false, then the action(s) in the false branch will run.\n" +
+          "Mandatory Input: At least one Trigger and one Action or CombatGroup statement.\n" +
+          "Previous Statement: MainBlock or ActionBlock\n" +
+          "Next Statement: ActionBlock or nothing\n" +
+          "Statement type: ActionBlock",
         helpUrl: "",
         //mutator: "controls_if_mutator",
       });

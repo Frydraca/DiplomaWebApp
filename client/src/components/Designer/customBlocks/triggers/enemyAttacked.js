@@ -6,17 +6,20 @@ export const enemyAttacked = {
       this.jsonInit({
         type: "trigger_enemy_attacked",
         message0: "Enemy attacked",
-        previousStatement: ["Structure", "Trigger"],
+        previousStatement: "Trigger",
         nextStatement: "Trigger",
         colour: 230,
-        tooltip: "",
+        tooltip:
+          "Returns true, if the player was atatcked last turn.\n" +
+          "Previous Statement: Trigger\n" +
+          "Next Statement: Trigger or nothing\n" +
+          "Statement type: Trigger",
         helpUrl: "",
       });
     },
   },
   generator: (block) => {
-    // TODO: Assemble JavaScript into code variable.
-    var code = "EnemyAttacked()";
+    var code = "this.PlayerWasAttacked(playerId)";
     return code;
   },
 };

@@ -15,10 +15,15 @@ export const buildUpto = {
             check: "Group",
           },
         ],
-        previousStatement: ["Block", "Action"],
-        nextStatement: ["Block", "Action"],
+        previousStatement: ["Action"],
+        nextStatement: ["Action"],
         colour: 290,
-        tooltip: "",
+        tooltip:
+          "Block to specify the order of building Buildings.\n" +
+          "Mandatory Input: Group (with Building option selected)\n" +
+          "Previous Statement: Action\n" +
+          "Next Statement: Action or nothing\n" +
+          "Statement type: Action",
         helpUrl: "",
       });
     },

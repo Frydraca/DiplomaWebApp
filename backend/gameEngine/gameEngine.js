@@ -42,6 +42,8 @@ var GameEngine = /** @class */ (function () {
             unit.SetHasAction(true);
         });
         this.gameState.GetPlayers().forEach(function (player) {
+            player.SetWasAttackedLastTurn(player.GetWasAttacked());
+            player.SetWasAttacked(false);
             var battleGroups = player.GetBattleGroups();
             battleGroups.forEach(function (group) {
                 group.CheckUnits();
@@ -93,6 +95,7 @@ var GameEngine = /** @class */ (function () {
         return true;
     };
     GameEngine.prototype.DamageObject = function (object, damage) {
+        this.gameState.GetPlayerByName(object.GetOwner()).SetWasAttacked(true);
         return true;
     };
     GameEngine.prototype.ModifyResource = function (playerName, resource, amount) {
@@ -222,21 +225,23 @@ var GameEngine = /** @class */ (function () {
             return element.GetOwner() === playerName &&
                 element.GetName() === ObjectName.CommandCenter;
         })[0];
-        this.gameState.GetUnits().forEach(function (unit) {
-            if (playerName !== unit.GetOwner()) {
-                if (unit.GetDistanceFromObject(commandCenter) <= range) {
-                    enemiesInRange.push(unit);
+        if (commandCenter !== undefined) {
+            this.gameState.GetUnits().forEach(function (unit) {
+                if (playerName !== unit.GetOwner()) {
+                    if (unit.GetDistanceFromObject(commandCenter) <= range) {
+                        enemiesInRange.push(unit);
+                    }
                 }
-            }
-        });
-        this.gameState.GetBuildings().forEach(function (building) {
-            if (playerName !== building.GetOwner() &&
-                building.GetOwner() !== "gaia") {
-                if (building.GetDistanceFromObject(commandCenter) <= range) {
-                    enemiesInRange.push(building);
+            });
+            this.gameState.GetBuildings().forEach(function (building) {
+                if (playerName !== building.GetOwner() &&
+                    building.GetOwner() !== "gaia") {
+                    if (building.GetDistanceFromObject(commandCenter) <= range) {
+                        enemiesInRange.push(building);
+                    }
                 }
-            }
-        });
+            });
+        }
         return enemiesInRange;
     };
     GameEngine.prototype.Build = function (building) {
@@ -370,6 +375,9 @@ var GameEngine = /** @class */ (function () {
         });
         return number;
     };
+    GameEngine.prototype.CheckIfPlayerWasAttacked = function (playerName) {
+        return this.gameState.GetPlayerByName(playerName).GetWasAttackedLastTurn();
+    };
     GameEngine.prototype.GetClosestEnemy = function (gameObject) {
         var playerName = gameObject.GetOwner();
         var closestEnemy;
@@ -410,6 +418,21 @@ var GameEngine = /** @class */ (function () {
             }
         });
         return count;
+    };
+    GameEngine.prototype.GetPercentageOfUnitByPlayer = function (gameObject, playerName) {
+        var count = 0;
+        var totalCount = 0;
+        this.gameState.GetUnits().forEach(function (unit) {
+            if (unit.GetName() === gameObject.GetName() &&
+                unit.GetOwner() === playerName) {
+                count++;
+            }
+            if (unit.GetOwner() === playerName)
+                totalCount++;
+        });
+        if (totalCount === 0)
+            return 0;
+        return (count / totalCount) * 100;
     };
     GameEngine.prototype.DoesEnemyHasUnits = function (playerName) {
         var enemyHasUnit = false;

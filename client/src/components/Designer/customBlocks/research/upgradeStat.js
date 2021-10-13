@@ -25,10 +25,15 @@ export const upgradeStat = {
             check: "Unit",
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: "ResearchTask",
+        nextStatement: "ResearchTask",
         colour: 120,
-        tooltip: "",
+        tooltip:
+          "Research to upgrade a given unit selected stats.\n" +
+          "Mandatory Input: Unit\n" +
+          "Previous Connection: ResearchTask\n" +
+          "Next Connection: ResearchTask or nothing\n" +
+          "Statement type: ResearchTask",
         helpUrl: "",
       });
     },

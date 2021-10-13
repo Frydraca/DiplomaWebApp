@@ -12,12 +12,23 @@ export const tradingBlock = {
           {
             type: "input_statement",
             name: "trading",
+            check: "TradeTask",
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: [
+          "MainBlock",
+          "ActionBlock",
+          "ResearchBlock",
+          "TradeBlock",
+        ],
+        nextStatement: "TradeBlock",
         colour: 330,
-        tooltip: "",
+        tooltip:
+          "Block to add Trading tasks to the script.\n" +
+          "Mandatory Input: None\n" +
+          "Previous Connection: MainBlock, ActionBlock, ResearchBlock, TradeBlock\n" +
+          "Next Connection: TradeBlock or nothing\n" +
+          "Statement type: TradeBlock",
         helpUrl: "",
       });
     },

@@ -12,8 +12,8 @@ export const build = {
           {
             type: "field_number",
             name: "Number",
-            value: 0,
-            min: 0,
+            value: 1,
+            min: 1,
           },
           {
             type: "input_value",
@@ -21,10 +21,15 @@ export const build = {
             check: "Building",
           },
         ],
-        previousStatement: ["Block", "Action"],
+        previousStatement: "Action",
         nextStatement: "Action",
         colour: 290,
-        tooltip: "",
+        tooltip:
+          "Action to build a building the given times. The quantity value must be positive.\n" +
+          "Mandatory Input: Building\n" +
+          "Previous Statement: Action\n" +
+          "Next Statement: Action or nothing\n" +
+          "Statement type: Action",
         helpUrl: "",
       });
     },

@@ -20,9 +20,9 @@ export const unit = {
             ],
           },
         ],
-        output: ["GameObject", "Unit"],
+        output: "Unit",
         colour: 180,
-        tooltip: "",
+        tooltip: "Unit types of the game. Use as type input.\nOutput: Unit",
         helpUrl: "",
       });
     },

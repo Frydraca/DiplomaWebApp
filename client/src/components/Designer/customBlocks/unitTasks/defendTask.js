@@ -8,9 +8,9 @@ export const defendTask = {
       this.jsonInit({
         type: "defendtask",
         message0: "Defend",
-        output: "Task",
+        output: "UnitTask",
         colour: 60,
-        tooltip: "",
+        tooltip: "Defend unit task. Use as type input.\n" + "Output: UnitTask",
         helpUrl: "",
       });
     },

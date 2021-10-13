@@ -37,10 +37,15 @@ export const trading = {
             min: 0,
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: "TradeTask",
+        nextStatement: "TradeTask",
         colour: 330,
-        tooltip: "",
+        tooltip:
+          "Sell or Buy resources to have the specified amount. The specified amount must be non-negative.\n" +
+          "Mandatory Input: Resource\n" +
+          "Previous Connection: TradeTask\n" +
+          "Next Connection: TradeTask or nothing\n" +
+          "Statement type: TradeTask",
         helpUrl: "",
       });
     },

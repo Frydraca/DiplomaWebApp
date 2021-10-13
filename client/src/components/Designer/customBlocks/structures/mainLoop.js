@@ -12,11 +12,15 @@ export const mainLoop = {
           {
             type: "input_statement",
             name: "Block",
+            check: "MainBlock",
           },
         ],
-        previousStatement: null,
         colour: 20,
-        tooltip: "",
+        tooltip:
+          "The basic block of the script.\n" +
+          "Mandatory input: None\n" +
+          "Optional input: ActionBlock, ResearchBlock, TradeBlock\n" +
+          "Statement type: MainBlock",
         helpUrl: "",
       });
     },

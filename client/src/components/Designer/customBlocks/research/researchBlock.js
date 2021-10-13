@@ -15,10 +15,20 @@ export const researchBlock = {
             check: "ResearchTask",
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: [
+          "MainBlock",
+          "ActionBlock",
+          "ResearchBlock",
+          "TradeBlock",
+        ],
+        nextStatement: "ResearchBlock",
         colour: 120,
-        tooltip: "",
+        tooltip:
+          "Block to add Research tasks to the script.\n" +
+          "Mandatory Input: None\n" +
+          "Previous Connection: MainBlock, ActionBlock, ResearchBlock, TradeBlock\n" +
+          "Next Connection: ResearchBlock or nothing\n" +
+          "Statement type: ResearchBlock",
         helpUrl: "",
       });
     },

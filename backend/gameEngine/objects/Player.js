@@ -5,6 +5,8 @@ var Player = /** @class */ (function () {
         this.resources = playerData.GetResources();
         this.upgradeList = new UpgradeList();
         this.battleGroups = new Array();
+        this.wasAttacked = false;
+        this.wasAttackedLastTurn = false;
     }
     Player.prototype.GetPlayerName = function () {
         return this.playerName;
@@ -20,6 +22,18 @@ var Player = /** @class */ (function () {
     };
     Player.prototype.SetUpgradeList = function (upgradeList) {
         this.upgradeList = upgradeList;
+    };
+    Player.prototype.GetWasAttacked = function () {
+        return this.wasAttacked;
+    };
+    Player.prototype.SetWasAttacked = function (state) {
+        this.wasAttacked = state;
+    };
+    Player.prototype.GetWasAttackedLastTurn = function () {
+        return this.wasAttackedLastTurn;
+    };
+    Player.prototype.SetWasAttackedLastTurn = function (state) {
+        this.wasAttackedLastTurn = state;
     };
     Player.prototype.GetBattleGroups = function () {
         return this.battleGroups;

@@ -17,13 +17,23 @@ export const block = {
           {
             type: "input_statement",
             name: "Action",
-            check: ["Block", "Action"],
+            check: ["Action", "CombatGroup"],
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: [
+          "MainBlock",
+          "ActionBlock",
+          "ResearchBlock",
+          "TradeBlock",
+        ],
+        nextStatement: "ActionBlock",
         colour: 20,
-        tooltip: "",
+        tooltip:
+          "Block to add Actions with Triggers to the script. The specified action(s) will only run if the trigger condition is true.\n" +
+          "Mandatory Input: At least one Trigger and one Action or CombatGroup statement.\n" +
+          "Previous Statement: MainBlock or ActionBlock\n" +
+          "Next Statement: ActionBlock or nothing\n" +
+          "Statement type: ActionBlock",
         helpUrl: "",
       });
     },

@@ -57,8 +57,10 @@ export default class AiEngine {
     this.players = playerIds;
 
     this.game = new GameEngine(new GameMap(startingGameState));
-    this.pScript = playerScript.replace(/playerId/g, "this.players[0]");
-    this.sScript = serverScript.replace(/playerId/g, "this.players[1]");
+    playerScript = playerScript.replace(/playerId/g, "this.players[0]");
+    this.pScript = playerScript.replace(/enemyId/g, "this.players[1]");
+    serverScript = serverScript.replace(/playerId/g, "this.players[1]");
+    this.sScript = serverScript.replace(/enemyId/g, "this.players[0]");
     this.prices = new PricesData();
     this.upgradeCostData = new UpgradeCostCollectionData();
   }
@@ -206,6 +208,34 @@ export default class AiEngine {
   private GetNumberOfOwn(objectName: ObjectName, playerName: string): number {
     let object = this.MakeObjectFromType(objectName, playerName);
     return this.game.GetNumberOfGameObjectByPlayerName(object, playerName);
+  }
+
+  private GetPercentageOfOwn(
+    objectName: ObjectName,
+    playerName: string
+  ): number {
+    let object = this.MakeObjectFromType(objectName, playerName);
+    return this.game.GetPercentageOfUnitByPlayer(object, playerName);
+  }
+
+  private Have(
+    playerName: string,
+    objectName: ObjectName,
+    upgradeType?: UpgradeType
+  ): boolean {
+    if (upgradeType === undefined) {
+      if (this.GetNumberOfOwn(objectName, playerName) > 0) return true;
+      else return false;
+    }
+    let player = this.game.GetGameState().GetPlayerByName(playerName);
+    return player
+      .GetUpgradeList()
+      .GetUpgradesForType(<UnitType>(<unknown>objectName))
+      .GetUpgrade(upgradeType);
+  }
+
+  private PlayerWasAttacked(playerName: string): boolean {
+    return this.game.CheckIfPlayerWasAttacked(playerName);
   }
 
   private Trading(

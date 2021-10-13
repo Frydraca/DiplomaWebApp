@@ -20,18 +20,24 @@ export const combatGroup = {
           {
             type: "input_value",
             name: "Task",
-            check: "Task",
+            check: "UnitTask",
           },
           {
             type: "input_statement",
             name: "Combat Behaviour",
-            check: "CombatBehaviour",
+            check: "Tactic",
           },
         ],
-        previousStatement: null,
-        nextStatement: null,
+        previousStatement: "CombatGroup",
+        nextStatement: "CombatGroup",
         colour: 0,
-        tooltip: "",
+        tooltip:
+          "Define a combat group consisting of the provided units. The script will create the specified units and automatically assign them to the group. The group works together, their task is defined by the task input. Can apply more advanced tactics.\n" +
+          "Mandatory Input: Group (with Unit option selected), UnitTask\n" +
+          "Optional Input: Tactic\n" +
+          "Previous Statement: CombatGroup\n" +
+          "Next Statement: CombatGroup or nothing\n" +
+          "Statement type: CombatGroup",
         helpUrl: "",
       });
     },
