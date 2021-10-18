@@ -75,9 +75,6 @@ function SimulatorScreen() {
   );
   const [turnIncrementValue, setTurnIncrementValue] = useState(1);
 
-  const [canvasLeft, setCanvasLeft] = useState(1);
-  const [canvasTop, setCanvasTop] = useState(1);
-  const [canvasInit, setCanvasInit] = useState(true);
   const [hoveredObject, setHoveredObject] = useState({
     objectName: "Object",
     owner: "No one",
@@ -91,6 +88,8 @@ function SimulatorScreen() {
     },
   });
 
+  /* eslint-disable react-hooks/exhaustive-deps */
+
   const selectOwnScriptCallback = useCallback((script) =>
     selectOwnScript(script)
   );
@@ -100,6 +99,8 @@ function SimulatorScreen() {
   const selectTurnIncrementValueCallback = useCallback((value) =>
     setTurnIncrementValue(value)
   );
+
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   var cLeft = 0;
   var cTop = 0;
@@ -215,6 +216,8 @@ function SimulatorScreen() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
+
   const handleSimulate = useCallback(() => {
     simulate();
   });
@@ -237,6 +240,8 @@ function SimulatorScreen() {
     decrementTurnToView();
   });
 
+  /* eslint-enable react-hooks/exhaustive-deps */
+
   function simulate() {
     if (ownScriptId !== "" && enemyScriptId !== "") {
       dispatch(
@@ -251,7 +256,6 @@ function SimulatorScreen() {
           enemyScript: enemyScriptId,
         })
       );
-      setCanvasInit(true);
     }
   }
   function start() {
@@ -262,7 +266,6 @@ function SimulatorScreen() {
         })
       );
     }
-    setCanvasInit(true);
   }
   function stop() {
     if (simulationState !== "Not started yet") {
@@ -297,10 +300,6 @@ function SimulatorScreen() {
   function selectOwnScript(script) {
     setCurrentOwnScript(script.name);
     setOwnScriptId(script._id);
-  }
-  function selectEnemyScript(script) {
-    setCurrentEnemyScript(script.name);
-    setEnemyScriptId(script._id);
   }
   function selectEnemyScript(script) {
     setCurrentEnemyScript(script.name);

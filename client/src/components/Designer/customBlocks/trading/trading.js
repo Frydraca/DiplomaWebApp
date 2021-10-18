@@ -7,7 +7,7 @@ export const trading = {
     init: function () {
       this.jsonInit({
         type: "trading",
-        message0: "%1 %2 , when you have %3  than: %4",
+        message0: "%1 %2 , until you have: %3",
         args0: [
           {
             type: "field_dropdown",
@@ -21,14 +21,6 @@ export const trading = {
             type: "input_value",
             name: "Resource",
             check: "Resource",
-          },
-          {
-            type: "field_dropdown",
-            name: "relation",
-            options: [
-              ["less", "less"],
-              ["more", "more"],
-            ],
           },
           {
             type: "field_number",
@@ -57,7 +49,6 @@ export const trading = {
       "Resource",
       Blockly.JavaScript.ORDER_ATOMIC
     );
-    var dropdown_relation = block.getFieldValue("relation");
     var number_value = block.getFieldValue("value");
     // TODO: Assemble JavaScript into code variable.
 

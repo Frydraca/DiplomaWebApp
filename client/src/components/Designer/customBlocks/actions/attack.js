@@ -1,5 +1,3 @@
-import Blockly from "node-blockly/browser";
-
 export const attack = {
   name: "Attack",
   category: "Actions",

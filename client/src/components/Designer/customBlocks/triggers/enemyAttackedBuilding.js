@@ -27,11 +27,11 @@ export const enemyAttackedBuilding = {
     },
   },
   generator: (block) => {
-    var value_attackedbuilding = Blockly.JavaScript.valueToCode(
-      block,
-      "AttackedBuilding",
-      Blockly.JavaScript.ORDER_ATOMIC
-    );
+    // var value_attackedbuilding = Blockly.JavaScript.valueToCode(
+    //   block,
+    //   "AttackedBuilding",
+    //   Blockly.JavaScript.ORDER_ATOMIC
+    // );
     // TODO: Assemble JavaScript into code variable.
     var code = "...;\n";
     return code;

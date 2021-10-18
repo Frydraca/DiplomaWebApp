@@ -1,5 +1,4 @@
 import orBlock from "./or";
-import enemyAttackedBuilding from "./enemyAttackedBuilding";
 import enemyAttacked from "./enemyAttacked";
 import enemyUnit from "./enemyUnit";
 import enemyUnitPercentage from "./enemyUnitPercentage";

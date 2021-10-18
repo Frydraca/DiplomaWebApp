@@ -1,6 +1,5 @@
 import onlyAction from "./onlyAction";
 import block from "./block";
-import switchBlock from "./switchBlock";
 import ifElse from "./ifElse";
 import mainLoop from "./mainLoop";
 

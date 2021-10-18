@@ -10,7 +10,9 @@ export const attackTask = {
         message0: "Attack",
         output: "UnitTask",
         colour: 60,
+        /* eslint-disable no-useless-concat */
         tooltip: "Attack unit task. Use as type input.\n" + "Output: UnitTask",
+        /* eslint-enable no-useless-concat */
         helpUrl: "",
       });
     },

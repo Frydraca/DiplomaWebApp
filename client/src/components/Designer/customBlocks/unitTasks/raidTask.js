@@ -17,7 +17,9 @@ export const raidTask = {
         ],
         output: "UnitTask",
         colour: 60,
+        /* eslint-disable no-useless-concat */
         tooltip: "Raid unit task. Use as type input.\n" + "Output: UnitTask",
+        /* eslint-enable no-useless-concat */
         helpUrl: "",
       });
     },

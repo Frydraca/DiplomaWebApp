@@ -1,5 +1,3 @@
-import Blockly from "node-blockly/browser";
-
 export const retreatTactic = {
   name: "Retreat Tactic",
   category: "Combat Tactics",
@@ -39,18 +37,20 @@ export const retreatTactic = {
         previousStatement: "Tactic",
         nextStatement: "Tactic",
         colour: 0,
+        /* eslint-disable no-useless-concat */
         tooltip:
           "Define a retreat combat tactic. Use for combat groups.\n" +
           "Previous Statement: Tactic\n" +
           "Next Statement: Tactic or nothing\n" +
           "Statement type: Tactic",
+        /* eslint-enable no-useless-concat */
         helpUrl: "",
       });
     },
   },
   generator: (block) => {
     var checkbox_individualretreat =
-      block.getFieldValue("individualRetreat") == "TRUE";
+      block.getFieldValue("individualRetreat") === "TRUE";
     var number_retreatpercentage = block.getFieldValue("retreatPercentage");
     var number_individualretreatpercentage = block.getFieldValue(
       "individualRetreatPercentage"

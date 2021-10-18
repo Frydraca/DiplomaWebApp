@@ -28,12 +28,14 @@ export const block = {
         ],
         nextStatement: "ActionBlock",
         colour: 20,
+        /* eslint-disable no-useless-concat */
         tooltip:
           "Block to add Actions with Triggers to the script. The specified action(s) will only run if the trigger condition is true.\n" +
           "Mandatory Input: At least one Trigger and one Action or CombatGroup statement.\n" +
           "Previous Statement: MainBlock or ActionBlock\n" +
           "Next Statement: ActionBlock or nothing\n" +
           "Statement type: ActionBlock",
+        /* eslint-disable no-useless-concat */
         helpUrl: "",
       });
     },
@@ -45,7 +47,7 @@ export const block = {
     );
     var statements_action = Blockly.JavaScript.statementToCode(block, "Action");
     var code =
-      "if(" + statements_trigger + ") {\n" + "" + statements_action + "};\n";
+      "if(" + statements_trigger + ") {\n" + statements_action + "};\n";
     return code;
   },
 };

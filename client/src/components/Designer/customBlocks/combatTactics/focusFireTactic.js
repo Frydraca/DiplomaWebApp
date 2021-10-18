@@ -1,5 +1,3 @@
-import Blockly from "node-blockly/browser";
-
 export const focusFireTactic = {
   name: "Focus Fire Tactic",
   category: "Combat Tactics",
@@ -30,18 +28,20 @@ export const focusFireTactic = {
         previousStatement: "Tactic",
         nextStatement: "Tactic",
         colour: 0,
+        /* eslint-disable no-useless-concat */
         tooltip:
           "Define a focus fire combat tactic. Use for combat groups.\n" +
           "Previous Statement: Tactic\n" +
           "Next Statement: Tactic or nothing\n" +
           "Statement type: Tactic",
+        /* eslint-enable no-useless-concat */
         helpUrl: "",
       });
     },
   },
   generator: (block) => {
     var dropdown_target = block.getFieldValue("Target");
-    var checkbox_unitfocus = block.getFieldValue("unitFocus") == "TRUE";
+    var checkbox_unitfocus = block.getFieldValue("unitFocus") === "TRUE";
     // TODO: Assemble JavaScript into code variable.
     var code =
       ", this.FocusFireTactic('" +

@@ -17,7 +17,9 @@ export const guardTask = {
         ],
         output: "UnitTask",
         colour: 60,
+        /* eslint-disable no-useless-concat */
         tooltip: "Guard unit task. Use as type input.\n" + "Output: UnitTask",
+        /* eslint-enable no-useless-concat */
         helpUrl: "",
       });
     },
