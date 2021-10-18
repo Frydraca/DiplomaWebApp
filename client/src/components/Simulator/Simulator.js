@@ -32,7 +32,7 @@ function SimulatorScreen() {
     // do something with the mouse position values here
     // console.log(mousePosition);
     getHoveredObject();
-  }, [mousePosition]);
+  }, [mousePosition]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     dispatch(initializeScreen());
@@ -101,6 +101,9 @@ function SimulatorScreen() {
     setTurnIncrementValue(value)
   );
 
+  var cLeft = 0;
+  var cTop = 0;
+
   const draw = (ctx) => {
     let cellSize = 40;
     ctx.canvas.width = 1000;
@@ -109,12 +112,9 @@ function SimulatorScreen() {
     ctx.lineWidth = "2";
     ctx.strokeStyle = "black";
 
-    // if (canvasInit) {
-    //   var canvasRect = ctx.canvas.getBoundingClientRect();
-    //   setCanvasTop(canvasRect.top);
-    //   setCanvasLeft(canvasRect.left);
-    //   setCanvasInit(false);
-    // }
+    var canvasRect = ctx.canvas.getBoundingClientRect();
+    cLeft = canvasRect.left;
+    cTop = canvasRect.top;
 
     if (currentGameState !== undefined) {
       let tiles = currentGameState.tiles;
@@ -309,8 +309,8 @@ function SimulatorScreen() {
 
   function getHoveredObject() {
     if (currentGameState !== undefined) {
-      var coordX = Math.floor((mousePosition.left - canvasLeft) / 40) - 1;
-      var coordY = Math.floor((mousePosition.top - canvasTop) / 40) - 1;
+      var coordX = Math.floor((mousePosition.left - cLeft) / 40) - 1;
+      var coordY = Math.floor((mousePosition.top - cTop) / 40) - 1;
 
       let buildings = currentGameState.buildings;
       buildings.forEach((element) => {

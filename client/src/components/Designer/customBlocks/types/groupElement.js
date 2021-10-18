@@ -12,8 +12,8 @@ export const groupElement = {
           {
             type: "field_number",
             name: "Number",
-            value: 0,
-            min: 0,
+            value: 1,
+            min: 1,
           },
           {
             type: "input_value",
@@ -25,7 +25,7 @@ export const groupElement = {
         nextStatement: "GroupElement",
         colour: 180,
         tooltip:
-          "Block to specify the number of objects in a given type. Use for constructing groups.  Amount number is non-negative only.\n" +
+          "Block to specify the number of objects in a given type. Use for constructing groups. Amount number is positive only.\n" +
           "Mandatory Input: Building or Unit.\n" +
           "Previous Statement: Group or GroupElement\n" +
           "Next Statement: GroupElement or nothing\n" +

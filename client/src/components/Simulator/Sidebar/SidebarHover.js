@@ -3,6 +3,7 @@ import SidebarHoverRow from "./SidebarHoverRow";
 import SecurityIcon from "@material-ui/icons/Security";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import MyLocationIcon from "@material-ui/icons/MyLocation";
+import RadarIcon from "@material-ui/icons/Wifi";
 import PetsIcon from "@material-ui/icons/Pets";
 
 function SidebarHover(props) {
@@ -35,7 +36,7 @@ function SidebarHover(props) {
             data={data.stats.armor}
           ></SidebarHoverRow>
           <SidebarHoverRow
-            icon={<MyLocationIcon />}
+            icon={<RadarIcon />}
             stat={"Range"}
             data={data.stats.range}
           ></SidebarHoverRow>

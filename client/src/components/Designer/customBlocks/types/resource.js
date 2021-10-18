@@ -22,7 +22,7 @@ export const resource = {
             ],
           },
         ],
-        output: ["GameObject", "Resource"],
+        output: "Resource",
         colour: 180,
         tooltip:
           "Resource types of the game. Use as type input.\n" +
