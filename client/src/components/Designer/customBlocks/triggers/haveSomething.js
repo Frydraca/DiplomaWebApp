@@ -60,7 +60,7 @@ export const haveSomething = {
       value_havesomething = value_havesomething.substring(1);
     }
 
-    var code = negator + "this.Have(playerId, " + value_havesomething + ")";
+    var code = negator + "this.Have(playerId, " + value_havesomething + ") &&";
     return code;
   },
 };

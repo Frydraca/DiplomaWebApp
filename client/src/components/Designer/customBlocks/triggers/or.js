@@ -45,7 +45,7 @@ export const orBlock = {
     );
     // TODO: Assemble JavaScript into code variable.
     var code =
-      "(" + statements_conditiona + ") || (" + statements_conditionb + ")";
+      "(" + statements_conditiona + ") || (" + statements_conditionb + ") &&";
     return code;
   },
 };

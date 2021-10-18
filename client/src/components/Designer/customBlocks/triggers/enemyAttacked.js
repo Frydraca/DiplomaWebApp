@@ -19,7 +19,7 @@ export const enemyAttacked = {
     },
   },
   generator: (block) => {
-    var code = "this.PlayerWasAttacked(playerId)";
+    var code = "this.PlayerWasAttacked(playerId) &&";
     return code;
   },
 };

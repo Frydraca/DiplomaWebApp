@@ -47,7 +47,8 @@ export const enemyUnitPercentage = {
       "this.GetPercentageOfOwn(" +
       value_unit +
       ", enemyId) >= " +
-      number_percentage;
+      number_percentage +
+      " &&";
     return code;
   },
 };

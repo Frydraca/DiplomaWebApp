@@ -57,6 +57,10 @@ export const ifElse = {
       block,
       "FalseAction"
     );
+    statements_condition = statements_condition.substring(
+      0,
+      statements_condition.length - 2
+    );
     // TODO: Assemble JavaScript into code variable.
     var code =
       "if(" +

@@ -48,7 +48,7 @@ export const enemyUnit = {
     if (dropdown_havebool === "Has") {
       negator = "";
     }
-    var code = negator + "this.Have(enemyId, " + value_havesomething + ")";
+    var code = negator + "this.Have(enemyId, " + value_havesomething + ") &&";
     return code;
   },
 };

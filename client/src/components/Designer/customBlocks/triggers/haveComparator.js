@@ -56,7 +56,8 @@ export const haveComparator = {
       value_object +
       ", playerId)" +
       dropdown_comparator +
-      number_value;
+      number_value +
+      " &&";
     return code;
   },
 };
