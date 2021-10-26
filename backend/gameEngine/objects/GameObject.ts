@@ -11,8 +11,8 @@ export default class GameObject {
   private type: ObjectType;
   private location: LocationType;
   protected cost: Resources;
-  private hitPoints: number;
-  private maxHitPoints: number;
+  protected hitPoints: number;
+  protected maxHitPoints: number;
   private armor: number;
   private canAttack: boolean;
   private range: number;
@@ -56,6 +56,12 @@ export default class GameObject {
   }
   public GetHitPoints(): number {
     return this.hitPoints;
+  }
+  public SetHitPoints(value: number): void {
+    this.hitPoints = value;
+  }
+  public GetMaxHitPoints(): number {
+    return this.maxHitPoints;
   }
   public GetCanAttack(): boolean {
     return this.canAttack;

@@ -12,12 +12,12 @@ const tankBotData = {
     energyCore: 1,
     credits: 0,
   },
-  hitPoints: 20,
-  armor: 5,
+  hitPoints: 25,
+  armor: 4,
   speed: 2,
   canAttack: true,
   range: 4,
-  attackDamage: 10,
+  attackDamage: 6,
 };
 
 export default tankBotData;

@@ -13,6 +13,8 @@ import CommandResult from "./types/commandResult.js";
 import RubbleData from "./data/buildings/rubble.js";
 import { CommandType } from "./enums/commandType.js";
 import BuildingData from "./types/DataTypes/buildingData.js";
+import { UnitStatus } from "./enums/unitStatus.js";
+import { FocusTarget } from "./enums/FocusTarget.js";
 var GameEngine = /** @class */ (function () {
     function GameEngine(startingState) {
         this.gameState = new GameState(startingState);
@@ -47,6 +49,7 @@ var GameEngine = /** @class */ (function () {
             var battleGroups = player.GetBattleGroups();
             battleGroups.forEach(function (group) {
                 group.CheckUnits();
+                group.CheckRetreat();
             });
         });
         this.UpdateResources();
@@ -115,6 +118,22 @@ var GameEngine = /** @class */ (function () {
             //do something
             var playerName = unit.GetOwner();
             var player = this_1.gameState.GetPlayerByName(playerName);
+            if (unit.GetStatus() === UnitStatus.Retreating) {
+                var closestWorkshop = this_1.GetClosestWorkshop(unit);
+                // TODO repair distance rework
+                if (closestWorkshop !== null) {
+                    if (closestWorkshop.GetDistanceFromObject(unit) < 4) {
+                        var hpDiff = unit.GetHitPoints() - unit.GetMaxHitPoints();
+                        unit.Repair(5); // TODO repair value rework
+                        this_1.Execute(new DamageObjectCommand(unit, Math.max(-5, hpDiff)));
+                        unit.SetHasAction(false);
+                    }
+                    else {
+                        this_1.Retreat(unit, closestWorkshop);
+                    }
+                }
+                return "continue";
+            }
             //check if in battlegroup
             //check status
             if (unit.InGroup()) {
@@ -125,12 +144,34 @@ var GameEngine = /** @class */ (function () {
                     console.log("Error! Couldn't find battlegroup!");
                     return "continue";
                 }
+                var closestWorkshop = this_1.GetClosestWorkshop(unit);
+                if (closestWorkshop !== null &&
+                    battleGroup.IsIndividualRetreatAllowed() &&
+                    unit.GetPercentageHP() <= battleGroup.GetIndividualRetreatTreshold()) {
+                    this_1.Retreat(unit, closestWorkshop);
+                    return "continue";
+                }
                 switch (battleGroup.GetStatus()) {
                     case BattleGroupStatus.Wait:
                         if (this_1.AttackCheck(unit, playerName)) {
-                            var enemy = this_1.GetClosestEnemy(unit);
-                            if (unit.InRange(enemy)) {
-                                this_1.Attack(unit, enemy);
+                            var enemiesInRange = this_1.FindEnemiesInRangeOfUnit(unit);
+                            if (enemiesInRange.length > 0) {
+                                switch (battleGroup.GetFocusTarget()) {
+                                    case FocusTarget.Closest:
+                                        var enemy = this_1.GetClosestEnemy(unit);
+                                        this_1.Attack(unit, enemy);
+                                        break;
+                                    case FocusTarget.LowestHP:
+                                        var lowestEnemy = this_1.GetLowestEnemyFromList(enemiesInRange);
+                                        this_1.Attack(unit, lowestEnemy);
+                                        break;
+                                    case FocusTarget.HighestDamage:
+                                        var strongestEnemy = this_1.GetStrongestEnemyFromList(enemiesInRange);
+                                        this_1.Attack(unit, strongestEnemy);
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 unit.SetHasAction(false);
                             }
                         }
@@ -139,17 +180,34 @@ var GameEngine = /** @class */ (function () {
                         switch (battleGroup.GetTask()) {
                             case "Attack":
                                 if (this_1.AttackCheck(unit, playerName)) {
-                                    this_1.GeneralAttackMove(unit);
+                                    this_1.GeneralAttackMove(unit, battleGroup);
                                 }
                                 break;
                             case "Defend":
                                 if (this_1.AttackCheck(unit, playerName)) {
-                                    var enemy = this_1.GetClosestEnemy(unit);
-                                    if (unit.InRange(enemy)) {
-                                        this_1.Attack(unit, enemy);
+                                    var enemiesInRange = this_1.FindEnemiesInRangeOfUnit(unit);
+                                    if (enemiesInRange.length > 0) {
+                                        switch (battleGroup.GetFocusTarget()) {
+                                            case FocusTarget.Closest:
+                                                var enemy = this_1.GetClosestEnemy(unit);
+                                                this_1.Attack(unit, enemy);
+                                                break;
+                                            case FocusTarget.LowestHP:
+                                                var lowestEnemy = this_1.GetLowestEnemyFromList(enemiesInRange);
+                                                this_1.Attack(unit, lowestEnemy);
+                                                break;
+                                            case FocusTarget.HighestDamage:
+                                                var strongestEnemy = this_1.GetStrongestEnemyFromList(enemiesInRange);
+                                                this_1.Attack(unit, strongestEnemy);
+                                                break;
+                                            default:
+                                                break;
+                                        }
                                         unit.SetHasAction(false);
                                     }
-                                    this_1.GeneralDefendMove(unit, playerName);
+                                    else {
+                                        this_1.GeneralDefendMove(unit, battleGroup);
+                                    }
                                 }
                                 break;
                             default:
@@ -159,6 +217,17 @@ var GameEngine = /** @class */ (function () {
                         }
                         break;
                     case BattleGroupStatus.Retreat:
+                        if (closestWorkshop !== null) {
+                            if (closestWorkshop.GetDistanceFromObject(unit) < 4) {
+                                var hpDiff = unit.GetHitPoints() - unit.GetMaxHitPoints();
+                                unit.Repair(5); // TODO repair value rework
+                                this_1.Execute(new DamageObjectCommand(unit, Math.max(-5, hpDiff)));
+                                unit.SetHasAction(false);
+                            }
+                            else {
+                                this_1.Retreat(unit, closestWorkshop);
+                            }
+                        }
                         break;
                     default:
                         console.log("Error! unrecognized battle group status: " +
@@ -168,7 +237,7 @@ var GameEngine = /** @class */ (function () {
             }
             else {
                 if (this_1.AttackCheck(unit, playerName)) {
-                    this_1.GeneralAttackMove(unit);
+                    this_1.GeneralAttackMove(unit, null);
                 }
             }
         };
@@ -177,26 +246,47 @@ var GameEngine = /** @class */ (function () {
             _loop_1(i);
         }
     };
-    GameEngine.prototype.GeneralAttackMove = function (unit) {
-        var enemy = this.GetClosestEnemy(unit);
-        if (unit.InRange(enemy)) {
-            this.Attack(unit, enemy);
+    GameEngine.prototype.GeneralAttackMove = function (unit, battleGroup) {
+        var enemiesInRange = this.FindEnemiesInRangeOfUnit(unit);
+        if (battleGroup !== null && enemiesInRange.length > 0) {
+            switch (battleGroup.GetFocusTarget()) {
+                case FocusTarget.Closest:
+                    var enemy = this.GetClosestEnemy(unit);
+                    this.Attack(unit, enemy);
+                    break;
+                case FocusTarget.LowestHP:
+                    var lowestEnemy = this.GetLowestEnemyFromList(enemiesInRange);
+                    this.Attack(unit, lowestEnemy);
+                    break;
+                case FocusTarget.HighestDamage:
+                    var strongestEnemy = this.GetStrongestEnemyFromList(enemiesInRange);
+                    this.Attack(unit, strongestEnemy);
+                    break;
+                default:
+                    break;
+            }
         }
         else {
-            this.Move(unit, this.gameState.GetTileByLocation(enemy.GetLocation()));
+            var enemy = this.GetClosestEnemy(unit);
+            if (unit.InRange(enemy)) {
+                this.Attack(unit, enemy);
+            }
+            else {
+                this.Move(unit, this.gameState.GetTileByLocation(enemy.GetLocation()));
+            }
         }
         unit.SetHasAction(false);
     };
-    GameEngine.prototype.GeneralDefendMove = function (unit, playerName) {
+    GameEngine.prototype.GeneralDefendMove = function (unit, battleGroup) {
         // get enemies in range of command center
-        var enemiesTooClose = this.FindEnemiesInRangeOfCommandcenter(10, playerName);
+        var enemiesTooClose = this.FindEnemiesInRangeOfCommandcenter(10, unit.GetOwner());
         if (enemiesTooClose.length === 0)
             return;
         // find the closest one out of them
         var closestEnemy;
         var distance = Number.POSITIVE_INFINITY;
         enemiesTooClose.forEach(function (enemy) {
-            if (playerName !== enemy.GetOwner() && enemy.GetOwner() !== "gaia") {
+            if (unit.GetOwner() !== enemy.GetOwner() && enemy.GetOwner() !== "gaia") {
                 var currentDistance = unit.GetDistanceFromObject(enemy);
                 if (currentDistance < distance) {
                     closestEnemy = enemy;
@@ -204,11 +294,32 @@ var GameEngine = /** @class */ (function () {
                 }
             }
         });
-        if (unit.InRange(closestEnemy)) {
-            this.Attack(unit, closestEnemy);
+        var enemiesInRange = this.FindEnemiesInRangeOfUnit(unit);
+        if (battleGroup !== null && enemiesInRange.length > 0) {
+            switch (battleGroup.GetFocusTarget()) {
+                case FocusTarget.Closest:
+                    var enemy = this.GetClosestEnemy(unit);
+                    this.Attack(unit, enemy);
+                    break;
+                case FocusTarget.LowestHP:
+                    var lowestEnemy = this.GetLowestEnemyFromList(enemiesInRange);
+                    this.Attack(unit, lowestEnemy);
+                    break;
+                case FocusTarget.HighestDamage:
+                    var strongestEnemy = this.GetStrongestEnemyFromList(enemiesInRange);
+                    this.Attack(unit, strongestEnemy);
+                    break;
+                default:
+                    break;
+            }
         }
         else {
-            this.Move(unit, this.gameState.GetTileByLocation(closestEnemy.GetLocation()));
+            if (unit.InRange(closestEnemy)) {
+                this.Attack(unit, closestEnemy);
+            }
+            else {
+                this.Move(unit, this.gameState.GetTileByLocation(closestEnemy.GetLocation()));
+            }
         }
         unit.SetHasAction(false);
     };
@@ -243,6 +354,66 @@ var GameEngine = /** @class */ (function () {
             });
         }
         return enemiesInRange;
+    };
+    GameEngine.prototype.FindEnemiesInRangeOfUnit = function (baseUnit) {
+        var enemiesInRange = new Array();
+        this.gameState.GetUnits().forEach(function (unit) {
+            if (baseUnit.GetOwner() !== unit.GetOwner()) {
+                if (unit.GetDistanceFromObject(baseUnit) <= baseUnit.GetRange()) {
+                    enemiesInRange.push(unit);
+                }
+            }
+        });
+        this.gameState.GetBuildings().forEach(function (building) {
+            if (baseUnit.GetOwner() !== building.GetOwner() &&
+                building.GetOwner() !== "gaia") {
+                if (building.GetDistanceFromObject(baseUnit) <= baseUnit.GetRange()) {
+                    enemiesInRange.push(building);
+                }
+            }
+        });
+        return enemiesInRange;
+    };
+    GameEngine.prototype.GetLowestEnemyFromList = function (enemies) {
+        var lowestEnemy = null;
+        var lowestHP = Number.POSITIVE_INFINITY;
+        enemies.forEach(function (enemy) {
+            if (enemy.GetHitPoints() < lowestHP) {
+                lowestEnemy = enemy.GetHitPoints();
+                lowestEnemy = enemy;
+            }
+        });
+        return lowestEnemy;
+    };
+    GameEngine.prototype.GetStrongestEnemyFromList = function (enemies) {
+        var strongestEnemy = null;
+        var highestDamage = Number.POSITIVE_INFINITY;
+        enemies.forEach(function (enemy) {
+            if (enemy.GetAttackDamage() < highestDamage) {
+                highestDamage = enemy.GetAttackDamage();
+                strongestEnemy = enemy;
+            }
+        });
+        return strongestEnemy;
+    };
+    GameEngine.prototype.Retreat = function (unit, workshop) {
+        this.Move(unit, this.gameState.GetTileByLocation(workshop.GetLocation()));
+        unit.SetHasAction(false);
+        unit.SetStatus(UnitStatus.Retreating);
+    };
+    GameEngine.prototype.GetClosestWorkshop = function (unit) {
+        var player = this.gameState.GetPlayerByName(unit.GetOwner());
+        var workshops = this.GetBuildingsOfGivenType(player.GetPlayerName(), ObjectName.Workshop);
+        var distance = Number.POSITIVE_INFINITY;
+        var closestWorkshop = null;
+        workshops.forEach(function (ws) {
+            var currentDistance = ws.GetDistanceFromObject(unit);
+            if (currentDistance < distance) {
+                currentDistance = distance;
+                closestWorkshop = ws;
+            }
+        });
+        return closestWorkshop;
     };
     GameEngine.prototype.Build = function (building) {
         var player = this.GetOwnerOfObject(building);
@@ -286,8 +457,8 @@ var GameEngine = /** @class */ (function () {
             return;
         }
         var newTile;
-        if (path.length <= unit.GetSpeed()) {
-            newTile = path[path.length - 1].GetTile();
+        if (path.length - 1 <= unit.GetSpeed()) {
+            newTile = path[path.length - 2].GetTile();
         }
         else {
             newTile = path[unit.GetSpeed()].GetTile();
@@ -302,7 +473,6 @@ var GameEngine = /** @class */ (function () {
                 if (targetObject.GetName() === ObjectName.CommandCenter) {
                     this.gameState.SetIsRunning(false);
                 }
-                //this.gameState.RemoveObject(targetObject);
                 var location_1 = targetObject.GetLocation();
                 if (targetObject.GetType() === ObjectType.Building) {
                     this.Execute(new RemoveBuildingCommand(targetObject, location_1));
@@ -358,22 +528,6 @@ var GameEngine = /** @class */ (function () {
         return this.gameState
             .GetPlayers()
             .find(function (player) { return player.GetPlayerName() === object.GetOwner(); });
-    };
-    GameEngine.prototype.GetNumberOfGameObjectsByPlayerId = function (gameObject, playerName) {
-        var number = 0;
-        this.gameState.GetBuildings().forEach(function (building) {
-            if (building.GetName() === gameObject.GetName() &&
-                building.GetOwner() === playerName) {
-                number++;
-            }
-        });
-        this.gameState.GetUnits().forEach(function (unit) {
-            if (unit.GetName() === gameObject.GetName() &&
-                unit.GetOwner() === playerName) {
-                number++;
-            }
-        });
-        return number;
     };
     GameEngine.prototype.CheckIfPlayerWasAttacked = function (playerName) {
         return this.gameState.GetPlayerByName(playerName).GetWasAttackedLastTurn();

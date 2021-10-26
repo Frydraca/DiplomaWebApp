@@ -55,34 +55,34 @@ export const trading = {
     var formattedResource = "";
     switch (value_resource) {
       case "(Energy)":
-        formattedResource = "Energy";
+        formattedResource = "'Energy'";
         break;
       case "(Steel)":
-        formattedResource = "Steel";
+        formattedResource = "'Steel'";
         break;
       case "(RoboSteel)":
-        formattedResource = "Robosteel";
+        formattedResource = "'Robosteel'";
         break;
       case "(Crystal)":
-        formattedResource = "Crystal";
+        formattedResource = "'Crystal'";
         break;
       case "(EnergyCore)":
-        formattedResource = "Energy Core";
+        formattedResource = "'Energy Core'";
         break;
       case "(Credits)":
-        formattedResource = "Credits";
+        formattedResource = "'Credits'";
         break;
       default:
-        formattedResource = "Unrecognized type!";
+        formattedResource = "";
         break;
     }
 
     var code =
       ", this." +
       dropdown_action +
-      "(playerId, '" +
+      "(playerId, " +
       formattedResource +
-      "', " +
+      ", " +
       number_value +
       ")";
     return code;

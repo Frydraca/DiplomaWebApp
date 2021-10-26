@@ -34,6 +34,11 @@ export const buildUpto = {
       "BuildingGroup",
       Blockly.JavaScript.ORDER_ATOMIC
     );
+    value_buildinggroup = value_buildinggroup.substring(1);
+    value_buildinggroup = value_buildinggroup.substring(
+      0,
+      value_buildinggroup.length - 1
+    );
     // TODO: Assemble JavaScript into code variable.
     var code = "this.BuildUpTo(playerId," + value_buildinggroup + ")";
     return code;

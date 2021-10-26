@@ -6,6 +6,11 @@ import FocusFireTactic from "../types/TacticTypes/focusFireTactic.js";
 import RetreatTactic from "../types/TacticTypes/retreatTactic.js";
 import Tactic from "../types/TacticTypes/tactic.js";
 import Unit from "./Unit.js";
+import ArtilleryBotData from "../data/units/artilleryBot.js";
+import AttackBotData from "../data/units/attackBot.js";
+import RaiderBotData from "../data/units/raiderBot.js";
+import TankBotData from "../data/units/tankBot.js";
+import { FocusTarget } from "../enums/FocusTarget.js";
 
 export default class BattleGroup {
   private id: number;
@@ -13,12 +18,12 @@ export default class BattleGroup {
   private status: BattleGroupStatus;
   private currentUnits: Unit[];
   private expectedUnits: ExpectedUnit[];
-  private invidualRetreatAllowed: boolean;
-  private invidualRetreatTreshold: number;
+  private individualRetreatAllowed: boolean;
+  private individualRetreatTreshold: number;
   private groupRetreatAllowed: boolean;
   private groupRetreatTreshold: number;
   private focusFireEnabled: boolean;
-  private focusFireTarget: string;
+  private focusFireTarget: FocusTarget;
   private focusOnlyUnits: boolean;
   private groupTask: string;
 
@@ -48,13 +53,13 @@ export default class BattleGroup {
     if (retreat !== undefined) {
       this.groupRetreatAllowed = retreat.GetGroupRetreatAllowed();
       this.groupRetreatTreshold = retreat.GetGroupRetreatValue();
-      this.invidualRetreatAllowed = retreat.GetIndividualRetreatAllowed();
-      this.invidualRetreatTreshold = retreat.GetIndividualRetreatPercentage();
+      this.individualRetreatAllowed = retreat.GetIndividualRetreatAllowed();
+      this.individualRetreatTreshold = retreat.GetIndividualRetreatPercentage();
     } else {
       this.groupRetreatAllowed = false;
       this.groupRetreatTreshold = 0;
-      this.invidualRetreatAllowed = false;
-      this.invidualRetreatTreshold = 0;
+      this.individualRetreatAllowed = false;
+      this.individualRetreatTreshold = 0;
     }
 
     if (focusFire !== undefined) {
@@ -63,7 +68,7 @@ export default class BattleGroup {
       this.focusOnlyUnits = focusFire.GetFocusOnlyUnits();
     } else {
       this.focusFireEnabled = false;
-      this.focusFireTarget = "";
+      this.focusFireTarget = FocusTarget.Closest;
       this.focusOnlyUnits = false;
     }
   }
@@ -78,6 +83,18 @@ export default class BattleGroup {
 
   public GetTask() {
     return this.groupTask;
+  }
+
+  public GetFocusTarget(): FocusTarget {
+    return this.focusFireTarget;
+  }
+
+  public IsIndividualRetreatAllowed(): boolean {
+    return this.individualRetreatAllowed;
+  }
+
+  public GetIndividualRetreatTreshold(): number {
+    return this.individualRetreatTreshold;
   }
 
   public HasAllUnits(): boolean {
@@ -132,7 +149,7 @@ export default class BattleGroup {
       if (unit.GetHitPoints() < 1) {
         this.currentUnits.splice(this.currentUnits.indexOf(unit), 1);
         let expectedUnit = this.expectedUnits.find(
-          (element) => element.GetUnitId() === unit.GetObjectId()
+          (element: ExpectedUnit) => element.GetUnitId() === unit.GetObjectId()
         );
         expectedUnit.SetUnitId(null);
         expectedUnit.SetInGroup(false);
@@ -141,6 +158,49 @@ export default class BattleGroup {
 
     if (this.currentUnits.length === 0) {
       this.status = BattleGroupStatus.Wait;
+    }
+
+    if (
+      this.currentUnits.length === this.expectedUnits.length &&
+      this.status === BattleGroupStatus.Wait
+    ) {
+      this.status = BattleGroupStatus.Active;
+    }
+  }
+
+  public CheckRetreat(): void {
+    if (this.groupRetreatAllowed) {
+      let currentHPPool = 0;
+      let currentMaxHPPool = 0;
+      this.currentUnits.forEach((unit: Unit) => {
+        currentHPPool += unit.GetHitPoints();
+      });
+      this.expectedUnits.forEach((unit: ExpectedUnit) => {
+        switch (unit.GetUnitType()) {
+          case UnitType.ArtilleryBot:
+            currentMaxHPPool += ArtilleryBotData.hitPoints;
+            break;
+          case UnitType.AttackBot:
+            currentMaxHPPool += AttackBotData.hitPoints;
+            break;
+          case UnitType.RaiderBot:
+            currentMaxHPPool += RaiderBotData.hitPoints;
+            break;
+          case UnitType.TankBot:
+            currentMaxHPPool += TankBotData.hitPoints;
+            break;
+          default:
+            break;
+        }
+      });
+      if (
+        (currentHPPool / currentMaxHPPool) * 100 <= this.groupRetreatTreshold &&
+        this.status !== BattleGroupStatus.Wait
+      ) {
+        this.status = BattleGroupStatus.Retreat;
+      } else if (this.status === BattleGroupStatus.Retreat) {
+        this.status = BattleGroupStatus.Wait;
+      }
     }
   }
 }

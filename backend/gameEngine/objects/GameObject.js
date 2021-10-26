@@ -37,6 +37,12 @@ var GameObject = /** @class */ (function () {
     GameObject.prototype.GetHitPoints = function () {
         return this.hitPoints;
     };
+    GameObject.prototype.SetHitPoints = function (value) {
+        this.hitPoints = value;
+    };
+    GameObject.prototype.GetMaxHitPoints = function () {
+        return this.maxHitPoints;
+    };
     GameObject.prototype.GetCanAttack = function () {
         return this.canAttack;
     };

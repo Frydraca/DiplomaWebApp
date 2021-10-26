@@ -13,13 +13,27 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { FocusTarget } from "../../enums/FocusTarget.js";
 import Tactic from "./tactic.js";
 var FocusFireTactic = /** @class */ (function (_super) {
     __extends(FocusFireTactic, _super);
     function FocusFireTactic(tacticType, focusFireEnabled, focusFireTarget, focusOnlyUnits) {
         var _this = _super.call(this, tacticType) || this;
         _this.focusFireEnabled = focusFireEnabled;
-        _this.focusFireTarget = focusFireTarget;
+        switch (focusFireTarget) {
+            case "closest":
+                _this.focusFireTarget = FocusTarget.Closest;
+                break;
+            case "lowest":
+                _this.focusFireTarget = FocusTarget.LowestHP;
+                break;
+            case "strongest":
+                _this.focusFireTarget = FocusTarget.HighestDamage;
+                break;
+            default:
+                _this.focusFireTarget = FocusTarget.Closest;
+                break;
+        }
         _this.focusOnlyUnits = focusOnlyUnits;
         return _this;
     }

@@ -12,12 +12,12 @@ const AttackBotData = {
     energyCore: 1,
     credits: 0,
   },
-  hitPoints: 12,
-  armor: 5,
-  speed: 4,
+  hitPoints: 16,
+  armor: 3,
+  speed: 3,
   canAttack: true,
   range: 5,
-  attackDamage: 15,
+  attackDamage: 8,
 };
 
 export default AttackBotData;

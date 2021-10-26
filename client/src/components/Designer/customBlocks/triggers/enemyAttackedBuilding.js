@@ -33,7 +33,7 @@ export const enemyAttackedBuilding = {
     //   Blockly.JavaScript.ORDER_ATOMIC
     // );
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code = "...;";
     return code;
   },
 };

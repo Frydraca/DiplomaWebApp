@@ -39,7 +39,7 @@ export const researchBlock = {
       "Research"
     );
     // TODO: Assemble JavaScript into code variable.
-    var code = "this.Research(playerId" + statements_research + ");\n";
+    var code = "this.Research(playerId" + statements_research + ");";
     return code;
   },
 };

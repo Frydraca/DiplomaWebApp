@@ -12,12 +12,12 @@ const RaiderBotData = {
     energyCore: 1,
     credits: 0,
   },
-  hitPoints: 10,
-  armor: 5,
-  speed: 3,
+  hitPoints: 15,
+  armor: 1,
+  speed: 4,
   canAttack: true,
   range: 4,
-  attackDamage: 10,
+  attackDamage: 7,
 };
 
 export default RaiderBotData;

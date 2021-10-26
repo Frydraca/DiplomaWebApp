@@ -42,7 +42,12 @@ export const build = {
     );
     var number_number = block.getFieldValue("Number");
     // TODO: Assemble JavaScript into code variable.
-    var code = "Build(" + value_buildingtobuild + ", " + number_number + ");\n";
+    var code =
+      "this.Build(playerId," +
+      value_buildingtobuild +
+      ", " +
+      number_number +
+      ")";
     return code;
   },
 };

@@ -65,12 +65,12 @@ export const ifElse = {
     var code =
       "if(" +
       statements_condition +
-      "){\n" +
+      "){" +
       statements_trueaction +
-      "}\n" +
-      "else {\n" +
+      "}" +
+      "else {" +
       statements_falseaction +
-      "};\n";
+      "};";
     return code;
   },
 };

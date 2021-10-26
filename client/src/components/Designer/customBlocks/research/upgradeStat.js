@@ -45,6 +45,11 @@ export const upgradeStat = {
       "upgradeTarget",
       Blockly.JavaScript.ORDER_ATOMIC
     );
+    value_upgradetarget = value_upgradetarget.substring(1);
+    value_upgradetarget = value_upgradetarget.substring(
+      0,
+      value_upgradetarget.length - 1
+    );
     // TODO: Assemble JavaScript into code variable.
     var code =
       ", this.UpgradeStats(playerId," +

@@ -42,12 +42,17 @@ export const create = {
     );
     var number_number = block.getFieldValue("Number");
     // TODO: Assemble JavaScript into code variable.
+    value_unittocreate = value_unittocreate.substring(1);
+    value_unittocreate = value_unittocreate.substring(
+      0,
+      value_unittocreate.length - 1
+    );
     var code =
       "this.CreateNTimes(playerId, " +
       value_unittocreate +
       ", " +
       number_number +
-      ");\n";
+      ")";
     return code;
   },
 };

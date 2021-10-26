@@ -50,8 +50,7 @@ export const block = {
       statements_trigger.length - 2
     );
     var statements_action = Blockly.JavaScript.statementToCode(block, "Action");
-    var code =
-      "if(" + statements_trigger + ") {\n" + statements_action + "};\n";
+    var code = "if(" + statements_trigger + ") {" + statements_action + "};";
     return code;
   },
 };

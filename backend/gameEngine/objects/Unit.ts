@@ -48,6 +48,26 @@ export default class Unit extends GameObject {
     this.hasAction = state;
   }
 
+  public GetPercentageHP(): number {
+    return (this.hitPoints / this.maxHitPoints) * 100;
+  }
+
+  public GetStatus(): UnitStatus {
+    return this.status;
+  }
+
+  public SetStatus(newStatus: UnitStatus): void {
+    this.status = newStatus;
+  }
+
+  public Repair(repairAmount: number): void {
+    this.SetHitPoints(this.GetHitPoints() + repairAmount);
+    if (this.GetHitPoints() > this.GetMaxHitPoints()) {
+      this.SetHitPoints(this.GetMaxHitPoints());
+      this.status = UnitStatus.Idle;
+    }
+  }
+
   public AddGroupName(groupId: number): void {
     this.groupId = groupId;
   }
@@ -67,6 +87,7 @@ export default class Unit extends GameObject {
     }
     return false;
   }
+
   public TakeCost(resources: Resources): Resources {
     resources.Decrease(this.cost);
     return resources;

@@ -1,9 +1,10 @@
+import { FocusTarget } from "../../enums/FocusTarget.js";
 import { TacticType } from "../../enums/tacticType.js";
 import Tactic from "./tactic.js";
 
 export default class FocusFireTactic extends Tactic {
   private focusFireEnabled: boolean;
-  private focusFireTarget: string;
+  private focusFireTarget: FocusTarget;
   private focusOnlyUnits: boolean;
 
   constructor(
@@ -14,14 +15,28 @@ export default class FocusFireTactic extends Tactic {
   ) {
     super(tacticType);
     this.focusFireEnabled = focusFireEnabled;
-    this.focusFireTarget = focusFireTarget;
+
+    switch (focusFireTarget) {
+      case "closest":
+        this.focusFireTarget = FocusTarget.Closest;
+        break;
+      case "lowest":
+        this.focusFireTarget = FocusTarget.LowestHP;
+        break;
+      case "strongest":
+        this.focusFireTarget = FocusTarget.HighestDamage;
+        break;
+      default:
+        this.focusFireTarget = FocusTarget.Closest;
+        break;
+    }
     this.focusOnlyUnits = focusOnlyUnits;
   }
 
   public GetFocusFireEnabled(): boolean {
     return this.focusFireEnabled;
   }
-  public GetFocusFireTarget(): string {
+  public GetFocusFireTarget(): FocusTarget {
     return this.focusFireTarget;
   }
   public GetFocusOnlyUnits(): boolean {

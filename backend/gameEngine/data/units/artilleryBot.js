@@ -12,12 +12,12 @@ const ArtilleryBotData = {
     energyCore: 1,
     credits: 0,
   },
-  hitPoints: 8,
-  armor: 5,
+  hitPoints: 12,
+  armor: 1,
   speed: 2,
   canAttack: true,
   range: 6,
-  attackDamage: 20,
+  attackDamage: 13,
 };
 
 export default ArtilleryBotData;

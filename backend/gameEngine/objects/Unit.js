@@ -51,6 +51,22 @@ var Unit = /** @class */ (function (_super) {
     Unit.prototype.SetHasAction = function (state) {
         this.hasAction = state;
     };
+    Unit.prototype.GetPercentageHP = function () {
+        return (this.hitPoints / this.maxHitPoints) * 100;
+    };
+    Unit.prototype.GetStatus = function () {
+        return this.status;
+    };
+    Unit.prototype.SetStatus = function (newStatus) {
+        this.status = newStatus;
+    };
+    Unit.prototype.Repair = function (repairAmount) {
+        this.SetHitPoints(this.GetHitPoints() + repairAmount);
+        if (this.GetHitPoints() > this.GetMaxHitPoints()) {
+            this.SetHitPoints(this.GetMaxHitPoints());
+            this.status = UnitStatus.Idle;
+        }
+    };
     Unit.prototype.AddGroupName = function (groupId) {
         this.groupId = groupId;
     };

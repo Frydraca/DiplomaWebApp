@@ -16,7 +16,7 @@ export const attack = {
   },
   generator: (block) => {
     // TODO: Assemble JavaScript into code variable.
-    var code = "this.Attack(playerId)\n";
+    var code = "this.Attack(playerId)";
     return code;
   },
 };

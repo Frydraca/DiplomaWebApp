@@ -34,7 +34,7 @@ export const switchBlock = {
     );
     var statements_action = Blockly.JavaScript.statementToCode(block, "Action");
     // TODO: Assemble JavaScript into code variable.
-    var code = "...;\n";
+    var code = "...;";
     return code;
   },
 };

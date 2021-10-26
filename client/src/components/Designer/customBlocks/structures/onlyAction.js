@@ -36,7 +36,7 @@ export const onlyAction = {
   generator: (block) => {
     var statements_action = Blockly.JavaScript.statementToCode(block, "Action");
     // TODO: Assemble JavaScript into code variable.
-    var code = "this.Do(" + statements_action + ");\n";
+    var code = "this.Do(" + statements_action + ");";
     return code;
   },
 };

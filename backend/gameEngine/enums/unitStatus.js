@@ -3,4 +3,5 @@ export var UnitStatus;
     UnitStatus["Idle"] = "Idle";
     UnitStatus["Moving"] = "Moving";
     UnitStatus["Attacking"] = "Attacking";
+    UnitStatus["Retreating"] = "Retreating";
 })(UnitStatus || (UnitStatus = {}));
