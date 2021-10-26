@@ -112,6 +112,24 @@ var GameEngine = /** @class */ (function () {
     ////////////////////////////////////
     // Functions called from aiEngine //
     ////////////////////////////////////
+    GameEngine.prototype.CalculateNextCenterForBattleGroups = function () {
+        var _this = this;
+        this.gameState.GetPlayers().forEach(function (player) {
+            player.GetBattleGroups().forEach(function (battleGroup) {
+                var slowestSpeed = battleGroup.GetSlowestUnitSpeed();
+                var closestEnemy = _this.GetClosestEnemyToLocation(battleGroup.GetCenterLocationOfGroup(), player.GetPlayerName());
+                if (closestEnemy !== undefined) {
+                    var path = _this.gameState.FindPathBetween(_this.gameState.GetTileByLocation(battleGroup.GetCenterLocationOfGroup()), _this.gameState.GetTileByLocation(closestEnemy.GetLocation()), player.GetPlayerName());
+                    if (path !== null && slowestSpeed < path.length) {
+                        battleGroup.SetTargetCenterLocation(path[slowestSpeed].GetTile().GetLocation());
+                    }
+                    else {
+                        battleGroup.SetTargetCenterLocation(battleGroup.GetCenterLocationOfGroup());
+                    }
+                }
+            });
+        });
+    };
     GameEngine.prototype.ActivateUnits = function () {
         var _loop_1 = function (i) {
             var unit = this_1.gameState.GetUnits()[i];
@@ -266,13 +284,22 @@ var GameEngine = /** @class */ (function () {
                     break;
             }
         }
+        else if (battleGroup !== null && enemiesInRange.length === 0) {
+            var enemy = this.GetClosestEnemyToLocation(battleGroup.GetCenterLocationOfGroup(), unit.GetOwner());
+            if (unit.GetDistanceFromLocation(battleGroup.GetCenterLocationOfGroup()) < 2) {
+                this.Move(unit, this.gameState.GetTileByLocation(enemy.GetLocation()), battleGroup.GetSlowestUnitSpeed());
+            }
+            else {
+                this.Move(unit, this.gameState.GetTileByLocation(this.gameState.GetClosestEmptyLocationToLocation(battleGroup.GetTargetCenterLocation())), unit.GetSpeed());
+            }
+        }
         else {
             var enemy = this.GetClosestEnemy(unit);
             if (unit.InRange(enemy)) {
                 this.Attack(unit, enemy);
             }
             else {
-                this.Move(unit, this.gameState.GetTileByLocation(enemy.GetLocation()));
+                this.Move(unit, this.gameState.GetTileByLocation(enemy.GetLocation()), unit.GetSpeed());
             }
         }
         unit.SetHasAction(false);
@@ -313,12 +340,21 @@ var GameEngine = /** @class */ (function () {
                     break;
             }
         }
+        else if (battleGroup !== null && enemiesInRange.length === 0) {
+            var enemy = this.GetClosestEnemyToLocation(battleGroup.GetCenterLocationOfGroup(), unit.GetOwner());
+            if (unit.GetDistanceFromLocation(battleGroup.GetCenterLocationOfGroup()) < 2) {
+                this.Move(unit, this.gameState.GetTileByLocation(enemy.GetLocation()), battleGroup.GetSlowestUnitSpeed());
+            }
+            else {
+                this.Move(unit, this.gameState.GetTileByLocation(this.gameState.GetClosestEmptyLocationToLocation(battleGroup.GetTargetCenterLocation())), unit.GetSpeed());
+            }
+        }
         else {
             if (unit.InRange(closestEnemy)) {
                 this.Attack(unit, closestEnemy);
             }
             else {
-                this.Move(unit, this.gameState.GetTileByLocation(closestEnemy.GetLocation()));
+                this.Move(unit, this.gameState.GetTileByLocation(closestEnemy.GetLocation()), unit.GetSpeed());
             }
         }
         unit.SetHasAction(false);
@@ -397,7 +433,7 @@ var GameEngine = /** @class */ (function () {
         return strongestEnemy;
     };
     GameEngine.prototype.Retreat = function (unit, workshop) {
-        this.Move(unit, this.gameState.GetTileByLocation(workshop.GetLocation()));
+        this.Move(unit, this.gameState.GetTileByLocation(workshop.GetLocation()), unit.GetSpeed());
         unit.SetHasAction(false);
         unit.SetStatus(UnitStatus.Retreating);
     };
@@ -435,7 +471,13 @@ var GameEngine = /** @class */ (function () {
     };
     GameEngine.prototype.Create = function (unit) {
         var player = this.GetOwnerOfObject(unit);
-        var locationResponse = this.gameState.GetClosestEmptyLocationToCommandCenter(player);
+        var commandCenter = this.gameState
+            .GetBuildings()
+            .filter(function (element) {
+            return element.GetOwner() === player.GetPlayerName() &&
+                element.GetName() === "Command Center";
+        });
+        var locationResponse = this.gameState.GetClosestEmptyLocationToLocation(commandCenter[0].GetLocation());
         if (unit.CanCreate(player.GetResources()) && locationResponse !== null) {
             player.SetResources(unit.TakeCost(player.GetResources()));
             unit.SetLocation(locationResponse);
@@ -449,19 +491,31 @@ var GameEngine = /** @class */ (function () {
             }
         }
     };
-    GameEngine.prototype.Move = function (unit, targetTile) {
+    GameEngine.prototype.Move = function (unit, targetTile, unitSpeed) {
         var currentTile = this.gameState.GetTileByLocation(unit.GetLocation());
-        var path = this.gameState.FindPathBetween(currentTile, targetTile);
+        var path = this.gameState.FindPathBetween(currentTile, targetTile, unit.GetOwner());
         if (path === null) {
             console.log("path fail");
             return;
         }
         var newTile;
-        if (path.length - 1 <= unit.GetSpeed()) {
+        var reducer = 0;
+        if (path.length - 1 <= unitSpeed) {
             newTile = path[path.length - 2].GetTile();
         }
         else {
-            newTile = path[unit.GetSpeed()].GetTile();
+            newTile = path[unitSpeed].GetTile();
+        }
+        while (!newTile.IsEmpty() ||
+            newTile.GetLocation().SameLocation(unit.GetLocation())) {
+            reducer++;
+            if (unitSpeed - reducer < 0) {
+                newTile = path[0].GetTile();
+                break;
+            }
+            if (unitSpeed - reducer >= path.length)
+                continue;
+            newTile = path[unitSpeed - reducer].GetTile();
         }
         this.Execute(new MoveUnitCommand(unit, currentTile.GetLocation(), newTile.GetLocation()));
     };
@@ -549,6 +603,30 @@ var GameEngine = /** @class */ (function () {
             if (playerName !== building.GetOwner() &&
                 building.GetOwner() !== "gaia") {
                 var currentDistance = building.GetDistanceFromObject(gameObject);
+                if (currentDistance < distance) {
+                    closestEnemy = building;
+                    distance = currentDistance;
+                }
+            }
+        });
+        return closestEnemy;
+    };
+    GameEngine.prototype.GetClosestEnemyToLocation = function (location, playerName) {
+        var closestEnemy;
+        var distance = Number.POSITIVE_INFINITY;
+        this.gameState.GetUnits().forEach(function (unit) {
+            if (playerName !== unit.GetOwner() && unit.GetOwner() !== "gaia") {
+                var currentDistance = unit.GetDistanceFromLocation(location);
+                if (currentDistance < distance) {
+                    closestEnemy = unit;
+                    distance = currentDistance;
+                }
+            }
+        });
+        this.gameState.GetBuildings().forEach(function (building) {
+            if (playerName !== building.GetOwner() &&
+                building.GetOwner() !== "gaia") {
+                var currentDistance = building.GetDistanceFromLocation(location);
                 if (currentDistance < distance) {
                     closestEnemy = building;
                     distance = currentDistance;

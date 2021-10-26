@@ -61,6 +61,10 @@ var GameObject = /** @class */ (function () {
         return (Math.abs(gameObject.GetLocation().GetX() - this.location.GetX()) +
             Math.abs(gameObject.GetLocation().GetY() - this.location.GetY()));
     };
+    GameObject.prototype.GetDistanceFromLocation = function (location) {
+        return (Math.abs(location.GetX() - this.location.GetX()) +
+            Math.abs(location.GetY() - this.location.GetY()));
+    };
     GameObject.prototype.InRange = function (gameObject) {
         if (this.range >= this.GetDistanceFromObject(gameObject)) {
             return true;

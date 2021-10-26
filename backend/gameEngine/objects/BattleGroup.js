@@ -6,9 +6,11 @@ import AttackBotData from "../data/units/attackBot.js";
 import RaiderBotData from "../data/units/raiderBot.js";
 import TankBotData from "../data/units/tankBot.js";
 import { FocusTarget } from "../enums/FocusTarget.js";
+import LocationType from "../types/locationType.js";
 var BattleGroup = /** @class */ (function () {
     function BattleGroup(owner, groupId, expectedUnits, task, tactics) {
         this.currentUnits = new Array();
+        this.targetCenterLocation = new LocationType(0, 0);
         this.id = groupId;
         this.owner = owner;
         this.status = BattleGroupStatus.Wait;
@@ -72,6 +74,30 @@ var BattleGroup = /** @class */ (function () {
             }
         }
         return missingUnits;
+    };
+    BattleGroup.prototype.GetSlowestUnitSpeed = function () {
+        var slowestSpeed = Number.POSITIVE_INFINITY;
+        this.currentUnits.forEach(function (unit) {
+            if (unit.GetSpeed() < slowestSpeed) {
+                slowestSpeed = unit.GetSpeed();
+            }
+        });
+        return slowestSpeed;
+    };
+    BattleGroup.prototype.GetCenterLocationOfGroup = function () {
+        var x = 0;
+        var y = 0;
+        this.currentUnits.forEach(function (unit) {
+            x += unit.GetLocation().GetX();
+            y += unit.GetLocation().GetY();
+        });
+        return new LocationType(Math.floor(x / this.currentUnits.length), Math.floor(y / this.currentUnits.length));
+    };
+    BattleGroup.prototype.GetTargetCenterLocation = function () {
+        return this.targetCenterLocation;
+    };
+    BattleGroup.prototype.SetTargetCenterLocation = function (target) {
+        this.targetCenterLocation = target;
     };
     BattleGroup.prototype.NeedUnitType = function (unitType) {
         for (var i = 0; i < this.expectedUnits.length; i++) {

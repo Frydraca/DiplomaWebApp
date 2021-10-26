@@ -333,23 +333,23 @@ export default class GameState {
     return ret;
   }
 
-  // TODO refactor
-  public GetClosestEmptyLocationToCommandCenter(player: Player): LocationType {
+  public GetClosestEmptyLocationToLocation(
+    location: LocationType
+  ): LocationType {
     let ret: LocationType;
-    let commandCenter = this.GetBuildings().filter(
-      (element) =>
-        element.GetOwner() === player.GetPlayerName() &&
-        element.GetName() === "Command Center"
-    );
-    let commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
+    let centerLocation = this.GetTileByLocation(location);
     let closestTile: Tile;
     let closestDistance = Number.POSITIVE_INFINITY;
     this.tiles.forEach((element) => {
       if (element.IsEmpty()) {
         if (
-          this.GetDistanceBetweenTiles(element, commandTile) < closestDistance
+          this.GetDistanceBetweenTiles(element, centerLocation) <
+          closestDistance
         ) {
-          closestDistance = this.GetDistanceBetweenTiles(element, commandTile);
+          closestDistance = this.GetDistanceBetweenTiles(
+            element,
+            centerLocation
+          );
           closestTile = element;
           ret = closestTile.GetLocation();
         }
@@ -375,7 +375,11 @@ export default class GameState {
     return false;
   }
 
-  public FindPathBetween(startingTile: Tile, targetTile: Tile): PathNode[] {
+  public FindPathBetween(
+    startingTile: Tile,
+    targetTile: Tile,
+    playerName: string
+  ): PathNode[] {
     let openList = new Array<PathNode>();
     let closedList = new Array<PathNode>();
     let startingNode = new PathNode(startingTile, null, 0, 0, 0);
@@ -430,7 +434,11 @@ export default class GameState {
       // discard the non empty nodes
       successors = successors.filter(
         (element: PathNode) =>
-          element.GetTile().IsEmpty() || element.GetTile() === targetTile
+          element.GetTile().IsEmpty() ||
+          element.GetTile() === targetTile ||
+          (element.GetTile().HasUnit() &&
+            this.GetUnitById(element.GetTile().GetUnitId()).GetOwner() ===
+              playerName)
       );
 
       // for each successor

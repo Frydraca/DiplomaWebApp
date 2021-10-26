@@ -11,6 +11,7 @@ import AttackBotData from "../data/units/attackBot.js";
 import RaiderBotData from "../data/units/raiderBot.js";
 import TankBotData from "../data/units/tankBot.js";
 import { FocusTarget } from "../enums/FocusTarget.js";
+import LocationType from "../types/locationType.js";
 
 export default class BattleGroup {
   private id: number;
@@ -26,6 +27,7 @@ export default class BattleGroup {
   private focusFireTarget: FocusTarget;
   private focusOnlyUnits: boolean;
   private groupTask: string;
+  private targetCenterLocation: LocationType;
 
   constructor(
     owner: string,
@@ -35,6 +37,7 @@ export default class BattleGroup {
     tactics: Tactic[]
   ) {
     this.currentUnits = new Array<Unit>();
+    this.targetCenterLocation = new LocationType(0, 0);
     this.id = groupId;
     this.owner = owner;
     this.status = BattleGroupStatus.Wait;
@@ -112,6 +115,38 @@ export default class BattleGroup {
       }
     }
     return missingUnits;
+  }
+
+  public GetSlowestUnitSpeed(): number {
+    let slowestSpeed = Number.POSITIVE_INFINITY;
+    this.currentUnits.forEach((unit) => {
+      if (unit.GetSpeed() < slowestSpeed) {
+        slowestSpeed = unit.GetSpeed();
+      }
+    });
+    return slowestSpeed;
+  }
+
+  public GetCenterLocationOfGroup(): LocationType {
+    let x = 0;
+    let y = 0;
+    this.currentUnits.forEach((unit) => {
+      x += unit.GetLocation().GetX();
+      y += unit.GetLocation().GetY();
+    });
+
+    return new LocationType(
+      Math.floor(x / this.currentUnits.length),
+      Math.floor(y / this.currentUnits.length)
+    );
+  }
+
+  public GetTargetCenterLocation(): LocationType {
+    return this.targetCenterLocation;
+  }
+
+  public SetTargetCenterLocation(target: LocationType): void {
+    this.targetCenterLocation = target;
   }
 
   public NeedUnitType(unitType: UnitType): boolean {

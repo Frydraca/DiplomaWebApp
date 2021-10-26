@@ -83,6 +83,12 @@ export default class GameObject {
       Math.abs(gameObject.GetLocation().GetY() - this.location.GetY())
     );
   }
+  public GetDistanceFromLocation(location: LocationType): number {
+    return (
+      Math.abs(location.GetX() - this.location.GetX()) +
+      Math.abs(location.GetY() - this.location.GetY())
+    );
+  }
   public InRange(gameObject: GameObject): boolean {
     if (this.range >= this.GetDistanceFromObject(gameObject)) {
       return true;

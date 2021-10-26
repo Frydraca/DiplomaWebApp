@@ -57,6 +57,7 @@ var AiEngine = /** @class */ (function () {
             if (this.game.IsRunning()) {
                 eval(this.sScript);
             }
+            this.game.CalculateNextCenterForBattleGroups();
             this.game.ActivateUnits();
             this.game.TurnEnd();
         }

@@ -84,7 +84,7 @@ export default class AiEngine {
       if (this.game.IsRunning()) {
         eval(this.sScript);
       }
-
+      this.game.CalculateNextCenterForBattleGroups();
       this.game.ActivateUnits();
       this.game.TurnEnd();
     }

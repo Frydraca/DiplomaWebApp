@@ -239,21 +239,17 @@ var GameState = /** @class */ (function () {
         });
         return ret;
     };
-    // TODO refactor
-    GameState.prototype.GetClosestEmptyLocationToCommandCenter = function (player) {
+    GameState.prototype.GetClosestEmptyLocationToLocation = function (location) {
         var _this = this;
         var ret;
-        var commandCenter = this.GetBuildings().filter(function (element) {
-            return element.GetOwner() === player.GetPlayerName() &&
-                element.GetName() === "Command Center";
-        });
-        var commandTile = this.GetTileByLocation(commandCenter[0].GetLocation());
+        var centerLocation = this.GetTileByLocation(location);
         var closestTile;
         var closestDistance = Number.POSITIVE_INFINITY;
         this.tiles.forEach(function (element) {
             if (element.IsEmpty()) {
-                if (_this.GetDistanceBetweenTiles(element, commandTile) < closestDistance) {
-                    closestDistance = _this.GetDistanceBetweenTiles(element, commandTile);
+                if (_this.GetDistanceBetweenTiles(element, centerLocation) <
+                    closestDistance) {
+                    closestDistance = _this.GetDistanceBetweenTiles(element, centerLocation);
                     closestTile = element;
                     ret = closestTile.GetLocation();
                 }
@@ -272,7 +268,8 @@ var GameState = /** @class */ (function () {
         }
         return false;
     };
-    GameState.prototype.FindPathBetween = function (startingTile, targetTile) {
+    GameState.prototype.FindPathBetween = function (startingTile, targetTile, playerName) {
+        var _this = this;
         var openList = new Array();
         var closedList = new Array();
         var startingNode = new PathNode(startingTile, null, 0, 0, 0);
@@ -301,7 +298,11 @@ var GameState = /** @class */ (function () {
             successors = successors.filter(function (element) { return element.GetTile() !== null; });
             // discard the non empty nodes
             successors = successors.filter(function (element) {
-                return element.GetTile().IsEmpty() || element.GetTile() === targetTile;
+                return element.GetTile().IsEmpty() ||
+                    element.GetTile() === targetTile ||
+                    (element.GetTile().HasUnit() &&
+                        _this.GetUnitById(element.GetTile().GetUnitId()).GetOwner() ===
+                            playerName);
             });
             var _loop_2 = function (i) {
                 var currentSuccessor = successors[i];
