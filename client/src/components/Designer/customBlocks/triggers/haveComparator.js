@@ -52,9 +52,9 @@ export const haveComparator = {
     var number_value = block.getFieldValue("value");
     // TODO: Assemble JavaScript into code variable.
     var code =
-      "this.GetNumberOfOwn(" +
+      "this.GetNumberOfOwn(playerId," +
       value_object +
-      ", playerId)" +
+      ")" +
       dropdown_comparator +
       number_value +
       " &&";

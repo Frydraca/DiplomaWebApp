@@ -103,5 +103,6 @@ export default class GameObject {
   }
   public UpgradeHitPoints(value: number): void {
     this.hitPoints += value;
+    this.maxHitPoints += value;
   }
 }

@@ -13,38 +13,46 @@ export const CatalogData = [
   {
     title: "Home",
     icon: <HomeIcon />,
-    onClickFunction: "TODO",
+    link: "/designerhelp",
   },
   {
     title: "Structures",
     icon: <AccountTreeIcon />,
+    link: "/designerhelp/structures",
   },
   {
     title: "Actions",
     icon: <DoubleArrowIcon />,
+    link: "/designerhelp/actions",
   },
   {
     title: "Triggers",
     icon: <AccessAlarmsIcon />,
+    link: "/designerhelp/triggers",
   },
   {
     title: "Types",
     icon: <CategoryIcon />,
+    link: "/designerhelp/types",
   },
   {
     title: "Combat Tactics",
     icon: <CallSplitIcon />,
+    link: "/designerhelp/combatTactics",
   },
   {
     title: "Unit Tasks",
     icon: <BuildIcon />,
+    link: "/designerhelp/unitTasks",
   },
   {
     title: "Research",
     icon: <ImportContactsIcon />,
+    link: "/designerhelp/research",
   },
   {
     title: "Trading",
     icon: <AttachMoneyIcon />,
+    link: "/designerhelp/trading",
   },
 ];

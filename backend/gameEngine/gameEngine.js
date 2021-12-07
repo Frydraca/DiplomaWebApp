@@ -557,7 +557,7 @@ var GameEngine = /** @class */ (function () {
         });
     };
     GameEngine.prototype.CheckForGameEnd = function () {
-        if (this.gameState.GetTurnNumber() >= 50) {
+        if (this.gameState.GetTurnNumber() >= 75) {
             this.gameState.SetIsRunning(false);
         }
     };

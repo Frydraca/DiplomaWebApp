@@ -7,7 +7,13 @@ function Catalog(props) {
       <ul className="DesignerCatalogList">
         {CatalogData.map((value, key) => {
           return (
-            <li key={key} className="row" onClick={() => {}}>
+            <li
+              key={key}
+              className="row"
+              onClick={() => {
+                window.location.pathname = value.link;
+              }}
+            >
               <div id="icon">{value.icon}</div>
               <div id="title">{value.title}</div>
             </li>

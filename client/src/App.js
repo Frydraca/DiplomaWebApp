@@ -44,7 +44,31 @@ export default function App() {
           <RulesScreen />
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/designerHelp">
-          <DesignerHelpScreen />
+          <DesignerHelpScreen type="home" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/structures">
+          <DesignerHelpScreen type="structures" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/actions">
+          <DesignerHelpScreen type="actions" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/triggers">
+          <DesignerHelpScreen type="triggers" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/types">
+          <DesignerHelpScreen type="types" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/combatTactics">
+          <DesignerHelpScreen type="combatTactics" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/unitTasks">
+          <DesignerHelpScreen type="unitTasks" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/research">
+          <DesignerHelpScreen type="research" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/designerHelp/trading">
+          <DesignerHelpScreen type="trading" />
         </AuthenticatedRoute>
       </Router>
     </div>

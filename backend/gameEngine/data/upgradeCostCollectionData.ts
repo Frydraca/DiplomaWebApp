@@ -10,20 +10,20 @@ export default class UpgradeCostCollectionData {
 
   constructor() {
     // Energy, Steel RoboSteel, Crystal, EnergyCore, Credits
-    let artilleryBotArmor = new Resources(0, 0, 10, 0, 0, 100);
-    let artilleryBotAttack = new Resources(0, 0, 0, 20, 0, 100);
+    let artilleryBotArmor = new Resources(0, 20, 0, 0, 0, 100);
+    let artilleryBotAttack = new Resources(0, 20, 0, 0, 0, 100);
     let artilleryBotHitPoints = new Resources(50, 0, 0, 0, 0, 50);
     let artilleryBotSpeed = new Resources(100, 0, 0, 0, 5, 100);
-    let attackBotArmor = new Resources(0, 0, 10, 0, 0, 100);
-    let attackBotAttack = new Resources(0, 0, 0, 20, 0, 100);
+    let attackBotArmor = new Resources(0, 20, 0, 0, 0, 100);
+    let attackBotAttack = new Resources(0, 20, 0, 0, 0, 100);
     let attackBotHitPoints = new Resources(50, 0, 0, 0, 0, 50);
     let attackBotSpeed = new Resources(100, 0, 0, 0, 5, 100);
-    let raiderBotArmor = new Resources(0, 0, 10, 0, 0, 100);
-    let raiderBotAttack = new Resources(0, 0, 0, 20, 0, 100);
+    let raiderBotArmor = new Resources(0, 20, 0, 0, 0, 100);
+    let raiderBotAttack = new Resources(0, 20, 0, 0, 0, 100);
     let raiderBotHitPoints = new Resources(50, 0, 0, 0, 0, 50);
     let raiderBotSpeed = new Resources(100, 0, 0, 0, 5, 100);
-    let tankBotArmor = new Resources(0, 0, 10, 0, 0, 100);
-    let tankBotAttack = new Resources(0, 0, 0, 20, 0, 100);
+    let tankBotArmor = new Resources(0, 20, 0, 0, 0, 100);
+    let tankBotAttack = new Resources(0, 20, 0, 0, 0, 100);
     let tankBotHitPoints = new Resources(50, 0, 0, 0, 0, 50);
     let tankBotSpeed = new Resources(100, 0, 0, 0, 5, 100);
     this.artilleryBot = new UpgradeCostsData(

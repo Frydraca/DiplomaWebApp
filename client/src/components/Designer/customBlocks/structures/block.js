@@ -17,7 +17,7 @@ export const block = {
           {
             type: "input_statement",
             name: "Action",
-            check: ["Action", "CombatGroup"],
+            check: ["Action", "ResearchBlock", "TradeBlock", "CombatGroup"],
           },
         ],
         previousStatement: [

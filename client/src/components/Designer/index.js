@@ -26,9 +26,11 @@ function EditorScreen() {
 
   const [show, setShow] = useState(false);
   const [scriptCode, setScriptCode] = useState("");
-  var [warning, setWarning] = useState("");
+  const [warning, setWarning] = useState("");
 
-  useEffect(() => {}, [setScriptCode]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    dispatch(loadScript(id));
+  }, [warning]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClose = useCallback(() => setShow(false), [setShow]);
   const handleShow = () => setShow(true);
@@ -112,7 +114,6 @@ function EditorScreen() {
     handleShow();
   }
   function update() {
-    console.log(blocklyCode);
     dispatch(
       updateScript(script._id, {
         content: blocklyCode,
@@ -152,6 +153,33 @@ function EditorScreen() {
         if (occurences !== null) {
           for (let i = 0; i < occurences.length; i++) {
             let result = tokenize(workText, "Group", tokens);
+            workText = result.workText;
+            tokens = result.tokens;
+          }
+        }
+        //Have tokenization
+        occurences = workText.match(/Have/g);
+        if (occurences !== null) {
+          for (let i = 0; i < occurences.length; i++) {
+            let result = tokenize(workText, "Have", tokens);
+            workText = result.workText;
+            tokens = result.tokens;
+          }
+        }
+        //GetNumberOfOwn tokenization
+        occurences = workText.match(/GetNumberOfOwn/g);
+        if (occurences !== null) {
+          for (let i = 0; i < occurences.length; i++) {
+            let result = tokenize(workText, "GetNumberOfOwn", tokens);
+            workText = result.workText;
+            tokens = result.tokens;
+          }
+        }
+        //GetPercentageOfOwn tokenization
+        occurences = workText.match(/GetPercentageOfOwn/g);
+        if (occurences !== null) {
+          for (let i = 0; i < occurences.length; i++) {
+            let result = tokenize(workText, "GetPercentageOfOwn", tokens);
             workText = result.workText;
             tokens = result.tokens;
           }
@@ -237,6 +265,7 @@ function EditorScreen() {
             tokens = result.tokens;
           }
         }
+        console.log(workText);
         console.log(tokens);
 
         // Start Checking the tokens
@@ -247,11 +276,6 @@ function EditorScreen() {
               if (currentToken.args[0] === "") {
                 scriptIsCorrect = false;
                 tempWarning += "\n Error: empty input in a GroupElement block.";
-              }
-              if (currentToken.args.length < 2) {
-                scriptIsCorrect = false;
-                tempWarning +=
-                  "\n Warning: no research rules in a GroupElement block.";
               }
               break;
             case "Group":
@@ -271,7 +295,6 @@ function EditorScreen() {
                     "'Steel Mine'",
                     "'Workshop'",
                   ];
-                  console.log(argToken.args[0]);
                   if (!arr.includes(argToken.args[0])) {
                     scriptIsCorrect = false;
                     tempWarning +=
@@ -304,6 +327,26 @@ function EditorScreen() {
               if (currentToken.args[1] === "") {
                 scriptIsCorrect = false;
                 tempWarning += "\n Error: empty input in a UpgradeStats block.";
+              }
+              break;
+            case "Have":
+              if (currentToken.args[1] === "") {
+                scriptIsCorrect = false;
+                tempWarning += "\n Error: empty input in a Have block.";
+              }
+              break;
+            case "GetNumberOfOwn":
+              if (currentToken.args[1] === "") {
+                scriptIsCorrect = false;
+                tempWarning +=
+                  "\n Error: empty input in a You have less/more than... block.";
+              }
+              break;
+            case "GetPercentageOfOwn":
+              if (currentToken.args[1] === "") {
+                scriptIsCorrect = false;
+                tempWarning +=
+                  "\n Error: empty input in an Enemy has less/more than... block.";
               }
               break;
             case "Research":
@@ -388,22 +431,8 @@ function EditorScreen() {
       tempWarning = "The check didn't find any errors.";
     }
     console.log(tempWarning);
+    update();
     setWarning(tempWarning);
-
-    setScriptCode(blocklyCode);
-  }
-
-  function checkGroupElement(elementToTest) {
-    var args = elementToTest.substring(13, elementToTest.length - 1).split(",");
-    if (args[0] === "") return false;
-    else return true;
-  }
-
-  function checkGroup(groupToTest) {
-    var args = groupToTest.substring(6, groupToTest.length - 1).split(",");
-    console.log(args);
-    if (args[0] === "") return false;
-    else return true;
   }
 
   useEffect(() => {

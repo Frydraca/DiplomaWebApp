@@ -20,7 +20,6 @@ export const building = {
               ["Foundry", "Foundry"],
               ["Core Factory", "CoreFactory"],
               ["Workshop", "Workshop"],
-              ["Tower", "Tower"],
             ],
           },
         ],

@@ -17,7 +17,7 @@ export const ifElse = {
           {
             type: "input_statement",
             name: "TrueAction",
-            check: ["Action", "CombatGroup"],
+            check: ["Action", "ResearchBlock", "TradeBlock", "CombatGroup"],
           },
           {
             type: "input_statement",
@@ -40,7 +40,6 @@ export const ifElse = {
           "Next Statement: ActionBlock or nothing\n" +
           "Statement type: ActionBlock",
         helpUrl: "",
-        //mutator: "controls_if_mutator",
       });
     },
   },

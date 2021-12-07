@@ -163,17 +163,17 @@ var AiEngine = /** @class */ (function () {
     AiEngine.prototype.GroupElement = function (objectName, count) {
         return new GroupElement(objectName, count);
     };
-    AiEngine.prototype.GetNumberOfOwn = function (objectName, playerName) {
+    AiEngine.prototype.GetNumberOfOwn = function (playerName, objectName) {
         var object = this.MakeObjectFromType(objectName, playerName);
         return this.game.GetNumberOfGameObjectByPlayerName(object, playerName);
     };
-    AiEngine.prototype.GetPercentageOfOwn = function (objectName, playerName) {
+    AiEngine.prototype.GetPercentageOfOwn = function (playerName, objectName) {
         var object = this.MakeObjectFromType(objectName, playerName);
         return this.game.GetPercentageOfUnitByPlayer(object, playerName);
     };
     AiEngine.prototype.Have = function (playerName, objectName, upgradeType) {
         if (upgradeType === undefined) {
-            if (this.GetNumberOfOwn(objectName, playerName) > 0)
+            if (this.GetNumberOfOwn(playerName, objectName) > 0)
                 return true;
             else
                 return false;

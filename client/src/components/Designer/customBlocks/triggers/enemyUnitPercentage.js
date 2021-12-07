@@ -44,9 +44,9 @@ export const enemyUnitPercentage = {
     var number_percentage = block.getFieldValue("percentage");
     // TODO: Assemble JavaScript into code variable.
     var code =
-      "this.GetPercentageOfOwn(" +
+      "this.GetPercentageOfOwn(enemyId," +
       value_unit +
-      ", enemyId) >= " +
+      ") >= " +
       number_percentage +
       " &&";
     return code;

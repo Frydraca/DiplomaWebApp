@@ -17,7 +17,7 @@ export const groupElement = {
           },
           {
             type: "input_value",
-            name: "NAME",
+            name: "Object",
             check: ["Building", "Unit"],
           },
         ],
@@ -38,7 +38,7 @@ export const groupElement = {
     var number_number = block.getFieldValue("Number");
     var value_name = Blockly.JavaScript.valueToCode(
       block,
-      "NAME",
+      "Object",
       Blockly.JavaScript.ORDER_ATOMIC
     );
     var formattedValue = value_name.replace("(", "").replace(")", "");

@@ -205,14 +205,14 @@ export default class AiEngine {
     return new GroupElement(objectName, count);
   }
 
-  private GetNumberOfOwn(objectName: ObjectName, playerName: string): number {
+  private GetNumberOfOwn(playerName: string, objectName: ObjectName): number {
     let object = this.MakeObjectFromType(objectName, playerName);
     return this.game.GetNumberOfGameObjectByPlayerName(object, playerName);
   }
 
   private GetPercentageOfOwn(
-    objectName: ObjectName,
-    playerName: string
+    playerName: string,
+    objectName: ObjectName
   ): number {
     let object = this.MakeObjectFromType(objectName, playerName);
     return this.game.GetPercentageOfUnitByPlayer(object, playerName);
@@ -224,7 +224,7 @@ export default class AiEngine {
     upgradeType?: UpgradeType
   ): boolean {
     if (upgradeType === undefined) {
-      if (this.GetNumberOfOwn(objectName, playerName) > 0) return true;
+      if (this.GetNumberOfOwn(playerName, objectName) > 0) return true;
       else return false;
     }
     let player = this.game.GetGameState().GetPlayerByName(playerName);

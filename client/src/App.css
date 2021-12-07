@@ -9,7 +9,7 @@ body {
 }
 
 .BlocklyDrawer {
-  height: 700px;
+  height: 800px;
   width: 100%;
 }
 
@@ -266,6 +266,21 @@ body {
   align-items: center;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
+}
+
+.DesignerCatalogList .row:hover {
+  cursor: pointer;
+  background-color: #293846;
+}
+
+.DesignerCatalogList .row #icon {
+  flex: 30%;
+  display: grid;
+  place-items: center;
+}
+
+.DesignerCatalogList .row #title {
+  flex: 70%;
 }
 
 /* .App-logo {

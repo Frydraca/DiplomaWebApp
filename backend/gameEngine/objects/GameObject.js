@@ -79,6 +79,7 @@ var GameObject = /** @class */ (function () {
     };
     GameObject.prototype.UpgradeHitPoints = function (value) {
         this.hitPoints += value;
+        this.maxHitPoints += value;
     };
     return GameObject;
 }());
