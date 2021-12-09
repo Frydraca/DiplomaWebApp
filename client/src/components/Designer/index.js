@@ -449,10 +449,7 @@ function EditorScreen() {
     <>
       <div className="Editor">
         <Row>
-          <Col md={6}>
-            <h1>blockly editor</h1>
-            {script !== undefined && <h1>{script.name}</h1>}
-          </Col>
+          <Col md={6}>{script !== undefined && <h1>{script.name}</h1>}</Col>
         </Row>
         <Row>
           <Col md={3}>

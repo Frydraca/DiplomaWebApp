@@ -181,6 +181,11 @@ function RulesScreen(props) {
                         height="100"
                       ></img>
                       <p>The general attacking unit. Balanced stats.</p>
+                      <p> Hit points: 16 </p>
+                      <p> Attack damage: 8 </p>
+                      <p> Armor: 3 </p>
+                      <p> Range: 5 </p>
+                      <p> Speed: 3 </p>
                       <h4>Artillery Bot</h4>
                       <img
                         src={Images.Artillery}
@@ -189,6 +194,11 @@ function RulesScreen(props) {
                         height="100"
                       ></img>
                       <p>Long range, high damage unit. Has slow speed.</p>
+                      <p> Hit points: 12 </p>
+                      <p> Attack damage: 13 </p>
+                      <p> Armor: 1 </p>
+                      <p> Range: 6 </p>
+                      <p> Speed: 2 </p>
                       <h4>Raider Bot</h4>
                       <img
                         src={Images.Raider}
@@ -197,6 +207,11 @@ function RulesScreen(props) {
                         height="100"
                       ></img>
                       <p>Fast attacking robot. Weaker defenses.</p>
+                      <p> Hit points: 15 </p>
+                      <p> Attack damage: 7 </p>
+                      <p> Armor: 2 </p>
+                      <p> Range: 4 </p>
+                      <p> Speed: 4 </p>
                       <h4>Tank Bot</h4>
                       <img
                         src={Images.Tank}
@@ -205,6 +220,11 @@ function RulesScreen(props) {
                         height="100"
                       ></img>
                       <p>Strong defensive unit. Slow.</p>
+                      <p> Hit points: 25 </p>
+                      <p> Attack damage: 6 </p>
+                      <p> Armor: 4 </p>
+                      <p> Range: 4 </p>
+                      <p> Speed: 2 </p>
                     </div>
                   );
                 case "upgrades":
@@ -220,15 +240,22 @@ function RulesScreen(props) {
                       <p>
                         Increases the units attack by 1. Symbol: Target Cross.
                       </p>
+                      <p> Upgrade Cost: 20 steel, 100 credits</p>
                       <h4>Armor Upgrade</h4>
                       <p>Increases the units armor by 1. Symbol: Shield.</p>
+                      <p> Upgrade Cost: 20 steel, 100 credits</p>
                       <h4>Hit Points Upgrade</h4>
                       <p>
                         Increases the units hit points by 10. Symbol: Heart.
                       </p>
+                      <p> Upgrade Cost: 50 steel, 50 credits</p>
                       <h4>Move Speed Upgrade</h4>
                       <p>
                         Increases the units move speed by 1. Symbol: Footprint.
+                      </p>
+                      <p>
+                        {" "}
+                        Upgrade Cost: 100 steel, 5 energy core, 100 credits
                       </p>
                     </div>
                   );

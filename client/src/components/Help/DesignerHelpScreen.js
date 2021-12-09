@@ -115,7 +115,7 @@ function DesignerHelpScreen(props) {
                       <p>
                         The premier method to specify the buildings of your
                         base. The game will build the buildings in order, until
-                        all specified was built. If one gets destroyed it eill
+                        all specified was built. If one gets destroyed it will
                         be rebuilt.
                       </p>
                       <h4>Build</h4>
