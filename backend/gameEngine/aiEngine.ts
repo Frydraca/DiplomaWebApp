@@ -51,7 +51,6 @@ export default class AiEngine {
       height: number;
       tiles: { location: number[]; terrain: string }[];
       startingLocations: [number[]];
-      startingWorkerLocations: [number[]];
     }
   ) {
     this.players = playerIds;

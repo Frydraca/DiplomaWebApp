@@ -16,7 +16,7 @@ export function MapCard({ gameMap }) {
       <Card style={{ marginBottom: 20 }} className="mx-auto" border="primary">
         <Card.Header>{gameMap.name}</Card.Header>
         <Card.Body>
-          <p>description</p>
+          <p>{gameMap.description}</p>
           <Button onClick={viewMap}>View</Button>
         </Card.Body>
       </Card>

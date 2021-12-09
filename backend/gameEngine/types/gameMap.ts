@@ -8,7 +8,6 @@ export default class GameMap {
   private height: number;
   private tiles: Tile[];
   private startingLocations: LocationType[];
-  private startingWorkerLocations: LocationType[];
 
   constructor(gameMapData: {
     name: string;
@@ -16,14 +15,12 @@ export default class GameMap {
     height: number;
     tiles: { location: number[]; terrain: string }[];
     startingLocations: [number[]];
-    startingWorkerLocations: [number[]];
   }) {
     this.name = JSON.parse(JSON.stringify(gameMapData.name));
     this.width = JSON.parse(JSON.stringify(gameMapData.width));
     this.height = JSON.parse(JSON.stringify(gameMapData.height));
     this.tiles = new Array<Tile>();
     this.startingLocations = new Array<LocationType>();
-    this.startingWorkerLocations = new Array<LocationType>();
 
     gameMapData.tiles.forEach(
       (element: { location: number[]; terrain: string }) => {
@@ -54,11 +51,6 @@ export default class GameMap {
     );
     gameMapData.startingLocations.forEach((element: number[]) => {
       this.startingLocations.push(new LocationType(element[0], element[1]));
-    });
-    gameMapData.startingWorkerLocations.forEach((element: number[]) => {
-      this.startingWorkerLocations.push(
-        new LocationType(element[0], element[1])
-      );
     });
   }
 

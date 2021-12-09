@@ -9,7 +9,6 @@ var GameMap = /** @class */ (function () {
         this.height = JSON.parse(JSON.stringify(gameMapData.height));
         this.tiles = new Array();
         this.startingLocations = new Array();
-        this.startingWorkerLocations = new Array();
         gameMapData.tiles.forEach(function (element) {
             var newTerrain;
             switch (element.terrain) {
@@ -30,9 +29,6 @@ var GameMap = /** @class */ (function () {
         });
         gameMapData.startingLocations.forEach(function (element) {
             _this.startingLocations.push(new LocationType(element[0], element[1]));
-        });
-        gameMapData.startingWorkerLocations.forEach(function (element) {
-            _this.startingWorkerLocations.push(new LocationType(element[0], element[1]));
         });
     }
     GameMap.prototype.GetTiles = function () {
