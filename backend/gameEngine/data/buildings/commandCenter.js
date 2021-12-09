@@ -22,7 +22,7 @@ const CommandCenterData = {
     credits: 0,
   },
   production: {
-    energy: 10,
+    energy: 20,
     steel: 0,
     crystal: 0,
     roboSteel: 0,

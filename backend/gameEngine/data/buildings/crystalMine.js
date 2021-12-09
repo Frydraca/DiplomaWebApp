@@ -22,7 +22,7 @@ const CrystalMineData = {
     credits: 0,
   },
   production: {
-    energy: 10,
+    energy: 0,
     steel: 0,
     crystal: 3,
     roboSteel: 0,
