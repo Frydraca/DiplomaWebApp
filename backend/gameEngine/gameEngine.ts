@@ -741,7 +741,7 @@ export default class GameEngine {
   }
 
   public CheckForGameEnd(): void {
-    if (this.gameState.GetTurnNumber() >= 75) {
+    if (this.gameState.GetTurnNumber() >= 100) {
       this.gameState.SetIsRunning(false);
     }
   }

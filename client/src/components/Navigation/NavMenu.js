@@ -8,14 +8,13 @@ function NavMenu() {
 
   return (
     <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
-      <Navbar.Brand href="/">Ai Designer</Navbar.Brand>
+      <Navbar.Brand href="/designer/new">Ai Designer</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto mr-3">
           {isLoggedIn() ? (
             <>
               <Nav.Link href="/mapList">Maps</Nav.Link>
-              <Nav.Link href="/simulator">Simulator</Nav.Link>
               <Nav.Link href="/designer/new">Designer</Nav.Link>
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/help">Help</Nav.Link>

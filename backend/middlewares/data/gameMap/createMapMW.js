@@ -6,6 +6,7 @@ export default function (objectrepository) {
   return function (req, res, next) {
     var gameMap = new GameMap({
       name: req.body.name,
+      description: req.body.description,
       width: req.body.width,
       height: req.body.height,
       tiles: req.body.tiles,

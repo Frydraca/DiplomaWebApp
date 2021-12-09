@@ -36,7 +36,7 @@ function RulesScreen(props) {
                       </p>
                       <p>
                         The game is turn based, each unit has one action every
-                        turn. If the game doesn't end in 75 turn the game is a
+                        turn. If the game doesn't end in 100 turn the game is a
                         draw.
                       </p>
                     </div>
