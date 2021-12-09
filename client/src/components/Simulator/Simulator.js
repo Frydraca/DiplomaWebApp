@@ -123,7 +123,7 @@ function SimulatorScreen() {
         ctx.beginPath();
         ctx.rect(
           (element.location.x + 1) * cellSize,
-          (element.location.y + 1) * cellSize,
+          element.location.y * cellSize,
           cellSize,
           cellSize
         );
@@ -150,7 +150,7 @@ function SimulatorScreen() {
         ctx.beginPath();
         ctx.rect(
           (element.location.x + 1) * cellSize + 8,
-          (element.location.y + 1) * cellSize + 4,
+          element.location.y * cellSize + 4,
           0.6 * cellSize * hpPercent,
           3
         );
@@ -159,7 +159,7 @@ function SimulatorScreen() {
         ctx.beginPath();
         ctx.rect(
           (element.location.x + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
-          (element.location.y + 1) * cellSize + 4,
+          element.location.y * cellSize + 4,
           0.6 * cellSize - 0.6 * cellSize * hpPercent,
           3
         );
@@ -176,7 +176,7 @@ function SimulatorScreen() {
         ctx.drawImage(
           img,
           (element.location.x + 1) * cellSize + 8,
-          (element.location.y + 1) * cellSize + 8,
+          element.location.y * cellSize + 8,
           0.6 * cellSize,
           0.6 * cellSize
         );
@@ -187,7 +187,7 @@ function SimulatorScreen() {
         ctx.beginPath();
         ctx.rect(
           (element.location.x + 1) * cellSize + 8,
-          (element.location.y + 1) * cellSize + 4,
+          element.location.y * cellSize + 4,
           0.6 * cellSize * hpPercent,
           3
         );
@@ -196,7 +196,7 @@ function SimulatorScreen() {
         ctx.beginPath();
         ctx.rect(
           (element.location.x + 1) * cellSize + 8 + 0.6 * cellSize * hpPercent,
-          (element.location.y + 1) * cellSize + 4,
+          element.location.y * cellSize + 4,
           0.6 * cellSize - 0.6 * cellSize * hpPercent,
           3
         );
@@ -208,7 +208,7 @@ function SimulatorScreen() {
         ctx.drawImage(
           img,
           (element.location.x + 1) * cellSize + 8,
-          (element.location.y + 1) * cellSize + 8,
+          element.location.y * cellSize + 8,
           0.6 * cellSize,
           0.6 * cellSize
         );
@@ -397,7 +397,7 @@ function SimulatorScreen() {
       </div>
       <div id="main">
         <Container>
-          <Row>
+          <Row className="DataTable">
             <Col>
               {currentGameState !== undefined ? (
                 <>
@@ -405,7 +405,7 @@ function SimulatorScreen() {
                     <Table striped bordered hover>
                       <thead>
                         <tr>
-                          <th>Turn Number</th>
+                          <th>Turn</th>
                           <th>Player</th>
                           <th>Steel</th>
                           <th>RoboSteel</th>

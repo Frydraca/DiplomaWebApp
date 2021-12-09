@@ -28,11 +28,17 @@ body {
 }
 
 .SimulatorScreen #main {
-  flex: 66%;
+  flex: 61%;
 }
 
 .SimulatorScreen #upgrades {
-  flex: 17%;
+  flex: 22%;
+}
+
+.DataTable {
+  font-size: 14px;
+  width: 675px;
+  margin: 0px;
 }
 
 .Sidebar {
