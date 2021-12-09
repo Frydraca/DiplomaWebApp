@@ -309,7 +309,7 @@ function SimulatorScreen() {
   function getHoveredObject() {
     if (currentGameState !== undefined) {
       var coordX = Math.floor((mousePosition.left - cLeft) / 40) - 1;
-      var coordY = Math.floor((mousePosition.top - cTop) / 40) - 1;
+      var coordY = Math.floor((mousePosition.top - cTop) / 40);
 
       let buildings = currentGameState.buildings;
       buildings.forEach((element) => {
