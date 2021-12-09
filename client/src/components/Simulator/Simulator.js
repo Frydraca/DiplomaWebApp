@@ -61,7 +61,7 @@ function SimulatorScreen() {
 
   const gameId = useSelector((state) => state.currentGame.id);
   const allScriptList = useSelector((state) => state.script.scripts);
-  const userScriptList = useSelector((state) => state.ownScripts.ownScripts);
+  const userScriptList = useSelector((state) => state.script.scripts);
   const currentGameState = useSelector(
     (state) => state.currentGame.currentGameState
   );
