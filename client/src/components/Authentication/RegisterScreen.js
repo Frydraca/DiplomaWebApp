@@ -75,7 +75,7 @@ function RegisterScreen() {
               <Form.Control
                 type="text"
                 placeholder="Enter your user name"
-                name="User name"
+                name="userName"
                 onChange={onChangeOfCredentials}
                 ref={register}
                 isInvalid={!!errors.userName}
@@ -95,7 +95,7 @@ function RegisterScreen() {
               <Form.Control
                 type="password"
                 placeholder="Password"
-                name="Password"
+                name="password"
                 onChange={onChangeOfCredentials}
                 ref={register}
                 isInvalid={!!errors.password}
