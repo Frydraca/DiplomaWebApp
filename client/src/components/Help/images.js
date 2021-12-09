@@ -27,6 +27,18 @@ import research from "./Images/Research/Research.png";
 import upgradeBlock from "./Images/Research/UpgradeBlock.png";
 import trading from "./Images/Trading/Trading.png";
 import tradingBlock from "./Images/Trading/TradingBlock.png";
+import commandCenter from "./Images/Buildings/commandCenter_green.png";
+import steelMine from "./Images/Buildings/steelMine_green.png";
+import crystalMine from "./Images/Buildings/crystalMine_green.png";
+import solarPowerPlant from "./Images/Buildings/solarPowerPlant_green.png";
+import foundry from "./Images/Buildings/foundry_green.png";
+import coreFactory from "./Images/Buildings/coreFactory_green.png";
+import workshop from "./Images/Buildings/workshop_green.png";
+import rubble from "./Images/Buildings/rubble.png";
+import attack from "./Images/Units/attack.png";
+import artillery from "./Images/Units/artillery.png";
+import raider from "./Images/Units/raider.png";
+import tank from "./Images/Units/tank.png";
 
 const Images = {
   MainLoop: mainLoop,
@@ -58,6 +70,18 @@ const Images = {
   UpgradeBlock: upgradeBlock,
   Trading: trading,
   TradingBlock: tradingBlock,
+  CommandCenter: commandCenter,
+  SteelMine: steelMine,
+  CrystalMine: crystalMine,
+  SolarPowerPlant: solarPowerPlant,
+  Foundry: foundry,
+  CoreFactory: coreFactory,
+  Workshop: workshop,
+  Rubble: rubble,
+  Attack: attack,
+  Artillery: artillery,
+  Raider: raider,
+  Tank: tank,
 };
 
 export default Images;

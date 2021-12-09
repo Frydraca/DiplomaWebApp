@@ -41,7 +41,19 @@ export default function App() {
           <HelpScreen />
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/gameRules">
-          <RulesScreen />
+          <RulesScreen type="home" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/gameRules/resources">
+          <RulesScreen type="resources" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/gameRules/buildings">
+          <RulesScreen type="buildings" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/gameRules/units">
+          <RulesScreen type="units" />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/gameRules/upgrades">
+          <RulesScreen type="upgrades" />
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/designerHelp">
           <DesignerHelpScreen type="home" />
